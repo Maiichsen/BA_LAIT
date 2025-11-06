@@ -1,11 +1,72 @@
 @import './base.css';
 @import "tailwindcss";
 @theme {
-  /* extend the default theme with custom variables */
-  --color-primary: oklch(0.53 0.12 118.34);
-  /* or override the default theme */
-  --breakpoint-sm: 30rem;
+  --color-tutara50: #f0f3f4;
+  --color-tutara100: #f0f0ef;
+  --color-tutara200: #d7d6d5;
+  --color-tutara700: #595655;
+  --color-tutara800: #3f3d3c;
+  --color-tutara900: #252323;
+  --color-cornflowerBlue10: #edf0fd;
+  --color-cornflowerBlue100: #a3b5f5;
+  --color-cornflowerBlue900: #071141;
+  --color-purple10: #f0edf6;
+  --color-purple100: #b7a4f4;
+  --color-burntSienna10: #fdf2ed;
+  --color-confetti10: #fdf9ed;
 }
+
+.h1 {
+  /*6rem (96px)*/
+  @apply text-tutara900 text-8xl font-medium
+}
+
+.h2 {
+  /*4.5rem (72px)*/
+  @apply text-tutara900 text-7xl font-medium
+}
+
+.h3 {
+  /*3.75rem (60px)*/
+  @apply text-tutara900 text-6xl font-medium
+}
+
+.h4 {
+  /*2.25rem (36px)*/
+  @apply text-tutara900 text-4xl font-medium
+}
+
+.h5 {
+  /*1.875rem (30px)*/
+  @apply text-tutara900 text-3xl font-medium
+}
+
+.paragraf1 {
+  /*1.5rem (24px)*/
+  @apply text-tutara700 text-2xl font-light
+}
+
+.paragraf2 {
+  /*1rem (16px)*/
+  @apply text-tutara900 text-base font-normal
+}
+
+.caption {
+  /*1rem (16px)*/
+  @apply text-tutara700 text-base font-normal
+}
+
+.titleText {
+  /*1.5rem (24px)*/
+  @apply text-tutara900 text-2xl font-light
+}
+
+.titleText2 {
+  /*1rem (16px)*/
+  @apply text-tutara900 text-base font-medium
+}
+
+
 
 #app {
   max-width: 1280px;
