@@ -1,4 +1,11 @@
 @import './base.css';
+@import "tailwindcss";
+@theme {
+  /* extend the default theme with custom variables */
+  --color-primary: oklch(0.53 0.12 118.34);
+  /* or override the default theme */
+  --breakpoint-sm: 30rem;
+}
 
 #app {
   max-width: 1280px;
