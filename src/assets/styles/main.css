@@ -1,0 +1,123 @@
+@import './base.css';
+@import "tailwindcss";
+
+@theme {
+
+  /* ----------------Typography---------------- */
+	--text-h1: clamp(2.875rem, 2.0827rem + 3.3803vw, 5.125rem);
+	--text-h1--line-height: clamp(3.625rem, 2.6567rem + 4.1315vw, 6.375rem);
+	--text-h1--font-weight: 500;
+
+
+	--text-h2: clamp(2.625rem, 2.0088rem + 2.6291vw, 4.375rem);
+	--text-h2--line-height: clamp(3.25rem, 2.6778rem + 2.4413vw, 4.875rem);
+	--text-h2--font-weight: 500;
+
+
+	--text-h3: clamp(2.25rem, 1.8099rem + 1.8779vw, 3.5rem);
+	--text-h3--line-height: clamp(2.5rem, 1.8398rem + 2.8169vw, 4.375rem);
+	--text-h3--font-weight: 500;
+
+
+	--text-h4: clamp(2rem, 1.6479rem + 1.5023vw, 3rem);
+	--text-h4--line-height: clamp(2.5rem, 2.0599rem + 1.8779vw, 3.75rem);
+	--text-h4--font-weight: 500;
+
+
+	--text-h5: clamp(1.75rem, 1.4859rem + 1.1268vw, 2.5rem);
+	--text-h5--line-height: clamp(2.25rem, 1.9419rem + 1.3146vw, 3.125rem);
+	--text-h5--font-weight: 500;
+
+
+	--text-h6: clamp(1.625rem, 1.493rem + 0.5634vw, 2rem);
+	--text-h6--line-height: clamp(2rem, 1.8239rem + 0.7512vw, 2.5rem);
+	--text-h6--font-weight: 500;
+
+
+	--text-t1: clamp(1.5rem, 1.412rem + 0.3756vw, 1.75rem);
+	--text-t1--line-height: clamp(1.875rem, 1.6109rem + 1.1268vw, 2.625rem);
+	--text-t1--font-weight: 400;
+
+
+	--text-t2: clamp(1.25rem, 1.162rem + 0.3756vw, 1.5rem);
+	--text-t2--line-height: clamp(1.5rem, 1.2359rem + 1.1268vw, 2.25rem);
+	--text-t2--font-weight: 400;
+
+
+	--text-t3: clamp(1.125rem, 1.125rem + 0vw, 1.125rem);
+	--text-t3--line-height: clamp(1.375rem, 1.243rem + 0.5634vw, 1.75rem);
+	--text-t3--font-weight: 450;
+
+
+	--text-p1: clamp(1rem, 1rem + 0vw, 1rem);
+	--text-p1--line-height: clamp(1.5rem, 1.5rem + 0vw, 1.5rem);
+	--text-p1--font-weight: 400;
+
+
+
+	--text-p2: clamp(0.875rem, 0.875rem + 0vw, 0.875rem);
+	--text-p2--line-height: clamp(1.75rem, 1.75rem + 0vw, 1.75rem);
+	--text-p2--font-weight: 400;
+
+
+	--text-c1: clamp(1rem, 0.8239rem + 0.7512vw, 1.5rem);
+	--text-c1--line-height: clamp(1rem, 0.8239rem + 0.7512vw, 1.5rem);
+	--text-c1--font-weight: 400;
+
+
+	--text-c2: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+	--text-c2--line-height: clamp(0.75rem, 0.662rem + 0.3756vw, 1rem);
+	--text-c2--font-weight: 400;
+
+  /* ----------------Colors---------------- */
+
+	/* green */
+	--color-green-te-papa: #294753;
+	--color-william: #386671;
+	--color-green-10: #f0f3f4;
+
+	/* burnt sienna */
+	--color-burnt-sienna-500: #ee8a5f;
+	--color-burnt-sienna-50: #f5bca3;
+	--color-burnt-sienna-10: #fdf2ed;
+	--color-burnt-sienna-900: #341305;
+
+	/* cornflower blue */
+	--color-cornflower-blue-900: #071141;
+	--color-cornflower-blue-500: #5f78ee;
+	--color-cornflower-blue-100: #a3b5f5;
+	--color-cornflower-blue-10: #edf0fd;
+
+	/* confetti */
+	--color-confetti-100: #eece5f;
+	--color-confetti-50: #f5e3a3;
+	--color-confetti-10: #fdf9ed;
+
+	/* purple */
+	--color-purple-500: #885fed;
+	--color-purple-100: #b7a4f4;
+	--color-purple-10: #f0edf6;
+
+	/* tutara */
+	--color-tutara-900: #252323;
+	--color-tutara-800: #3f3d3c;
+	--color-tutara-700: #595655;
+	--color-tutara-600: #736f6d;
+	--color-tutara-500: #8d8987;
+	--color-tutara-400: #a5a2a1;
+	--color-tutara-300: #bebcbb;
+	--color-tutara-200: #d7d6d5;
+	--color-tutara-100: #f0f0ef;
+	--color-tutara-50: #fafafa;
+}
+
+@layer components {
+  .text-c2 {
+    font-size: var(--text-c2);
+    line-height: var(--text-c2--line-height);
+    font-weight: var(--text-c2--font-weight);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+}
+

@@ -1,9 +1,5 @@
-<script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue';
-</script>
-
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div class="">
+    <h1 class="text-h1">Dette er en overskrift</h1>
+  </div>
 </template>
