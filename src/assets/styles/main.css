@@ -113,11 +113,9 @@
 
 @layer components {
   .text-c2 {
-    font-size: var(--text-c2);
-    line-height: var(--text-c2--line-height);
-    font-weight: var(--text-c2--font-weight);
-    text-transform: uppercase;
-    letter-spacing: 0.02em;
+ 	text-transform: uppercase;
+	color: var(--color-tutara-700);
+	letter-spacing: 0.02em;
   }
 }
 
