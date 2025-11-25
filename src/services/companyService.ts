@@ -20,7 +20,7 @@ export const getCompanyById = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('companies')
-      .select('*')
+      .select()
       .eq('company_id', companyId)
       .single();
 
