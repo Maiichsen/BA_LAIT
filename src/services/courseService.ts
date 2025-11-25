@@ -34,12 +34,12 @@ export const getCourseById = async (courseId: string): Course => {
 };
 
 
-export const deleteCourseById = async (courseId: string): boolean => {
+export const deleteCourseById = async (courseId: string) => {
   try {
     const {error} = await supabase
       .from('courses')
-      .delete()
-      .eq('course', courseId);
+      .update({soft_deleted_at: new Date().toISOString()})
+      .eq('course_id', courseId);
 
     if (error) throw error;
     return true;
