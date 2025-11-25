@@ -1,5 +1,15 @@
 import {createCompany} from './services/companyService.ts';
-import {createCourse, deleteCourseById, getCourseById} from './services/courseService.ts';
+import {
+  createCourse,
+  createCourseKey,
+  deleteCourseById,
+  getCourseById,
+} from './services/courseService.ts';
+import {
+  createUser,
+  findCompanyByRegistrationKey,
+  findCourseKeyById,
+} from './services/userService.ts';
 
 console.log('hey');
 
@@ -8,3 +18,11 @@ console.log('hey');
 }).catch((err) => {
   console.log(err);
 })*/
+
+
+createUser({email: 'MAIL', registration_key: '71bcd413-ea31-48e0-a206-116863147ed2', password:'password'}).then((data) => {
+  console.log("noget urelatererte");
+  console.log(data);
+}).catch((error) => {
+  console.log(error);
+});
