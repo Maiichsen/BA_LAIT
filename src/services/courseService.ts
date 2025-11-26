@@ -34,6 +34,20 @@ export const getCourseById = async (courseId: string) => {
   }
 };
 
+export const getAllActiveCourses = async () => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .select('*')
+      .is('soft_deleted_at', null);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase

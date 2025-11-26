@@ -7,7 +7,8 @@ export const createCompany = async (companyName: string) => {
       .insert([
         {company_name: companyName},
       ])
-      .select(); // To get the created company returned, if needed
+      // To get the created company returned, if needed
+      .select();
 
     if (error) throw error;
     return data;
@@ -23,6 +24,19 @@ export const getCompanyById = async (companyId: string) => {
       .select()
       .eq('company_id', companyId)
       .single();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getAllCompanies = async () => {
+  try {
+    const {data, error} = await supabase
+      .from('companies')
+      .select('*');
 
     if (error) throw error;
     return data;
