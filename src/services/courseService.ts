@@ -1,5 +1,5 @@
 import {supabase} from '../db/connection.ts';
-import type {newCourseParams} from '@/types/courseTypes.ts';
+import type {newCourseParams} from '../types/courseTypes.ts';
 
 export const createCourse = async (newCourseParams: newCourseParams) => {
   try {
@@ -34,9 +34,43 @@ export const getCourseById = async (courseId: string) => {
   }
 };
 
-export const getAllCompanyCourses = async (userId: string) => {
+export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_keys')
+      .select('course:courses(*)')
+      .eq('company_id', companyId);
 
+    /*To get list of unique courses*/
+    const uniqueCourses = Array.from(
+      new Map(data?.map(item => [item.course.course_id, item.course])).values(),
+    );
+
+    if (error) throw error;
+    return uniqueCourses;
+  } catch (err) {
+    console.log(err);
+  }
 };
+
+export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('enrollments')
+      .select('course:courses(*),users!inner(company_id)')
+      .eq('users.company_id', companyId);
+
+    const uniqueCourses = Array.from(
+      new Map(data?.map(item => [item.course.course_id, item.course])).values(),
+    );
+
+    if (error) throw error;
+    return uniqueCourses;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 export const getAllCoursesByStudent = async (userId: string) => {
   try {
