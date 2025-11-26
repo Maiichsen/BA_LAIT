@@ -34,6 +34,23 @@ export const getCourseById = async (courseId: string) => {
   }
 };
 
+export const getAllCompanyCourses = async (userId: string) => {
+
+};
+
+export const getAllCoursesByStudent = async (userId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('enrollments')
+      .select('course:courses(*)')
+      .eq('user_id', userId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const deleteCourseById = async (courseId: string) => {
   try {
@@ -115,6 +132,21 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
       .from('course_pages')
       .update({is_visible: isVisible})
       .eq('course_page_id', coursePageId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+///////*ENROLLMENTS*////////
+export const createEnrollment = async (courseId: string, userId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('enrollments')
+      .insert([{course_id: courseId, user_id: userId}])
+      .select();
 
     if (error) throw error;
     return data;

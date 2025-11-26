@@ -1,8 +1,8 @@
 import {createCompany} from './services/companyService.ts';
 import {
   createCourse,
-  createCourseKey,
-  deleteCourseById,
+  createCourseKey, createEnrollment,
+  deleteCourseById, getAllStudentCourses,
   getCourseById,
 } from './services/courseService.ts';
 import {
@@ -20,9 +20,10 @@ console.log('hey');
 })*/
 
 
-createUser({email: 'MAIL', registration_key: '71bcd413-ea31-48e0-a206-116863147ed2', password:'password'}).then((data) => {
-  console.log("noget urelatererte");
+getAllStudentCourses('a900584d-77ac-4047-a2d7-c6e63cdca22b').then((data) => {
   console.log(data);
 }).catch((error) => {
   console.log(error);
 });
+
+/*createEnrollment('af3988d8-60f7-47aa-8442-3d56b2c0f08c','a900584d-77ac-4047-a2d7-c6e63cdca22b');*/
