@@ -1,15 +1,16 @@
 import {supabase} from '../db/connection.ts';
 import type {newCourseParams} from '@/types/courseTypes.ts';
-import type {Course} from '@/types/db.ts';
 
-export const createCourse = async (newCourseParams: newCourseParams): Course => {
+export const createCourse = async (newCourseParams: newCourseParams) => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .insert([
         newCourseParams,
       ])
-      .select(); // To get the created course returned, if needed
+      // To get the created course returned, if needed
+      .select();
+
 
     if (error) throw error;
     return data;
@@ -18,7 +19,7 @@ export const createCourse = async (newCourseParams: newCourseParams): Course => 
   }
 };
 
-export const getCourseById = async (courseId: string): Course => {
+export const getCourseById = async (courseId: string) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -48,6 +49,20 @@ export const deleteCourseById = async (courseId: string) => {
   }
 };
 
+export const permDeleteCourseById = async (courseId: string) => {
+  try {
+    const {error} = await supabase
+      .from('courses')
+      .delete()
+      .eq('course_id', courseId);
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 ///////*COURSE KEYS*////////
 export const createCourseKey = async (courseId: string, companyId?: string) => {
@@ -56,6 +71,50 @@ export const createCourseKey = async (courseId: string, companyId?: string) => {
       .from('course_keys')
       .insert([{course_id: courseId, company_id: companyId}])
       .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteCourseKey = async (courseKeyId: string) => {
+  try {
+    const {error} = await supabase
+      .from('course_keys')
+      .delete()
+      .eq('course__key_id', courseKeyId);
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+///////*COURSE PAGES*////////
+export const createCoursePage = async (courseId: string, orderIndex: number) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_pages')
+      .insert([{course_id: courseId, order_index: orderIndex}])
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_pages')
+      .update({is_visible: isVisible})
+      .eq('course_page_id', coursePageId);
 
     if (error) throw error;
     return data;

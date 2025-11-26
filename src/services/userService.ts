@@ -45,7 +45,7 @@ export const createUser = async (newUserParams: newUserParams) => {
           email: newUserParams.email,
           password: newUserParams.password,
           is_company_user: true,
-          company_id: foundCompany.company_id
+          company_id: foundCompany.company_id,
         }])
         .select();
 
@@ -53,18 +53,20 @@ export const createUser = async (newUserParams: newUserParams) => {
       return data;
     }
 
-
-    /*const foundCourseKey = await findCourseKeyById(newUserParams.registration_key);
+    const foundCourseKey = await findCourseKeyById(newUserParams.registration_key);
     if (foundCourseKey) {
       const {data, error} = await supabase
         .from('users')
-        .insert([{"bruger er user.."}])
+        .insert([{
+          email: newUserParams.email,
+          password: newUserParams.password,
+          company_id: foundCourseKey.company_id,
+        }])
         .select();
 
       if (error) throw error;
       return data;
-    }*/
-
+    }
     throw new Error('Invalid registration key');
 
   } catch (err) {
