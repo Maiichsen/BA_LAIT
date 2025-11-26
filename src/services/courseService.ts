@@ -8,9 +8,7 @@ export const createCourse = async (newCourseParams: newCourseParams) => {
       .insert([
         newCourseParams,
       ])
-      // To get the created course returned, if needed
       .select();
-
 
     if (error) throw error;
     return data;
@@ -34,12 +32,26 @@ export const getCourseById = async (courseId: string) => {
   }
 };
 
-export const getAllActiveCourses = async () => {
+export const getAllPublicCourses = async () => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .select('*')
+      .eq('is_published', true)
       .is('soft_deleted_at', null);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getAllCourses = async () => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .select('*');
 
     if (error) throw error;
     return data;
@@ -52,12 +64,12 @@ export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('course_keys')
-      .select('course:courses(*)')
+      .select('courses(*)')
       .eq('company_id', companyId);
 
     /*To get list of unique courses*/
     const uniqueCourses = Array.from(
-      new Map(data?.map(item => [item.course.course_id, item.course])).values(),
+      new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
 
     if (error) throw error;
@@ -71,11 +83,12 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('enrollments')
-      .select('course:courses(*),users!inner(company_id)')
+      .select('courses(*),users!inner(company_id)')
       .eq('users.company_id', companyId);
 
+    /*To get list of unique courses*/
     const uniqueCourses = Array.from(
-      new Map(data?.map(item => [item.course.course_id, item.course])).values(),
+      new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
 
     if (error) throw error;
@@ -85,13 +98,32 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
   }
 };
 
-
 export const getAllCoursesByStudent = async (userId: string) => {
   try {
     const {data, error} = await supabase
       .from('enrollments')
-      .select('course:courses(*)')
+      .select('courses(*)')
       .eq('user_id', userId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const getUsersByCompanyAndCourseEnrollment = async (companyId: string, courseId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('users')
+      .select(`
+      user_id,
+      email,
+      first_name,
+      last_name,
+      enrollments!inner(course_id)`)
+      .eq('company_id', companyId)
+      .eq('enrollments.course_id', courseId);
 
     if (error) throw error;
     return data;
@@ -158,6 +190,20 @@ export const deleteCourseKey = async (courseKeyId: string) => {
   }
 };
 
+export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_keys')
+      .select('*')
+      .eq('company_id', companyId)
+      .eq('course_id', courseId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 ///////*COURSE PAGES*////////
 export const createCoursePage = async (courseId: string, orderIndex: number) => {
