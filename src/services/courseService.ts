@@ -5,9 +5,13 @@ export const createCourse = async (newCourseParams: newCourseParams) => {
   try {
     const {data, error} = await supabase
       .from('courses')
-      .insert([
-        newCourseParams,
-      ])
+      .insert([{
+        long_course_description: newCourseParams.long_course_description,
+        short_course_description: newCourseParams.short_course_description,
+        cover_image_url: newCourseParams.cover_image_url,
+        estimated_time_minutes: newCourseParams.estimated_time_minutes,
+        title: newCourseParams.title,
+      }])
       .select();
 
     if (error) throw error;
@@ -104,26 +108,6 @@ export const getAllCoursesByStudent = async (userId: string) => {
       .from('enrollments')
       .select('courses(*)')
       .eq('user_id', userId);
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const getUsersByCompanyAndCourseEnrollment = async (companyId: string, courseId: string) => {
-  try {
-    const {data, error} = await supabase
-      .from('users')
-      .select(`
-      user_id,
-      email,
-      first_name,
-      last_name,
-      enrollments!inner(course_id)`)
-      .eq('company_id', companyId)
-      .eq('enrollments.course_id', courseId);
 
     if (error) throw error;
     return data;

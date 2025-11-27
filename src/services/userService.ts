@@ -73,3 +73,24 @@ export const createUser = async (newUserParams: newUserParams) => {
     console.log(err);
   }
 };
+
+export const getUsersByCompanyAndCourseEnrollment = async (companyId: string, courseId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('users')
+      .select(`
+      user_id,
+      email,
+      company_id,
+      first_name,
+      last_name,
+      enrollments!inner(course_id)`)
+      .eq('company_id', companyId)
+      .eq('enrollments.course_id', courseId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};

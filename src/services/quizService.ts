@@ -1,7 +1,29 @@
 import {supabase} from '../db/connection.ts';
+import type {newQuizParams} from '@/types/quizTypes.ts';
+
+/////////* QUIZ */////////
+export const createQuiz = async (newQuizParams: newQuizParams) => {
+  try {
+    const {data, error} = await supabase
+      .from('quizzes')
+      .insert([{
+        certification_requirement: newQuizParams.certification_requirement,
+        course_page_id: newQuizParams.course_page_id,
+        passing_percentage: newQuizParams.passing_percentage,
+        title: newQuizParams.title,
+      }])
+      // To get the created question type returned, if needed
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 
-/////////*QUESTION TYPES*/////////
+/////////* QUESTION TYPES */////////
 export const createQuestionTypes = async (title: string, description: string) => {
   try {
     const {data, error} = await supabase
