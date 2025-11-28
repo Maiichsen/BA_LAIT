@@ -1,5 +1,5 @@
 import {supabase} from '../db/connection.ts';
-import type {newCourseParams} from '../types/courseTypes.ts';
+import type {newCourseParams, newCourseSeatParams} from '../types/courseTypes.ts';
 
 export const createCourse = async (newCourseParams: newCourseParams) => {
   try {
@@ -145,12 +145,17 @@ export const permDeleteCourseById = async (courseId: string) => {
 };
 
 
-///////*COURSE KEYS*////////
-export const createCourseKey = async (courseId: string, companyId?: string) => {
+///////*COURSE SEATS*////////
+export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
   try {
     const {data, error} = await supabase
-      .from('course_keys')
-      .insert([{course_id: courseId, company_id: companyId}])
+      .from('course_seats')
+      .insert([{
+        course_id: newCourseSeatParams.course_id,
+        company_id: newCourseSeatParams.company_id,
+        user_id: newCourseSeatParams.user_id,
+        reserved_for_email: newCourseSeatParams.reserved_for_email,
+      }])
       .select();
 
     if (error) throw error;
@@ -160,12 +165,12 @@ export const createCourseKey = async (courseId: string, companyId?: string) => {
   }
 };
 
-export const deleteCourseKey = async (courseKeyId: string) => {
+export const deleteCourseSeat = async (courseSeatId: string) => {
   try {
     const {error} = await supabase
-      .from('course_keys')
+      .from('course_seats')
       .delete()
-      .eq('course__key_id', courseKeyId);
+      .eq('course_seat_id', courseSeatId);
 
     if (error) throw error;
     return true;
@@ -218,17 +223,3 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
   }
 };
 
-///////*ENROLLMENTS*////////
-export const createEnrollment = async (courseId: string, userId: string) => {
-  try {
-    const {data, error} = await supabase
-      .from('enrollments')
-      .insert([{course_id: courseId, user_id: userId}])
-      .select();
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};
