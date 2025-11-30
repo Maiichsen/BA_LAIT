@@ -1,5 +1,6 @@
 import {} from './services/companyService.ts';
 import {} from './services/courseService.ts';
+import {supabase} from './db/connection.ts';
 
 
 console.log('hey');
@@ -11,3 +12,16 @@ console.log('hey');
   console.log(error);
 });*/
 
+const testlogin = async () => {
+  try {
+    const {data, error} = await supabase.auth.signInWithOtp({
+      email: 'megaoreomuffin@hotmail.com',
+    });
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+testlogin();
