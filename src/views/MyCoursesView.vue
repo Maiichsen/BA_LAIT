@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h1>KONTAKT</h1>
+<h1>MINE KURSER</h1>
 </template>
 
 <style scoped>

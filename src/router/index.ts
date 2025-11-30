@@ -14,12 +14,36 @@ const router = createRouter({
       component: () => import('../views/LoginView.vue'),
     },
     {
-      path: '/alle-kurser',
+      path: '/all_courses',
       name: 'allCourses',
       meta: {
         layout: DefaultLayout,
       },
       component: () => import('../views/AllCoursesView.vue'),
+    },
+    {
+      path: '/my_courses',
+      name: 'myCourses',
+      meta: {
+        layout: DefaultLayout,
+      },
+      component: () => import('../views/MyCoursesView.vue'),
+    },
+    {
+      path: '/companies',
+      name: 'companies',
+      meta: {
+        layout: DefaultLayout,
+      },
+      component: () => import('../views/CompaniesView.vue'),
+    },
+    {
+      path: '/contact',
+      name: 'contact',
+      meta: {
+        layout: DefaultLayout,
+      },
+      component: () => import('../views/ContactView.vue'),
     },
   ],
 });
