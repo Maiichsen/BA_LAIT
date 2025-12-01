@@ -35,6 +35,7 @@ export const findCourseKeyById = async (id: string) => {
   }
 };
 
+
 export const createUser = async (newUserParams: newUserParams) => {
   try {
     const foundCompany = await findCompanyByRegistrationKey(newUserParams.registration_key);
@@ -69,6 +70,20 @@ export const createUser = async (newUserParams: newUserParams) => {
     }
     throw new Error('Invalid registration key');
 
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const signUpNewUser = async (email: string, password: string) => {
+  try {
+    const {data, error} = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+
+    if (error) throw error;
+    return data;
   } catch (err) {
     console.log(err);
   }
