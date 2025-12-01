@@ -1,7 +1,7 @@
 import {supabase} from '../db/connection.ts';
 import type {newUserParams} from '@/types/userTypes.ts';
 
-export const findCompanyByRegistrationKey = async (registrationKey: string) => {
+/*export const findCompanyByRegistrationKey = async (registrationKey: string) => {
   try {
     if (!registrationKey) {
       throw new Error('registration key is missing');
@@ -18,9 +18,9 @@ export const findCompanyByRegistrationKey = async (registrationKey: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
-export const findCourseKeyById = async (id: string) => {
+/*export const findCourseKeyById = async (id: string) => {
   try {
     const {data, error} = await supabase
       .from('course_keys')
@@ -33,12 +33,13 @@ export const findCourseKeyById = async (id: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
 
 export const createUser = async (newUserParams: newUserParams) => {
   try {
-    const foundCompany = await findCompanyByRegistrationKey(newUserParams.registration_key);
+
+    /* const foundCompany = await findCompanyByRegistrationKey(newUserParams.registration_key);
     if (foundCompany) {
       const {data, error} = await supabase
         .from('users')
@@ -53,7 +54,6 @@ export const createUser = async (newUserParams: newUserParams) => {
       if (error) throw error;
       return data;
     }
-
     const foundCourseKey = await findCourseKeyById(newUserParams.registration_key);
     if (foundCourseKey) {
       const {data, error} = await supabase
@@ -67,7 +67,8 @@ export const createUser = async (newUserParams: newUserParams) => {
 
       if (error) throw error;
       return data;
-    }
+    }*/
+
     throw new Error('Invalid registration key');
 
   } catch (err) {

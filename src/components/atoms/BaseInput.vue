@@ -9,6 +9,11 @@ interface Props {
 }
 
 const props = defineProps<Props>();
+const modelValue = defineModel();
+
+const onInput = (event: Event) => {
+  modelValue.value = (event.target as HTMLInputElement).value
+};
 </script>
 
 <template>
@@ -20,6 +25,8 @@ const props = defineProps<Props>();
            :placeholder=props.placeholder
            :id=props.inputId
            :name=props.inputId
+           :value="modelValue"
+           @input="onInput"
     />
   </div>
 </template>
