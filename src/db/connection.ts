@@ -8,4 +8,4 @@ export const supabase = createClient<Database>(
   String(process.env.VITE_SUPABASE_KEY),*/
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_KEY,
-);
+)

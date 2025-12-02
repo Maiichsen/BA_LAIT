@@ -11,7 +11,3 @@
   <router-link to="/contact" class="mr-4">Kontakt</router-link>
 </div>
 </template>
-
-<style scoped>
-
-</style>

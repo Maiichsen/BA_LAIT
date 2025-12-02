@@ -1,12 +1,38 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
-import {signUpNewUser} from '@/services/userService.ts';
+import {
+  checkIfUserExists,
+  createAuthStudent,
+  createAuthUser,
+  createInvitedStudent,
+} from '@/services/userService.ts';
 
 const userEmail = ref('');
 const userPassword = ref('');
+const companyId = ref('');
 
-const handleLogin = async() => {
+/*admin email, inviting user*/
+const createStudent = async () => {
+  try {
+    const data = await createInvitedStudent(userEmail.value, companyId.value);
+    console.log(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+/*invited user, creates auth account*/
+const handleSignUp = async () => {
+  try {
+    const data = await createAuthStudent(userEmail.value, userPassword.value);
+    console.log(data);
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+const handleLogin = async () => {
   try {
     const data = await signUpNewUser(userEmail.value, userPassword.value);
     console.log(data);
@@ -14,14 +40,48 @@ const handleLogin = async() => {
     console.error(e);
   }
 };
+
+
+
 </script>
 
 <template>
-  <form @submit.prevent="handleLogin">
-    <BaseInput input-type="text" placeholder="e-mail" input-id="loginEmail" label-text="E-mail" layout="stacked" v-model="userEmail"/>
+  <h1>ADMIN OPRET STUDENT</h1>
+  <form @submit.prevent="createStudent">
+    <BaseInput input-type="text" placeholder="mail" input-id="mail" label-text="mail"
+               layout="stacked" v-model="userEmail"/>
     <br>
-    <BaseInput input-type="text" placeholder="adgangskode" input-id="loginPassword" label-text="Adgangskode" layout="stacked" v-model="userPassword"/>
+    <BaseInput input-type="text" placeholder="virksomhed" input-id="virksomhed"
+               label-text="virksomhed" layout="stacked" v-model="companyId"/>
     <br>
-    <button type="submit" class="hover:text-red-700">LOG IND!</button>
+    <button type="submit" class="hover:text-red-700">send mail</button>
+    <br>
   </form>
+  <br>
+  <br>
+  <h1>OPRET STUDENT</h1>
+  <form @submit.prevent="handleSignUp">
+    <BaseInput input-type="text" placeholder="e-mail" input-id="opretemail" label-text="E-mail"
+               layout="stacked" v-model="userEmail"/>
+    <br>
+    <BaseInput input-type="text" placeholder="adgangskode" input-id="opretpassword"
+               label-text="Adgangskode" layout="stacked" v-model="userPassword"/>
+    <br>
+    <button type="submit" class="hover:text-red-700">opret bruger</button>
+  </form>
+  <br>
+  <br>
+
+<h1>log ind</h1>
+  <form @submit.prevent="handleLogin">
+    <BaseInput input-type="text" placeholder="e-mail" input-id="loginEmail" label-text="E-mail"
+               layout="stacked" v-model="userEmail"/>
+    <br>
+    <BaseInput input-type="text" placeholder="adgangskode" input-id="loginPassword"
+               label-text="Adgangskode" layout="stacked" v-model="userPassword"/>
+    <br>
+    <button type="submit" class="hover:text-red-700">log ind</button>
+  </form>
+
+
 </template>

@@ -1,82 +1,62 @@
 import {supabase} from '../db/connection.ts';
-import type {newUserParams} from '@/types/userTypes.ts';
 
-/*export const findCompanyByRegistrationKey = async (registrationKey: string) => {
+/*EMAIL STUFF*/
+/*EMAIL STUFF*/
+/*EMAIL STUFF*/
+export const supabaseSendStudentLoginMail = async (email: string) => {
   try {
-    if (!registrationKey) {
-      throw new Error('registration key is missing');
-    }
-
-    const {data, error} = await supabase
-      .from('companies')
-      .select()
-      .eq('registration_key', registrationKey)
-      .single();
-
+    const {error} = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: '/login',
+      },
+    });
     if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};*/
-
-/*export const findCourseKeyById = async (id: string) => {
-  try {
-    const {data, error} = await supabase
-      .from('course_keys')
-      .select()
-      .eq('course_key_id', id)
-      .single();
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};*/
-
-
-export const createUser = async (newUserParams: newUserParams) => {
-  try {
-
-    /* const foundCompany = await findCompanyByRegistrationKey(newUserParams.registration_key);
-    if (foundCompany) {
-      const {data, error} = await supabase
-        .from('users')
-        .insert([{
-          email: newUserParams.email,
-          password: newUserParams.password,
-          is_company_user: true,
-          company_id: foundCompany.company_id,
-        }])
-        .select();
-
-      if (error) throw error;
-      return data;
-    }
-    const foundCourseKey = await findCourseKeyById(newUserParams.registration_key);
-    if (foundCourseKey) {
-      const {data, error} = await supabase
-        .from('users')
-        .insert([{
-          email: newUserParams.email,
-          password: newUserParams.password,
-          company_id: foundCourseKey.company_id,
-        }])
-        .select();
-
-      if (error) throw error;
-      return data;
-    }*/
-
-    throw new Error('Invalid registration key');
-
+    return true;
   } catch (err) {
     console.log(err);
   }
 };
 
-export const signUpNewUser = async (email: string, password: string) => {
+export const createInvitedStudent = async (email: string, companyId: string) => {
+  console.log(email);
+  console.log(companyId);
+  try {
+    const {data, error} = await supabase
+      .from('invited_users')
+      .insert({
+        company_id: companyId,
+        user_email: email,
+      })
+      .select();
+
+    if (error) throw error;
+    if (!data) throw new Error('No data object found, lost in space');
+
+    return await supabaseSendStudentLoginMail(data[0].user_email);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/*CREATING AUTH USERS*/
+/*CREATING AUTH USERS*/
+/*CREATING AUTH USERS*/
+export const checkIfUserExists = async (email: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('users')
+      .select('user_id')
+      .eq('email', email.toLowerCase());
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const supabaseSignUpNewUser = async (email: string, password: string) => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email: email,
@@ -90,19 +70,12 @@ export const signUpNewUser = async (email: string, password: string) => {
   }
 };
 
-export const getUsersByCompanyAndCourseEnrollment = async (companyId: string, courseId: string) => {
+export const getInvitedUser = async (email: string) => {
   try {
     const {data, error} = await supabase
-      .from('users')
-      .select(`
-      user_id,
-      email,
-      company_id,
-      first_name,
-      last_name,
-      enrollments!inner(course_id)`)
-      .eq('company_id', companyId)
-      .eq('enrollments.course_id', courseId);
+      .from('invited_users')
+      .select()
+      .eq('user_email', email.toLowerCase());
 
     if (error) throw error;
     return data;
@@ -110,3 +83,51 @@ export const getUsersByCompanyAndCourseEnrollment = async (companyId: string, co
     console.log(err);
   }
 };
+
+export const deleteInvitedUser = async (email: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('invited_users')
+      .delete()
+      .eq('user_email', email.toLowerCase());
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const createAuthStudent = async (email: string, password: string) => {
+  try {
+    const userList = await checkIfUserExists(email);
+    if (userList && userList.length > 0) throw new Error('user already exists');
+
+    const invitedUser = await getInvitedUser(email);
+    if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
+
+    const authData = await supabaseSignUpNewUser(email, password);
+    if (!authData) throw new Error('no auth data created');
+    if (!authData.user) throw new Error('no auth user created');
+
+    const {data, error} = await supabase
+      .from('users')
+      .insert({
+        user_id: authData.user.id,
+        company_id: invitedUser[0].company_id,
+        email: email,
+      })
+      .select();
+
+    if (error) throw error;
+    await deleteInvitedUser(email);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/*LOGIN USER*/
+/*LOGIN USER*/
+/*LOGIN USER*/
