@@ -3,6 +3,8 @@
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
 import {supabase} from '@/db/connection.ts';
+import type {User} from '@/types/db.ts';
+import {updateNewUser} from '@/services/userService.ts';
 
 const userPassword = ref('');
 const userFirstName = ref('');
@@ -15,10 +17,14 @@ const userLastName = ref('');
 };
 
 test();*/
+
+const handleUpdateUser = async () => {
+  await updateNewUser(userPassword.value, userFirstName.value, userLastName.value);
+};
 </script>
 
 <template>
-  <form action="">
+  <form @submit.prevent="handleUpdateUser">
     <BaseInput input-type="text" placeholder="password" input-id="password"
                label-text="New password" layout="stacked" v-model="userPassword" />
     <BaseInput input-type="text" placeholder="firstname" input-id="firstname"

@@ -8,7 +8,8 @@ const supabaseSendStudentLoginMail = async (email: string) => {
     const {error} = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: 'http://localhost:5173/opret',
+        /*shouldCreateUser: false, means "do not create a user", but the link only works on users that exists in auth*/
+        emailRedirectTo: 'http://localhost:5173/login',
       },
     });
     if (error) throw error;
@@ -147,7 +148,7 @@ export const signInUser = async (email: string, password: string) => {
 
 
 /*AUTH STUFF*/
-export const isUserAuthenticated = async () => {
+export const getAuthUser = async () => {
   try {
     const {data, error} = await supabase.auth.getUser();
 
@@ -157,3 +158,53 @@ export const isUserAuthenticated = async () => {
     console.log(err);
   }
 };
+
+/*UPDATE AUTH USER*/
+/*UPDATE AUTH USER*/
+/*UPDATE AUTH USER*/
+const updateAuthUserPassword = async (password: string) => {
+  try {
+    const {data, error} = await supabase.auth.updateUser({
+      password: password,
+    });
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const updateFirstnameAndLastName = async (firstname: string, lastname: string) => {
+  try {
+    const userData = await getAuthUser();
+    if (!userData) throw new Error('no user data');
+    if (!userData.user) throw new Error('no user');
+
+    const {data, error} = await supabase
+      .from('users')
+      .update({
+        first_name: firstname,
+        last_name: lastname,
+      })
+      .eq('user_id', userData.user?.id);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const updateNewUser = async (password: string, firstname: string, lastname: string) => {
+  try {
+    const data = await updateAuthUserPassword(password);
+
+    await updateFirstnameAndLastName(firstname, lastname);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
