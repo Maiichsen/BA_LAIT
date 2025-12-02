@@ -5,7 +5,7 @@ import {
   checkIfUserExists,
   createAuthStudent,
   createAuthUser,
-  createInvitedStudent,
+  createInvitedStudent, signInUser,
 } from '@/services/userService.ts';
 
 const userEmail = ref('');
@@ -34,7 +34,7 @@ const handleSignUp = async () => {
 
 const handleLogin = async () => {
   try {
-    const data = await signUpNewUser(userEmail.value, userPassword.value);
+    const data = await signInUser(userEmail.value, userPassword.value);
     console.log(data);
   } catch (e) {
     console.error(e);

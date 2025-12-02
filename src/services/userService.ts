@@ -3,12 +3,12 @@ import {supabase} from '../db/connection.ts';
 /*EMAIL STUFF*/
 /*EMAIL STUFF*/
 /*EMAIL STUFF*/
-export const supabaseSendStudentLoginMail = async (email: string) => {
+const supabaseSendStudentLoginMail = async (email: string) => {
   try {
     const {error} = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: '/login',
+        emailRedirectTo: 'http://localhost:5173/opret',
       },
     });
     if (error) throw error;
@@ -42,7 +42,7 @@ export const createInvitedStudent = async (email: string, companyId: string) => 
 /*CREATING AUTH USERS*/
 /*CREATING AUTH USERS*/
 /*CREATING AUTH USERS*/
-export const checkIfUserExists = async (email: string) => {
+const checkIfUserExists = async (email: string) => {
   try {
     const {data, error} = await supabase
       .from('users')
@@ -56,7 +56,7 @@ export const checkIfUserExists = async (email: string) => {
   }
 };
 
-export const supabaseSignUpNewUser = async (email: string, password: string) => {
+const supabaseSignUpNewUser = async (email: string, password: string) => {
   try {
     const {data, error} = await supabase.auth.signUp({
       email: email,
@@ -70,7 +70,7 @@ export const supabaseSignUpNewUser = async (email: string, password: string) => 
   }
 };
 
-export const getInvitedUser = async (email: string) => {
+const getInvitedUser = async (email: string) => {
   try {
     const {data, error} = await supabase
       .from('invited_users')
@@ -84,7 +84,7 @@ export const getInvitedUser = async (email: string) => {
   }
 };
 
-export const deleteInvitedUser = async (email: string) => {
+const deleteInvitedUser = async (email: string) => {
   try {
     const {data, error} = await supabase
       .from('invited_users')
@@ -131,3 +131,29 @@ export const createAuthStudent = async (email: string, password: string) => {
 /*LOGIN USER*/
 /*LOGIN USER*/
 /*LOGIN USER*/
+export const signInUser = async (email: string, password: string) => {
+  try {
+    const {data, error} = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+/*AUTH STUFF*/
+export const isUserAuthenticated = async () => {
+  try {
+    const {data, error} = await supabase.auth.getUser();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};

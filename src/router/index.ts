@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginLayout from '@/components/layouts/LoginLayout.vue';
 import DefaultLayout from '@/components/layouts/DefaultLayout.vue';
+import {isUserAuthenticated} from '@/services/userService.ts';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,21 @@ const router = createRouter({
         layout: DefaultLayout,
       },
       component: () => import('../views/ContactView.vue'),
+    },
+    {
+      path: '/opret',
+      name: 'updateUser',
+      meta: {
+        layout: DefaultLayout,
+      },
+      component: () => import('../views/UpdateUserView.vue'),
+      beforeEnter: async (_to, _from,next) => {
+        const user = await isUserAuthenticated();
+        if (!user) {
+          return next({name: 'login'});
+        }
+        return next();
+      },
     },
   ],
 });
