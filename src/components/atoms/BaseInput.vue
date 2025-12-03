@@ -4,8 +4,8 @@ interface Props {
   inputType: string,
   placeholder?: string,
   inputId: string,
-  labelText: string,
-  layout: 'stacked' | 'inline',
+  labelText?: string,
+  layout?: 'stacked' | 'inline',
 }
 
 const props = defineProps<Props>();

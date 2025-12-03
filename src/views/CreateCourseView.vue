@@ -3,6 +3,7 @@ import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseDetailsPage from '@/components/createCourse/CourseDetailsPage.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
+import CreateQuiz from '@/components/createCourse/quiz/createQuiz.vue';
 </script>
 
 <template>
@@ -10,7 +11,10 @@ import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue
     <SidebarContent/>
     <div>
       <AddContentHeader/>
-      <CourseDetailsPage/>
+      <div>
+        <CourseDetailsPage/>
+        <CreateQuiz/>
+      </div>
       <CourseEditorFooter/>
     </div>
   </div>
