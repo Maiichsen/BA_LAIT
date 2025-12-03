@@ -2,24 +2,15 @@
 
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
-import {supabase} from '@/db/connection.ts';
-import type {User} from '@/types/db.ts';
-import {updateNewUser} from '@/services/userService.ts';
+import {updateNewStudent} from '@/services/studentService.ts';
 
 const userPassword = ref('');
 const userFirstName = ref('');
 const userLastName = ref('');
 
-/*const test = async() => {
-  const testedata = await supabase.auth.getUser();
-  console.log("");
-  console.log(testedata);
-};
-
-test();*/
 
 const handleUpdateUser = async () => {
-  await updateNewUser(userPassword.value, userFirstName.value, userLastName.value);
+  await updateNewStudent(userPassword.value, userFirstName.value, userLastName.value);
 };
 </script>
 
