@@ -9,7 +9,7 @@ const supabaseSendStudentLoginMail = async (email: string) => {
       email: email,
       options: {
         /*shouldCreateUser: false, means "do not create a user", but the link only works on users that exists in auth*/
-        emailRedirectTo: 'http://localhost:5173/login',
+        emailRedirectTo: 'http://localhost:5173/opret',
       },
     });
     if (error) throw error;
@@ -128,6 +128,28 @@ export const createAuthStudent = async (email: string, password: string) => {
   }
 };
 
+export const createStudent = async (userId: string, email: string) => {
+  try {
+    const invitedUser = await getInvitedUser(email);
+    if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
+
+    const {data, error} = await supabase
+      .from('users')
+      .insert({
+        user_id: userId,
+        company_id: invitedUser[0].company_id,
+        email: email,
+      })
+      .select();
+
+    if (error) throw error;
+    await deleteInvitedUser(email);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 
 /*LOGIN USER*/
 /*LOGIN USER*/
@@ -159,9 +181,9 @@ export const getAuthUser = async () => {
   }
 };
 
-/*UPDATE AUTH USER*/
-/*UPDATE AUTH USER*/
-/*UPDATE AUTH USER*/
+/*UPDATE USER*/
+/*UPDATE USER*/
+/*UPDATE USER*/
 const updateAuthUserPassword = async (password: string) => {
   try {
     const {data, error} = await supabase.auth.updateUser({
@@ -198,13 +220,20 @@ const updateFirstnameAndLastName = async (firstname: string, lastname: string) =
 
 export const updateNewUser = async (password: string, firstname: string, lastname: string) => {
   try {
-    const data = await updateAuthUserPassword(password);
 
-    await updateFirstnameAndLastName(firstname, lastname);
+    const authUser = await getAuthUser();
+    if (!authUser) throw new Error('no user data');
+    if (!authUser.user || !authUser.user.email) throw new Error('no user found');
 
-    if (error) throw error;
-    return data;
+    await createStudent(authUser.user.id, authUser.user.email);
+
+    await Promise.all([
+      updateAuthUserPassword(password),
+      updateFirstnameAndLastName(firstname, lastname),
+    ]);
+
+    return true;
   } catch (err) {
     console.log(err);
   }
-}
+};

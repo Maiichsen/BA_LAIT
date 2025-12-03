@@ -4,9 +4,9 @@ import {ref} from 'vue';
 import {
   checkIfUserExists,
   createAuthStudent,
-  createAuthUser,
   createInvitedStudent, signInUser,
 } from '@/services/userService.ts';
+import {supabase} from '@/db/connection.ts';
 
 const userEmail = ref('');
 const userPassword = ref('');
@@ -41,7 +41,12 @@ const handleLogin = async () => {
   }
 };
 
+const test = async () => {
+  const data = await supabase.auth.getUser();
+  console.log(data);
+};
 
+test();
 
 </script>
 
