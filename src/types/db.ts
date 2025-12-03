@@ -15,11 +15,6 @@ export type Content = Database['public']['Tables']['contents']['Row'];
 export type NewContent = Database['public']['Tables']['contents']['Insert'];
 export type UpdateContent = Database['public']['Tables']['contents']['Update'];
 
-// COURSE KEY
-export type CourseKey = Database['public']['Tables']['course_keys']['Row'];
-export type NewCourseKey = Database['public']['Tables']['course_keys']['Insert'];
-export type UpdateCourseKey = Database['public']['Tables']['course_keys']['Update'];
-
 // COURSE PAGES
 export type CoursePage = Database['public']['Tables']['course_pages']['Row'];
 export type NewCoursePage = Database['public']['Tables']['course_pages']['Insert'];
@@ -35,10 +30,10 @@ export type Course = Database['public']['Tables']['courses']['Row'];
 export type NewCourse = Database['public']['Tables']['courses']['Insert'];
 export type UpdateCourse = Database['public']['Tables']['courses']['Update'];
 
-// ENROLLMENTS
-export type Enrollment = Database['public']['Tables']['enrollments']['Row'];
-export type NewEnrollment = Database['public']['Tables']['enrollments']['Insert'];
-export type UpdateEnrollment = Database['public']['Tables']['enrollments']['Update'];
+// COURSE_SEATS
+export type Seat = Database['public']['Tables']['course_seats']['Row'];
+export type NewSeat = Database['public']['Tables']['course_seats']['Insert'];
+export type UpdateSeat = Database['public']['Tables']['course_seats']['Update'];
 
 // QUESTION TYPES
 export type QuestionType = Database['public']['Tables']['question_types']['Row'];
