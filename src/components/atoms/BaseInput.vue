@@ -2,7 +2,7 @@
 /*TODO: måske sin egen prop til input name?*/
 interface Props {
   inputType: string,
-  placeholder: string,
+  placeholder?: string,
   inputId: string,
   labelText: string,
   layout: 'stacked' | 'inline',

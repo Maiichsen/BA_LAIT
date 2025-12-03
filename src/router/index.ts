@@ -23,6 +23,14 @@ const router = createRouter({
       component: () => import('../views/AllCoursesView.vue'),
     },
     {
+      path: '/create_course',
+      name: 'createCourse',
+      meta: {
+        layout: DefaultLayout,
+      },
+      component: () => import('../views/CreateCourseView.vue'),
+    },
+    {
       path: '/my_courses',
       name: 'myCourses',
       meta: {
