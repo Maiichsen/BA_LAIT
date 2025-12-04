@@ -13,7 +13,6 @@ import CreateQuiz from '@/components/createCourse/quiz/createQuiz.vue';
       <AddContentHeader/>
       <div>
         <CourseDetailsPage/>
-        <CreateQuiz/>
       </div>
       <CourseEditorFooter/>
     </div>

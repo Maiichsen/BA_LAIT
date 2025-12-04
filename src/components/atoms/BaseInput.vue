@@ -6,14 +6,17 @@ interface Props {
   inputId: string,
   labelText?: string,
   layout?: 'stacked' | 'inline',
+  accept?: string,
 }
 
 const props = defineProps<Props>();
 const modelValue = defineModel();
 
+const emit = defineEmits(['change']);
 const onInput = (event: Event) => {
-  modelValue.value = (event.target as HTMLInputElement).value
+  modelValue.value = (event.target as HTMLInputElement).value;
 };
+
 </script>
 
 <template>
@@ -27,6 +30,8 @@ const onInput = (event: Event) => {
            :name=props.inputId
            :value="modelValue"
            @input="onInput"
+           :accept="accept"
+           @change="emit('change', $event)"
     />
   </div>
 </template>
