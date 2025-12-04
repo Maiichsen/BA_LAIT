@@ -4,6 +4,8 @@ export interface newCourseParams {
   cover_image_url: string | null
   estimated_time_minutes: number | null
   title: string
+  author_name: string | null
+  isPublished: boolean
 }
 
 export interface newCourseSeatParams {

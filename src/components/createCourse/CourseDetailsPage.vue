@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import {ref} from 'vue';
-import {uploadImageToSupabaseBucket} from '@/services/imageService.ts';
+import {onMounted, ref} from 'vue';
+import {
+  downloadImageFromSupabaseBucket,
+  uploadImageToSupabaseBucket,
+} from '@/services/imageService.ts';
+import {createCourse} from '@/services/courseService.ts';
 
 const title = ref('');
 const shortDescription = ref('');
-const timeEstimate = ref('');
+const timeEstimate = ref(null);
 const authorName = ref('');
 const longDescription = ref('');
 
@@ -33,9 +37,28 @@ const savetest = () => {
     return;
   }
   uploadImageToSupabaseBucket(UniqueImgFileName, imgFile.value);
+  createCourse({
+    title: title.value,
+    short_course_description: shortDescription.value,
+    cover_image_url: UniqueImgFileName,
+    estimated_time_minutes: timeEstimate.value,
+    author_name: authorName.value,
+    long_course_description: longDescription.value,
+    isPublished: false,
+  });
 };
 
 savetest();
+
+const coverPreviewUrl = ref<string | null>(null);
+onMounted(async () => {
+  const blob = await downloadImageFromSupabaseBucket('1764872121548');
+  if (!blob) {
+    return;
+  }
+
+  coverPreviewUrl.value = URL.createObjectURL(blob);
+});
 </script>
 
 <template>
@@ -66,10 +89,10 @@ savetest();
         @change="handleFileNameChange"
       />
       <BaseInput
-        input-type="text"
+        input-type="number"
         placeholder="varighed"
         input-id="varighed"
-        label-text="Varighed"
+        label-text="Varighed i minutter"
         layout="inline"
         v-model="timeEstimate"
       />
@@ -94,5 +117,9 @@ savetest();
 
   <div @click="savetest">
     KLIK HER
+  </div>
+
+  <div v-if="coverPreviewUrl">
+    <img :src="coverPreviewUrl">
   </div>
 </template>

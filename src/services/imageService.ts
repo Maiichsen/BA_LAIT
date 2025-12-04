@@ -12,3 +12,16 @@ export const uploadImageToSupabaseBucket = async (fileName: string, coverImage: 
     console.log(err);
   }
 };
+
+export const downloadImageFromSupabaseBucket = async (fileName: string) => {
+  try {
+    const {data, error} = await supabase.storage
+      .from('courseCovers')
+      .download(`public/${fileName}`);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
