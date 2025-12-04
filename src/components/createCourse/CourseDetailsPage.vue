@@ -2,10 +2,10 @@
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {onMounted, ref} from 'vue';
 import {
-  downloadImageFromSupabaseBucket,
+  downloadImageFromSupabaseBucket, downloadImageFromSupabaseBucketByCourseId,
   uploadImageToSupabaseBucket,
 } from '@/services/imageService.ts';
-import {createCourse} from '@/services/courseService.ts';
+import {createCourse, getCourseById, getCoverImgByCourseId} from '@/services/courseService.ts';
 
 const title = ref('');
 const shortDescription = ref('');
@@ -50,14 +50,14 @@ const savetest = () => {
 
 savetest();
 
-const coverPreviewUrl = ref<string | null>(null);
-onMounted(async () => {
-  const blob = await downloadImageFromSupabaseBucket('1764872121548');
-  if (!blob) {
-    return;
-  }
+const coverUrl = ref<string | null>(null);
 
-  coverPreviewUrl.value = URL.createObjectURL(blob);
+onMounted(async () => {
+  const img = await downloadImageFromSupabaseBucketByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8');
+  coverUrl.value = img ?? null;
+
+  /*const test = await getCoverImgByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8');
+  console.log(test[0].cover_image_url);*/
 });
 </script>
 
@@ -119,7 +119,7 @@ onMounted(async () => {
     KLIK HER
   </div>
 
-  <div v-if="coverPreviewUrl">
-    <img :src="coverPreviewUrl">
+  <div v-if="coverUrl">
+    <img :src="coverUrl">
   </div>
 </template>

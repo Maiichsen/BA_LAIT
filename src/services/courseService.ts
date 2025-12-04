@@ -36,6 +36,20 @@ export const getCourseById = async (courseId: string) => {
   }
 };
 
+export const getCoverImgByCourseId = async (courseId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .select('cover_image_url')
+      .eq('course_id', courseId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getAllPublicCourses = async () => {
   try {
     const {data, error} = await supabase
