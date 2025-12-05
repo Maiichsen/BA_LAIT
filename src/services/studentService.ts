@@ -1,9 +1,8 @@
 import {supabase} from '@/db/connection.ts';
 import {
-  checkIfUserExists,
   deleteInvitedUser,
   getAuthUser,
-  getInvitedUser, supabaseSendLoginMail, supabaseSignUpNewUser,
+  getInvitedUser, supabaseSendLoginMail,
   updateAuthUserPassword, updateFirstnameAndLastName,
 } from '@/services/userService.ts';
 
