@@ -23,22 +23,25 @@ const router = createRouter({
       component: () => import('../views/AllCoursesView.vue'),
     },
     {
-      path: '/create_course/:id',
+      path: '/create_course/:course_id',
       name: 'frontpageCreateCourse',
       meta: {
         layout: DefaultLayout,
       },
+      props: true,
       component: () => import('@/views/courseViews/CourseEditorView.vue'),
       children: [
         {
           path: '',
           name: 'frontpage',
+          props: true,
           component: () => import('@/views/courseViews/CourseDetailsView.vue'),
         },
         {
-          path: ':pageIndex',
+          path: ':page_id',
           name: 'courseContent',
-          component: () => import('@/views/courseViews/CourseEditorView.vue'),
+          props: true,
+          component: () => import('@/views/courseViews/CreateContentView.vue'),
         },
       ],
     },

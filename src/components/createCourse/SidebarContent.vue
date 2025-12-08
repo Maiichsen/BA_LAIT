@@ -7,7 +7,7 @@ import {useRouter} from 'vue-router';
 const router = useRouter();
 
 interface Props {
-  courseId: string;
+  course_id: string;
 }
 
 const props = defineProps<Props>();
@@ -16,31 +16,32 @@ const listOfCoursePages = ref<CoursePage[]>([]);
 
 const getCoursePages = async () => {
   try {
-    listOfCoursePages.value = await getAllCoursePagesByCourseId(props.courseId);
+    listOfCoursePages.value = await getAllCoursePagesByCourseId(props.course_id);
   } catch (error) {
     console.log(error);
   }
 };
 
+const routeToContent = (pageId: string) => {
+  router.push({ name: 'courseContent', params: { page_id: pageId } });
+};
+
+const routeToDetails = () => {
+  router.push({ name: 'frontpage'});
+};
 
 onMounted(async () => {
   await getCoursePages();
 
 });
-
-const test = (pageId: string) => {
-  router.push({ name: 'createCourseContent', params: { id: courseId.value } });
-};
-
-
 </script>
 
 <template>
   <div class="flex-col border-2 border-yellow-500">
-    <p>
+    <p @click="routeToDetails()" class="hover:text-amber-600 cursor-pointer">
       Forside
     </p>
-    <p v-for="coursePage in listOfCoursePages" :key="coursePage.course_page_id" @click="test(coursePage.course_page_id)">
+    <p v-for="coursePage in listOfCoursePages" :key="coursePage.course_page_id" @click="routeToContent(coursePage.course_page_id)" class="hover:text-amber-600 cursor-pointer">
       {{ coursePage.course_page_title }}
     </p>
   </div>

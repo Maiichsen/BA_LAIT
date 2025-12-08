@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
-import CourseDetailsPage from '@/components/createCourse/CourseDetailsPage.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
 import {computed} from 'vue';
-import {useRoute} from 'vue-router';
 
-const route = useRoute();
+interface Props {
+  course_id: string;
+}
+
+const props = defineProps<Props>();
 
 const courseId = computed(() => {
-  return route.params.id;
+  return props.course_id;
 });
 
 console.log(courseId.value);
@@ -18,7 +20,7 @@ console.log(courseId.value);
 
 <template>
   <div class="flex">
-    <SidebarContent :course-id="courseId as string" />
+    <SidebarContent :course_id="props.course_id"/>
     <div>
       <AddContentHeader/>
       <div>

@@ -119,7 +119,7 @@ onMounted(async () => {
     KLIK HER
   </div>
 
-  <div v-if="coverUrl">
-    <img :src="coverUrl">
-  </div>
+  <!--  <div v-if="coverUrl">
+      <img :src="coverUrl">
+    </div>-->
 </template>
