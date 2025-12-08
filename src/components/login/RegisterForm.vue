@@ -1,19 +1,17 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
-import {
-  checkIfUserExists,
-  createAuthStudent,
-  createInvitedStudent, signInUser,
+import {signInUser,
 } from '@/services/userService.ts';
 import {supabase} from '@/db/connection.ts';
+import {createInvitedStudent, createStudent} from '@/services/studentService.ts';
 
 const userEmail = ref('');
 const userPassword = ref('');
 const companyId = ref('');
 
 /*admin email, inviting user*/
-const createStudent = async () => {
+const handleCreateStudent = async () => {
   try {
     const data = await createInvitedStudent(userEmail.value, companyId.value);
     console.log(data);
@@ -25,7 +23,7 @@ const createStudent = async () => {
 /*invited user, creates auth account*/
 const handleSignUp = async () => {
   try {
-    const data = await createAuthStudent(userEmail.value, userPassword.value);
+    const data = await createStudent(userEmail.value, userPassword.value);
     console.log(data);
   } catch (e) {
     console.error(e);
@@ -52,7 +50,7 @@ test();
 
 <template>
   <h1>ADMIN OPRET STUDENT</h1>
-  <form @submit.prevent="createStudent">
+  <form @submit.prevent="handleCreateStudent">
     <BaseInput input-type="text" placeholder="mail" input-id="mail" label-text="mail"
                layout="stacked" v-model="userEmail"/>
     <br>
