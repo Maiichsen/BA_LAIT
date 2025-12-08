@@ -160,7 +160,7 @@ onUnmounted(() => {
         @click.stop="isProfileOpen = !isProfileOpen"
         class="w-full justify-center"
       >
-        Profil (MJ)
+        Mai Jockwich
       </BaseButton>
 
       <!-- Mobile Dropdown -->
