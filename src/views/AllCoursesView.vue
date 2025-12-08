@@ -15,7 +15,7 @@ const handleCreateNewCourseClick = async () => {
     if (!course) return;
     courseId.value = course.course_id;
 
-    router.push({ name: 'frontpageCreateCourse', params: {course_id: courseId.value } });
+    router.push({ name: 'frontpage', params: {course_id: courseId.value } });
   } catch (error) {
     console.error(error);
   }

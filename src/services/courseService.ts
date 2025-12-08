@@ -1,13 +1,14 @@
 import {supabase} from '../db/connection.ts';
-import type {newCourseSeatParams, newCourseParams} from '../types/courseTypes.ts';
+import type {NewCourseSeatParams, CourseParams} from '../types/courseTypes.ts';
 
 export const createTemplateCourse = async () => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .insert([{
-        title: 'Ny kursus',
+        title: 'Nyt kursus',
         short_course_description: 'Beskrivelse af kursus',
+        is_published: false,
       }])
       .select()
       .single();
@@ -23,7 +24,7 @@ export const createTemplateCourse = async () => {
   }
 };
 
-export const createCourse = async (newCourseParams: newCourseParams) => {
+/*export const createCourse = async (newCourseParams: newCourseParams) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -41,7 +42,30 @@ export const createCourse = async (newCourseParams: newCourseParams) => {
   } catch (err) {
     console.log(err);
   }
+};*/
+
+export const updateCourse = async (courseId: string, updateCourseParams: CourseParams) => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .update({
+        long_course_description: updateCourseParams.long_course_description,
+        short_course_description: updateCourseParams.short_course_description,
+        cover_image_url: updateCourseParams.cover_image_url,
+        estimated_time_minutes: updateCourseParams.estimated_time_minutes,
+        title: updateCourseParams.title,
+        author_name: updateCourseParams.author_name,
+      })
+      .eq('course_id', courseId)
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
 };
+
 
 export const getCourseById = async (courseId: string) => {
   try {
@@ -217,9 +241,12 @@ export const getAllCoursePagesByCourseId = async (courseId: string) => {
     const {data, error} = await supabase
       .from('course_pages')
       .select('*')
-      .eq('course_id', courseId);
+      .eq('course_id', courseId)
+      .order('order_index', {ascending: true});
 
     if (error) throw error;
+    if (!data) throw new Error('course pages not found');
+
     return data;
   } catch (err) {
     console.log(err);
@@ -253,7 +280,7 @@ const createNewContent = async (coursePageId: string) => {
 };
 
 ///////*COURSE SEATS*////////
-export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
+export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams) => {
   try {
     const {data, error} = await supabase
       .from('course_seats')

@@ -16,7 +16,9 @@ const listOfCoursePages = ref<CoursePage[]>([]);
 
 const getCoursePages = async () => {
   try {
-    listOfCoursePages.value = await getAllCoursePagesByCourseId(props.course_id);
+    const data = await getAllCoursePagesByCourseId(props.course_id);
+    if (!data) return;
+    listOfCoursePages.value = data;
   } catch (error) {
     console.log(error);
   }
