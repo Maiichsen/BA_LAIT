@@ -50,10 +50,10 @@ onUnmounted(() => {
 
           <div class="profile-dropdown relative">
             <BaseButton
-              variant="primary-small"
-              @click="isProfileOpen = !isProfileOpen"
-              aria-label="Profil menu" class="px-2">
-              MJ
+                variant="primary-tiny"
+                @click="isProfileOpen = !isProfileOpen"
+                aria-label="Profil menu">
+                MJ
             </BaseButton>
 
             <!-- Dropdown -->
