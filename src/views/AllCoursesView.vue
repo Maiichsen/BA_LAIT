@@ -9,9 +9,10 @@ const courseId = ref<string | null>('');
 const handleCreateNewCourseClick = async () => {
   try {
     const course = await createTemplateCourse();
+    if (!course) return;
     courseId.value = course.course_id;
 
-    router.push({ name: 'createCourse', params: { id: courseId.value } });
+    router.push({ name: 'frontpageCreateCourse', params: { id: courseId.value } });
   } catch (error) {
     console.error(error);
   }

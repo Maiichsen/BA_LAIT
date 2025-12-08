@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {getAllCoursePagesByCourseId} from '@/services/courseService.ts';
 import type {CoursePage} from '@/types/db.ts';
+import {useRouter} from 'vue-router';
+
+const router = useRouter();
 
 interface Props {
   courseId: string;
@@ -9,7 +12,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const listOfCoursePages = ref<CoursePage>([]);
+const listOfCoursePages = ref<CoursePage[]>([]);
 
 const getCoursePages = async () => {
   try {
@@ -25,6 +28,10 @@ onMounted(async () => {
 
 });
 
+const test = (pageId: string) => {
+  router.push({ name: 'createCourseContent', params: { id: courseId.value } });
+};
+
 
 </script>
 
@@ -33,7 +40,7 @@ onMounted(async () => {
     <p>
       Forside
     </p>
-    <p v-for="coursePage in listOfCoursePages" :key="coursePage.course_page_id">
+    <p v-for="coursePage in listOfCoursePages" :key="coursePage.course_page_id" @click="test(coursePage.course_page_id)">
       {{ coursePage.course_page_title }}
     </p>
   </div>

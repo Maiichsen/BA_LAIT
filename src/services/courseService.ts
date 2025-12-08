@@ -137,7 +137,6 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
     console.log(err);
   }
 };*/
-
 /*export const getAllCoursesByStudent = async (userId: string) => {
   try {
     const {data, error} = await supabase
@@ -179,56 +178,6 @@ export const permDeleteCourseById = async (courseId: string) => {
     console.log(err);
   }
 };
-
-
-///////*COURSE SEATS*////////
-export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
-  try {
-    const {data, error} = await supabase
-      .from('course_seats')
-      .insert([{
-        course_id: newCourseSeatParams.course_id,
-        company_id: newCourseSeatParams.company_id,
-        user_id: newCourseSeatParams.user_id,
-        reserved_for_email: newCourseSeatParams.reserved_for_email,
-      }])
-      .select();
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const deleteCourseSeat = async (courseSeatId: string) => {
-  try {
-    const {error} = await supabase
-      .from('course_seats')
-      .delete()
-      .eq('course_seat_id', courseSeatId);
-
-    if (error) throw error;
-    return true;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-/*export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
-  try {
-    const {data, error} = await supabase
-      .from('course_keys')
-      .select('*')
-      .eq('company_id', companyId)
-      .eq('course_id', courseId);
-
-    if (error) throw error;
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};*/
 
 ///////*COURSE PAGES*////////
 export const createCoursePage = async (courseId: string, orderIndex: number) => {
@@ -302,3 +251,52 @@ const createNewContent = async (coursePageId: string) => {
     console.log(err);
   }
 };
+
+///////*COURSE SEATS*////////
+export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_seats')
+      .insert([{
+        course_id: newCourseSeatParams.course_id,
+        company_id: newCourseSeatParams.company_id,
+        user_id: newCourseSeatParams.user_id,
+        reserved_for_email: newCourseSeatParams.reserved_for_email,
+      }])
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const deleteCourseSeat = async (courseSeatId: string) => {
+  try {
+    const {error} = await supabase
+      .from('course_seats')
+      .delete()
+      .eq('course_seat_id', courseSeatId);
+
+    if (error) throw error;
+    return true;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/*export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_keys')
+      .select('*')
+      .eq('company_id', companyId)
+      .eq('course_id', courseId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};*/

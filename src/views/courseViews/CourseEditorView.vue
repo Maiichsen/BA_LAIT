@@ -22,7 +22,7 @@ console.log(courseId.value);
     <div>
       <AddContentHeader/>
       <div>
-        <CourseDetailsPage/>
+        <router-view/>
       </div>
       <CourseEditorFooter/>
     </div>

@@ -24,11 +24,23 @@ const router = createRouter({
     },
     {
       path: '/create_course/:id',
-      name: 'createCourse',
+      name: 'frontpageCreateCourse',
       meta: {
         layout: DefaultLayout,
       },
-      component: () => import('../views/CreateCourseView.vue'),
+      component: () => import('@/views/courseViews/CourseEditorView.vue'),
+      children: [
+        {
+          path: '',
+          name: 'frontpage',
+          component: () => import('@/views/courseViews/CourseDetailsView.vue'),
+        },
+        {
+          path: ':pageIndex',
+          name: 'courseContent',
+          component: () => import('@/views/courseViews/CourseEditorView.vue'),
+        },
+      ],
     },
     {
       path: '/my_courses',
