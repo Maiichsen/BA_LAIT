@@ -1,13 +1,18 @@
 /*import {} from './services/companyService.ts';
-import {} from './services/courseService.ts';
-import {checkIfUserExists} from './services/userService.ts';*/
-/*
-import {supabase} from './db/connection.ts';
-*/
+import {} from './services/courseService.ts';*/
+import {getAllCourses} from './services/courseService.ts';
+// import {supabase} from './db/connection.ts';
 
 
 console.log('hey');
 
+(async () => {
+  getAllCourses().then(courses => {
+    console.log(`YES! ${courses.length} courses`);
+  }).catch(e => {
+    console.error('ERROR', e);
+  });
+})();
 
 /*checkIfUserExists('test@test.dk').then((data) => {
   console.log(data);

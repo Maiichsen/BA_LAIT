@@ -65,18 +65,21 @@ export const getAllPublicCourses = async () => {
   }
 };
 
-export const getAllCourses = async () => {
+export const getAllCourses = () => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .select('*');
 
-    if (error) throw error;
-    return data;
+    if (error) {
+      reject(error);
+    }
+
+    resolve(data);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
 export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   try {
