@@ -3,12 +3,22 @@ import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseDetailsPage from '@/components/createCourse/CourseDetailsPage.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
-import CreateQuiz from '@/components/createCourse/quiz/createQuiz.vue';
+import {computed} from 'vue';
+import {useRoute} from 'vue-router';
+
+const route = useRoute();
+
+const courseId = computed(() => {
+  return route.params.id;
+});
+
+console.log(courseId.value);
+
 </script>
 
 <template>
   <div class="flex">
-    <SidebarContent/>
+    <SidebarContent :course-id="courseId as string" />
     <div>
       <AddContentHeader/>
       <div>

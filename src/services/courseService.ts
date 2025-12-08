@@ -100,14 +100,14 @@ export const getAllCourses = async () => {
   }
 };
 
-export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
+/*export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('course_keys')
       .select('courses(*)')
       .eq('company_id', companyId);
 
-    /*To get list of unique courses*/
+    /!*To get list of unique courses*!/
     const uniqueCourses = Array.from(
       new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
@@ -126,7 +126,7 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
       .select('courses(*),users!inner(company_id)')
       .eq('users.company_id', companyId);
 
-    /*To get list of unique courses*/
+    /!*To get list of unique courses*!/
     const uniqueCourses = Array.from(
       new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
@@ -136,9 +136,9 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
-export const getAllCoursesByStudent = async (userId: string) => {
+/*export const getAllCoursesByStudent = async (userId: string) => {
   try {
     const {data, error} = await supabase
       .from('enrollments')
@@ -150,7 +150,7 @@ export const getAllCoursesByStudent = async (userId: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
 export const deleteCourseById = async (courseId: string) => {
   try {
@@ -215,7 +215,7 @@ export const deleteCourseSeat = async (courseSeatId: string) => {
   }
 };
 
-export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
+/*export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('course_keys')
@@ -228,7 +228,7 @@ export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyI
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
 ///////*COURSE PAGES*////////
 export const createCoursePage = async (courseId: string, orderIndex: number) => {
@@ -238,6 +238,10 @@ export const createCoursePage = async (courseId: string, orderIndex: number) => 
       .insert([{course_id: courseId, order_index: orderIndex}])
       .select();
 
+    if (!data) return;
+    if (!data[0]) return;
+
+    await createNewContent(data[0].course_page_id);
     if (error) throw error;
     return data;
   } catch (err) {
@@ -259,3 +263,42 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
   }
 };
 
+export const getAllCoursePagesByCourseId = async (courseId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_pages')
+      .select('*')
+      .eq('course_id', courseId);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+/*CREATE CONTENT*/
+/*CREATE CONTENT*/
+/*CREATE CONTENT*/
+
+const createNewContent = async (coursePageId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('contents')
+      .insert([
+        {
+          course_page_id: coursePageId,
+          content_json:
+            {
+              text: 'her skal content værdien være i stedet..',
+            },
+        },
+
+      ]);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
