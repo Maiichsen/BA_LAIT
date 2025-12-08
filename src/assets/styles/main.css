@@ -118,6 +118,11 @@
 	--color-tutara-200: #d7d6d5;
 	--color-tutara-100: #f0f0ef;
 	--color-tutara-50: #fafafa;
+
+  	/* Info colors */
+    --color-info-red: #BE1010;
+    --color-info-green: #AFF8C8;
+    --color-info-red-hover:#880000;
 }
 
 @layer components {
