@@ -5,7 +5,7 @@ import type {
   newCourseSeatParams,
 } from '../types/courseTypes.ts';
 
-export const createCourse = (newCourseParams: newCourseParams): Promise<{hey: string}> => new Promise(async (resolve, reject) => {
+export const createCourse = (newCourseParams: newCourseParams): Promise<CourseRow> => new Promise(async (resolve, reject) => {
   if (!newCourseParams) return reject('missing newCourseParams');
 
   try {
@@ -21,14 +21,15 @@ export const createCourse = (newCourseParams: newCourseParams): Promise<{hey: st
       .select();
 
     if (error) return reject(error);
+    if (!data || !data[0]) return reject('Encountered an error creating course. Got null');
 
-    resolve(data);
+    resolve(data[0]);
   } catch (err) {
     reject(err);
   }
 });
 
-export const getCourseById = async (courseId: string) => {
+export const getCourseById = (courseId: string): Promise<CourseRow> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -36,28 +37,48 @@ export const getCourseById = async (courseId: string) => {
       .eq('course_id', courseId)
       .single();
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+    resolve(data);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
-export const getCoverImgByCourseId = async (courseId: string) => {
+export const getCoverImgFilenameByCourseId = (courseId: string): Promise<string | null> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .select('cover_image_url')
-      .eq('course_id', courseId);
+      .eq('course_id', courseId)
+      .single();
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+
+    resolve(data.cover_image_url);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
-export const getAllPublicCourses = async () => {
+export const getCoverImgUrlByCourseId = (courseId: string): Promise<string | null> => new Promise(async (resolve, reject) => {
+  const imgFilename = await getCoverImgFilenameByCourseId(courseId).catch(err => reject(err));
+
+  if (!imgFilename) return resolve(null);
+
+  try {
+    const {data, error} = await supabase.storage
+      .from('courseCovers')
+      .download(`public/${imgFilename}`);
+
+    if (error) return reject(error);
+
+    resolve(URL.createObjectURL(data));
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const getAllPublicCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -65,12 +86,13 @@ export const getAllPublicCourses = async () => {
       .eq('is_published', true)
       .is('soft_deleted_at', null);
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+
+    resolve(data);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
 export const getAllCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
   try {
@@ -79,7 +101,6 @@ export const getAllCourses = (): Promise<CourseRow[]> => new Promise(async (reso
       .select('*');
 
     if (error) return reject(error);
-    if (!data) return reject('error fetching all courses. Got null');
 
     resolve(data);
   } catch (err) {
@@ -87,14 +108,14 @@ export const getAllCourses = (): Promise<CourseRow[]> => new Promise(async (reso
   }
 });
 
-export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
+/*export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('course_keys')
       .select('courses(*)')
       .eq('company_id', companyId);
 
-    /*To get list of unique courses*/
+    /!*To get list of unique courses*!/
     const uniqueCourses = Array.from(
       new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
@@ -104,16 +125,16 @@ export const getAllUnenrolledCoursesByCompany = async (companyId: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
-export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
+/*export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
   try {
     const {data, error} = await supabase
       .from('enrollments')
       .select('courses(*),users!inner(company_id)')
       .eq('users.company_id', companyId);
 
-    /*To get list of unique courses*/
+    /!*To get list of unique courses*!/
     const uniqueCourses = Array.from(
       new Map(data?.map(item => [item.courses.course_id, item.courses])).values(),
     );
@@ -123,9 +144,9 @@ export const getAllEnrolledCoursesByCompany = async (companyId: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
-export const getAllCoursesByStudent = async (userId: string) => {
+/*export const getAllCoursesByStudent = async (userId: string) => {
   try {
     const {data, error} = await supabase
       .from('enrollments')
@@ -137,35 +158,37 @@ export const getAllCoursesByStudent = async (userId: string) => {
   } catch (err) {
     console.log(err);
   }
-};
+};*/
 
-export const deleteCourseById = async (courseId: string) => {
+export const deleteCourseById = (courseId: string): Promise<void> => new Promise(async (resolve, reject) => {
   try {
     const {error} = await supabase
       .from('courses')
       .update({soft_deleted_at: new Date().toISOString()})
       .eq('course_id', courseId);
 
-    if (error) throw error;
-    return true;
-  } catch (err) {
-    console.log(err);
-  }
-};
+    if (error) return reject(error);
 
-export const permDeleteCourseById = async (courseId: string) => {
+    resolve();
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const permDeleteCourseById = (courseId: string): Promise<void> => new Promise(async (resolve, reject) => {
   try {
     const {error} = await supabase
       .from('courses')
       .delete()
       .eq('course_id', courseId);
 
-    if (error) throw error;
-    return true;
+    if (error) return reject(error);
+
+    resolve();
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
 
 ///////*COURSE SEATS*////////

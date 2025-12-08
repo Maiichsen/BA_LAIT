@@ -4,8 +4,8 @@ export interface newCourseParams {
   title: string
   short_course_description: string
   long_course_description: string
-  cover_image_url: string | null
-  estimated_time_minutes: number | null
+  cover_image_url?: string
+  estimated_time_minutes?: number
 }
 
 export interface newCourseSeatParams {
