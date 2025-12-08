@@ -1,25 +1,32 @@
 import {supabase} from '../db/connection.ts';
-import type {newCourseParams, newCourseSeatParams} from '../types/courseTypes.ts';
+import type {
+  CourseRow,
+  newCourseParams,
+  newCourseSeatParams,
+} from '../types/courseTypes.ts';
 
-export const createCourse = async (newCourseParams: newCourseParams) => {
+export const createCourse = (newCourseParams: newCourseParams): Promise<{hey: string}> => new Promise(async (resolve, reject) => {
+  if (!newCourseParams) return reject('missing newCourseParams');
+
   try {
     const {data, error} = await supabase
       .from('courses')
       .insert([{
-        long_course_description: newCourseParams.long_course_description,
+        title: newCourseParams.title,
         short_course_description: newCourseParams.short_course_description,
+        long_course_description: newCourseParams.long_course_description,
         cover_image_url: newCourseParams.cover_image_url,
         estimated_time_minutes: newCourseParams.estimated_time_minutes,
-        title: newCourseParams.title,
       }])
       .select();
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+
+    resolve(data);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
 export const getCourseById = async (courseId: string) => {
   try {
@@ -65,15 +72,14 @@ export const getAllPublicCourses = async () => {
   }
 };
 
-export const getAllCourses = () => new Promise(async (resolve, reject) => {
+export const getAllCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .select('*');
 
-    if (error) {
-      reject(error);
-    }
+    if (error) return reject(error);
+    if (!data) return reject('error fetching all courses. Got null');
 
     resolve(data);
   } catch (err) {
