@@ -23,7 +23,7 @@ const router = createRouter({
       component: () => import('../views/AllCoursesView.vue'),
     },
     {
-      path: '/create_course',
+      path: '/create_course/:id',
       name: 'createCourse',
       meta: {
         layout: DefaultLayout,

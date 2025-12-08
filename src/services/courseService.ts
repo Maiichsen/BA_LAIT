@@ -1,5 +1,27 @@
 import {supabase} from '../db/connection.ts';
-import type {newCourseParams, newCourseSeatParams} from '../types/courseTypes.ts';
+import type {newCourseSeatParams, newCourseParams} from '../types/courseTypes.ts';
+
+export const createTemplateCourse = async () => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .insert([{
+        title: 'Ny kursus',
+        short_course_description: 'Beskrivelse af kursus',
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const courseId = data.course_id;
+
+    await createCoursePage(courseId, 1);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const createCourse = async (newCourseParams: newCourseParams) => {
   try {

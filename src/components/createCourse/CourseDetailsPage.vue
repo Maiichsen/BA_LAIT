@@ -2,10 +2,10 @@
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {onMounted, ref} from 'vue';
 import {
-  downloadImageFromSupabaseBucket, downloadImageFromSupabaseBucketByCourseId,
+  downloadImageFromSupabaseBucketByCourseId,
   uploadImageToSupabaseBucket,
 } from '@/services/imageService.ts';
-import {createCourse, getCourseById, getCoverImgByCourseId} from '@/services/courseService.ts';
+import {createCourse} from '@/services/courseService.ts';
 
 const title = ref('');
 const shortDescription = ref('');
