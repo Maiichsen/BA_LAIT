@@ -1,14 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import BaseButton from '@/components/atoms/BaseButton.vue';
 
 const isProfileOpen = ref(false);
 
-// Close dropdown when clicking outside
-import { onMounted, onUnmounted } from 'vue';
-
 const handleClickOutside = (event: MouseEvent) => {
   const target = event.target as HTMLElement;
-  if (!target.closest('.relative')) {
+  if (!target.closest('.profile-dropdown')) {
     isProfileOpen.value = false;
   }
 };
@@ -42,16 +40,21 @@ onUnmounted(() => {
 
         <!-- Kontakt og profil -->
         <div class="col-span-3 lg:col-span-4 flex justify-end items-center gap-3">
-          <router-link to="/contact" class="text-nav">Kontakt</router-link>
+            <BaseButton
+              variant="primary-small"
+              as="router-link"
+              to="/contact">
+              Kontakt
+          </BaseButton>
 
           <!-- Profile dropdown -->
-          <div class="relative">
-            <button
-              @click="isProfileOpen = !isProfileOpen"
-              class="flex items-center gap-2 text-nav"
-              aria-label="Profil menu">
-              MJ
-            </button>
+          <div class="profile-dropdown relative">
+            <BaseButton
+                variant="primary-small"
+                @click="isProfileOpen = !isProfileOpen"
+                aria-label="Profil menu">
+                MJ
+            </BaseButton>
 
             <!-- Dropdown -->
             <div
