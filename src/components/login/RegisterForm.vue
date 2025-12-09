@@ -11,36 +11,36 @@ const companyId = ref('');
 
 /*admin email, inviting user*/
 const handleCreateStudent = async () => {
-  try {
-    const data = await createInvitedStudent(userEmail.value, companyId.value);
-    console.log(data);
-  } catch (e) {
-    console.error(e);
-  }
+	try {
+		const data = await createInvitedStudent(userEmail.value, companyId.value);
+		console.log(data);
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 /*invited user, creates auth account*/
 const handleSignUp = async () => {
-  try {
-    const data = await createStudent(userEmail.value, userPassword.value);
-    console.log(data);
-  } catch (e) {
-    console.error(e);
-  }
+	try {
+		const data = await createStudent(userEmail.value, userPassword.value);
+		console.log(data);
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 const handleLogin = async () => {
-  try {
-    const data = await signInUser(userEmail.value, userPassword.value);
-    console.log(data);
-  } catch (e) {
-    console.error(e);
-  }
+	try {
+		const data = await signInUser(userEmail.value, userPassword.value);
+		console.log(data);
+	} catch (e) {
+		console.error(e);
+	}
 };
 
 const test = async () => {
-  const data = await supabase.auth.getUser();
-  console.log(data);
+	const data = await supabase.auth.getUser();
+	console.log(data);
 };
 
 test();

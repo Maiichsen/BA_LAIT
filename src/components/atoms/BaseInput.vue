@@ -14,8 +14,9 @@ const modelValue = defineModel();
 
 const emit = defineEmits(['change']);
 const onInput = (event: Event) => {
-  modelValue.value = (event.target as HTMLInputElement).value;
+	modelValue.value = (event.target as HTMLInputElement).value;
 };
+
 </script>
 
 <template>

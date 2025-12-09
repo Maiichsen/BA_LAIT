@@ -8,7 +8,7 @@ const userFirstName = ref('');
 const userLastName = ref('');
 
 const handleUpdateUser = async () => {
-  await updateNewStudent(userPassword.value, userFirstName.value, userLastName.value);
+	await updateNewStudent(userPassword.value, userFirstName.value, userLastName.value);
 };
 </script>
 

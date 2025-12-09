@@ -6,18 +6,18 @@ const isProfileOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 
 const handleClickOutside = (event: MouseEvent) => {
-  const target = event.target as HTMLElement;
-  if (!target.closest('.profile-dropdown')) {
-    isProfileOpen.value = false;
-  }
+	const target = event.target as HTMLElement;
+	if (!target.closest('.profile-dropdown')) {
+		isProfileOpen.value = false;
+	}
 };
 
 onMounted(() => {
-  document.addEventListener('click', handleClickOutside);
+	document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', handleClickOutside);
+	document.removeEventListener('click', handleClickOutside);
 });
 </script>
 
