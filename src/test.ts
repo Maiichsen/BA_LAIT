@@ -6,7 +6,7 @@ console.log('Running test file');
 // 20ff15e0-7cd7-432b-bbf5-9f9ebe48e82e has img
 // 55b8bf91-82b9-4c75-980a-29d14cc89c9d no img
 (async () => {
-  await getCoverImgUrlByCourseId('20ff15e0-7cd7-432b-bbf5-9f9ebe48e82f').then(imgUrl => {
+  await getCoverImgUrlByCourseId('20ff15e0-7cd7-432b-bbf5-9f9ebe48e82e').then(imgUrl => {
     console.log('yess');
     console.log(imgUrl);
   }).catch(err => {

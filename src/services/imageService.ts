@@ -1,4 +1,4 @@
-import {supabase} from '@/db/connection.ts';
+import {supabase} from '../db/connection.ts';
 
 export const uploadImageToSupabaseBucket = async (fileName: string, coverImage: File) => {
   try {
@@ -13,15 +13,16 @@ export const uploadImageToSupabaseBucket = async (fileName: string, coverImage: 
   }
 };
 
-export const downloadImageFromSupabaseBucket = async (fileName: string) => {
+export const downloadImageFromSupabaseBucket = (storageName: string, fileName: string): Promise<string | null> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase.storage
-      .from('courseCovers')
+      .from(storageName)
       .download(`public/${fileName}`);
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+
+    resolve(URL.createObjectURL(data));
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
