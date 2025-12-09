@@ -195,6 +195,23 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
   }
 };
 
+export const getAllCoursePagesByCourseId = (courseId: string): Promise<CoursePage[]> => new Promise(async (resolve, reject) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_pages')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('order_index', {ascending: true});
+
+    if (error) return reject(error);
+    if (!data) return reject('course pages not found');
+
+    resolve(data);
+  } catch (err) {
+    reject(err);
+  }
+});
+
 const createNewContent = async (coursePageId: string) => {
   try {
     const {data, error} = await supabase

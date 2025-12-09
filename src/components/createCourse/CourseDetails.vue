@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {onMounted, ref} from 'vue';
-import {
-  downloadImageFromSupabaseBucketByCourseId,
-  uploadImageToSupabaseBucket,
-} from '@/services/imageService.ts';
+import {uploadImageToSupabaseBucket} from '@/services/imageService.ts';
+import {getCoverImgUrlByCourseId} from '@/services/courseService.ts';
 import {updateCourse} from '@/services/courseService.ts';
 
 interface Props {
@@ -48,9 +46,10 @@ const handleUpdateCourse = async () => {
 
 const coverUrl = ref<string | null>(null);
 
-onMounted(async () => {
-  const img = await downloadImageFromSupabaseBucketByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8');
-  coverUrl.value = img ?? null;
+onMounted(() => {
+  getCoverImgUrlByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8').then(imgUrl => {
+    coverUrl.value = imgUrl;
+  }).catch(err => console.log(err));
 });
 </script>
 
@@ -112,7 +111,7 @@ onMounted(async () => {
     GEM
   </div>
 
-  <!--  <div v-if="coverUrl">
+  <div v-if="coverUrl">
       <img :src="coverUrl">
-    </div>-->
+    </div>
 </template>
