@@ -1,4 +1,6 @@
 import { supabase } from '../db/connection.ts';
+import type {InvitedUser} from '@/types/db.ts';
+import {createCompany} from '@/services/companyService.ts';
 
 /*EMAIL STUFF*/
 /*EMAIL STUFF*/
@@ -134,3 +136,27 @@ export const updateFirstnameAndLastName = async (firstname: string, lastname: st
 		console.log(err);
 	}
 };
+
+export const createInvitedUser = (email: string, companyId: string, isCompanyOwner: boolean): Promise<InvitedUser> => new Promise(async (resolve, reject) => {
+	try {
+		const {data, error} = await supabase
+			.from('invited_users')
+			.insert({
+				company_id: companyId,
+				user_email: email,
+				is_company_user: isCompanyOwner,
+			})
+			.select();
+
+		if (error) return reject(error);
+		if (!data || !data[0]) return reject('No data object found, lost in space');
+
+		const user = data[0];
+
+		supabaseSendLoginMail(user.user_email)
+			.then(() => resolve(user))
+			.catch(() => reject('Error sending verification e-mail'));
+	} catch (err) {
+		reject(err);
+	}
+});
