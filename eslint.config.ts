@@ -12,45 +12,45 @@ import pluginCypress from 'eslint-plugin-cypress';
 // More info at https://github.com/vuejs/eslint-config-typescript/#advanced-setup
 
 export default defineConfigWithVueTs(
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
-  },
+	{
+		name: 'app/files-to-lint',
+		files: ['**/*.{ts,mts,tsx,vue}'],
+	},
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+	globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
-  pluginVue.configs['flat/essential'],
-  vueTsConfigs.recommended,
+	pluginVue.configs['flat/essential'],
+	vueTsConfigs.recommended,
 
-  {
-    ...pluginVitest.configs.recommended,
-    files: ['src/**/__tests__/*'],
-  },
+	{
+		...pluginVitest.configs.recommended,
+		files: ['src/**/__tests__/*'],
+	},
 
-  {
-    ...pluginCypress.configs.recommended,
-    files: [
-      'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
-      'cypress/support/**/*.{js,ts,jsx,tsx}',
-    ],
-  },
-  {
-    rules: {
-      'arrow-spacing': ['error', {'before': true, 'after': true}],
-      'brace-style': ['error', '1tbs'],
-      'comma-dangle': ['error', 'always-multiline'],
-      'eqeqeq': ['error', 'always'],
-      'indent': ['error', 2],
-      'no-eval': ['error'],
-      'no-unused-vars': ['error'],
-      'no-var': ['error'],
-      'prefer-const': ['error'],
-      'quotes': ['error', 'single'],
-      'semi': ['error', 'always'],
-      'keyword-spacing': ['error', {'before': true}],
-      'line-comment-position': ['error', { 'position': 'above' }],
-      'array-bracket-newline': ['error', 'consistent'],
-      'no-trailing-spaces': ['error'],
-    },
-  },
+	{
+		...pluginCypress.configs.recommended,
+		files: [
+			'cypress/e2e/**/*.{cy,spec}.{js,ts,jsx,tsx}',
+			'cypress/support/**/*.{js,ts,jsx,tsx}',
+		],
+	},
+	{
+		rules: {
+			'arrow-spacing': ['error', {'before': true, 'after': true}],
+			'brace-style': ['error', '1tbs'],
+			'comma-dangle': ['error', 'always-multiline'],
+			'eqeqeq': ['error', 'always'],
+			'indent': ['error', 'tab'],
+			'no-eval': ['error'],
+			'no-unused-vars': ['error'],
+			'no-var': ['error'],
+			'prefer-const': ['error'],
+			'quotes': ['error', 'single'],
+			'semi': ['error', 'always'],
+			'keyword-spacing': ['error', {'before': true}],
+			'line-comment-position': ['error', { 'position': 'above' }],
+			'array-bracket-newline': ['error', 'consistent'],
+			'no-trailing-spaces': ['error'],
+		},
+	},
 );

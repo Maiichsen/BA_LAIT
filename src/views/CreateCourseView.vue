@@ -7,14 +7,14 @@ import CreateQuiz from '@/components/createCourse/quiz/createQuiz.vue';
 </script>
 
 <template>
-  <div class="flex">
-    <SidebarContent/>
-    <div>
-      <AddContentHeader/>
-      <div>
-        <CourseDetailsPage/>
-      </div>
-      <CourseEditorFooter/>
-    </div>
-  </div>
+	<div class="flex">
+		<SidebarContent />
+		<div>
+			<AddContentHeader />
+			<div>
+				<CourseDetailsPage />
+			</div>
+			<CourseEditorFooter />
+		</div>
+	</div>
 </template>
