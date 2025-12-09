@@ -71,7 +71,11 @@ export const updateCourse = async (courseId: string, updateCourseParams: CourseP
 export const getCourseById = (courseId: string): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('courses').select().eq('course_id', courseId).single();
+			const { data, error } = await supabase
+				.from('courses')
+				.select()
+				.eq('course_id', courseId)
+				.single();
 
 			if (error) return reject(error);
 			resolve(data);

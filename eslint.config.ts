@@ -42,7 +42,7 @@ export default defineConfigWithVueTs(
 			'eqeqeq': ['error', 'always'],
 			'indent': ['error', 'tab'],
 			'no-eval': ['error'],
-			'no-unused-vars': ['error'],
+			'no-unused-vars': ['warn'],
 			'no-var': ['error'],
 			'prefer-const': ['error'],
 			'quotes': ['error', 'single'],

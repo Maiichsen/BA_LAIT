@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { createCoursePage } from '@/services/courseService.ts';
+import {useCourseStore} from '@/stores/courseStore.ts';
 
 interface Props {
 	course_id: string;
 }
 
 const props = defineProps<Props>();
+const courseStore = useCourseStore();
 
-const handleCreateNewContentPage = () => {
-	createCoursePage('Ny side', props.course_id, 10);
+const handleCreateNewContentPage = async () => {
+	courseStore.addNewCoursePage(props.course_id);
 };
 </script>
 

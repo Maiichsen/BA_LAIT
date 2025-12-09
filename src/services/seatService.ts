@@ -2,24 +2,6 @@ import { supabase } from '../db/connection.ts';
 import type { NewCourseSeatParams } from '../types/courseTypes.ts';
 
 ///////*COURSE PAGES*////////
-export const createCoursePage = async (courseId: string, orderIndex: number) => {
-	try {
-		const { data, error } = await supabase
-			.from('course_pages')
-			.insert([{ course_id: courseId, order_index: orderIndex }])
-			.select();
-
-		if (!data) return;
-		if (!data[0]) return;
-
-		await createNewContent(data[0].course_page_id);
-		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
-	}
-};
-
 export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
 	try {
 		const { data, error } = await supabase
@@ -28,23 +10,6 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
 			.eq('course_page_id', coursePageId);
 
 		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
-	}
-};
-
-export const getAllCoursePagesByCourseId = async (courseId: string) => {
-	try {
-		const { data, error } = await supabase
-			.from('course_pages')
-			.select('*')
-			.eq('course_id', courseId)
-			.order('order_index', { ascending: true });
-
-		if (error) throw error;
-		if (!data) throw new Error('course pages not found');
-
 		return data;
 	} catch (err) {
 		console.log(err);

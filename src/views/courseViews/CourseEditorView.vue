@@ -3,7 +3,6 @@ import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
 import { onMounted } from 'vue';
-import { getAllCoursePagesByCourseId } from '@/services/courseService.ts';
 import { useCourseStore } from '@/stores/courseStore.ts';
 
 interface Props {
@@ -13,12 +12,8 @@ interface Props {
 const props = defineProps<Props>();
 const courseStore = useCourseStore();
 
-/*onmounted clear og hent courses til store*/
-
 onMounted(async () => {
-	const data = await getAllCoursePagesByCourseId(props.course_id);
-	if (!data) return;
-	courseStore.listOfCoursePages = data;
+	courseStore.loadCourse(props.course_id);
 });
 </script>
 
