@@ -1,6 +1,6 @@
 import {supabase} from '../db/connection.ts';
 import type {
-  newCourseSeatParams,
+  NewCourseSeatParams,
 } from '../types/courseTypes.ts';
 
 ///////*COURSE PAGES*////////

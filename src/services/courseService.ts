@@ -3,7 +3,8 @@ import type {
   NewCourseParams,
   CourseParams,
 } from '../types/courseTypes.ts';
-import type {Course, CoursePage} from '../types/db.ts';
+import type {Content, Course, CoursePage} from '../types/db.ts';
+import {defaultPageContent} from '../constants/courseConstants.ts';
 import {downloadImageFromSupabaseBucket} from './imageService.ts';
 
 export const createTemplateCourse = (): Promise<Course> => new Promise(async (resolve, reject) => {
@@ -11,8 +12,10 @@ export const createTemplateCourse = (): Promise<Course> => new Promise(async (re
     title: 'Nyt kurses',
     short_course_description: 'Kort beskrivelse af kurset',
   }).then(course => {
-    createCoursePage('Side 1', course.course_id,  1).then(() => {
-      resolve(course);
+    createCoursePage('Side 1', course.course_id,  1).then(page => {
+      createNewPageContent(page.course_page_id).then(() => {
+        resolve(course);
+      }).catch(() => reject('error creating page content'));
     }).catch(() => reject('error creating empty page'));
   }).catch(() => reject('error creating new course'));
 });
@@ -197,24 +200,40 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
   }
 };
 
-const createNewContent = async (coursePageId: string) => {
+export const getAllCoursePagesByCourseId = (courseId: string): Promise<CoursePage[]> => new Promise(async (resolve, reject) => {
+  try {
+    const {data, error} = await supabase
+      .from('course_pages')
+      .select('*')
+      .eq('course_id', courseId)
+      .order('order_index', {ascending: true});
+
+    if (error) return reject(error);
+    if (!data) return reject('course pages not found');
+
+    resolve(data);
+  } catch (err) {
+    reject(err);
+  }
+});
+
+export const createNewPageContent = (coursePageId: string): Promise<Content> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('contents')
       .insert([
         {
           course_page_id: coursePageId,
-          content_json:
-            {
-              text: 'her skal content værdien være i stedet..',
-            },
+          content_json: defaultPageContent,
         },
+      ])
+      .select();
 
-      ]);
+    if (error) return reject(error);
+    if (!data || !data[0]) return reject('error creating page content. Got null');
 
-    if (error) throw error;
-    return data;
+    resolve(data[0]);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
