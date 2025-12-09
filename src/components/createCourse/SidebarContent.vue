@@ -15,25 +15,25 @@ const props = defineProps<Props>();
 const listOfCoursePages = ref<CoursePage[]>([]);
 
 const getCoursePages = async () => {
-  try {
-    const data = await getAllCoursePagesByCourseId(props.course_id);
-    if (!data) return;
-    listOfCoursePages.value = data;
-  } catch (error) {
-    console.log(error);
-  }
+	try {
+		const data = await getAllCoursePagesByCourseId(props.course_id);
+		if (!data) return;
+		listOfCoursePages.value = data;
+	} catch (error) {
+		console.log(error);
+	}
 };
 
 const routeToContent = (pageId: string) => {
-  router.push({ name: 'courseContent', params: { page_id: pageId } });
+	router.push({ name: 'courseContent', params: { page_id: pageId } });
 };
 
 const routeToDetails = () => {
-  router.push({ name: 'frontpage' });
+	router.push({ name: 'frontpage' });
 };
 
 onMounted(async () => {
-  await getCoursePages();
+	await getCoursePages();
 });
 </script>
 

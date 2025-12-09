@@ -1,10 +1,10 @@
 import { supabase } from '../db/connection.ts';
 import {
-  deleteInvitedUser,
-  getAuthUser,
-  getInvitedUser,
-  supabaseSendLoginMail,
-  updateAuthUserPassword,
+	deleteInvitedUser,
+	getAuthUser,
+	getInvitedUser,
+	supabaseSendLoginMail,
+	updateAuthUserPassword,
 } from '@/services/userService.ts';
 
 /*export const createCompany = async (companyName: string) => {
@@ -28,17 +28,17 @@ import {
 /*INVITE COMPANY*/
 /****************/
 export const createInvitedCompany = async (email: string, companyId: string) => {
-  console.log(email);
-  console.log(companyId);
-  try {
-    const { data, error } = await supabase
-      .from('invited_users')
-      .insert({
-        company_id: companyId,
-        user_email: email,
-        is_company_user: true,
-      })
-      .select();
+	console.log(email);
+	console.log(companyId);
+	try {
+		const { data, error } = await supabase
+			.from('invited_users')
+			.insert({
+				company_id: companyId,
+				user_email: email,
+				is_company_user: true,
+			})
+			.select();
 
 		if (error) throw error;
 		if (!data) throw new Error('No data object found, lost in space');
@@ -56,14 +56,14 @@ export const createCompany = async (userId: string, email: string) => {
 		const invitedUser = await getInvitedUser(email);
 		if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
 
-    const { data, error } = await supabase
-      .from('users')
-      .insert({
-        user_id: userId,
-        company_id: invitedUser[0].company_id,
-        email: email,
-      })
-      .select();
+		const { data, error } = await supabase
+			.from('users')
+			.insert({
+				user_id: userId,
+				company_id: invitedUser[0].company_id,
+				email: email,
+			})
+			.select();
 
 		if (error) throw error;
 		await deleteInvitedUser(email);
@@ -84,7 +84,7 @@ export const updateNewCompany = async (password: string) => {
 
 		await createCompany(authUser.user.id, authUser.user.email);
 
-    await Promise.all([updateAuthUserPassword(password)]);
+		await Promise.all([updateAuthUserPassword(password)]);
 
 		return true;
 	} catch (err) {
@@ -96,12 +96,8 @@ export const updateNewCompany = async (password: string) => {
 /*GET COMPANY*/
 /*************/
 export const getCompanyById = async (companyId: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('companies')
-      .select()
-      .eq('company_id', companyId)
-      .single();
+	try {
+		const { data, error } = await supabase.from('companies').select().eq('company_id', companyId).single();
 
 		if (error) throw error;
 		return data;
@@ -111,10 +107,8 @@ export const getCompanyById = async (companyId: string) => {
 };
 
 export const getAllCompanies = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('companies')
-      .select('*');
+	try {
+		const { data, error } = await supabase.from('companies').select('*');
 
 		if (error) throw error;
 		return data;
@@ -124,11 +118,11 @@ export const getAllCompanies = async () => {
 };
 
 export const updateCompanyNameById = async (companyId: string, companyName: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('companies')
-      .update({company_name: companyName})
-      .eq('company_id', companyId);
+	try {
+		const { data, error } = await supabase
+			.from('companies')
+			.update({ company_name: companyName })
+			.eq('company_id', companyId);
 
 		if (error) throw error;
 		return data;
@@ -138,11 +132,8 @@ export const updateCompanyNameById = async (companyId: string, companyName: stri
 };
 
 export const deleteCompanyById = async (companyId: string) => {
-  try {
-    const { data, error } = await supabase
-      .from('companies')
-      .delete()
-      .eq('company_id', companyId);
+	try {
+		const { data, error } = await supabase.from('companies').delete().eq('company_id', companyId);
 
 		if (error) throw error;
 		return data;

@@ -5,11 +5,11 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const handleCreateNewCourseClick = () => {
-  createTemplateCourse()
-    .then(course => {
-      router.push({ name: 'frontpage', params: { course_id: course.course_id } });
-    })
-    .catch(err => console.log(err));
+	createTemplateCourse()
+		.then(course => {
+			router.push({ name: 'frontpage', params: { course_id: course.course_id } });
+		})
+		.catch(err => console.log(err));
 };
 </script>
 

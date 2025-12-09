@@ -1,32 +1,32 @@
 import { supabase } from '@/db/connection.ts';
 import {
-  deleteInvitedUser,
-  getAuthUser,
-  getInvitedUser,
-  supabaseSendLoginMail,
-  updateAuthUserPassword,
-  updateFirstnameAndLastName,
+	deleteInvitedUser,
+	getAuthUser,
+	getInvitedUser,
+	supabaseSendLoginMail,
+	updateAuthUserPassword,
+	updateFirstnameAndLastName,
 } from '@/services/userService.ts';
 
 export const createInvitedStudent = async (email: string, companyId: string) => {
-  console.log(email);
-  console.log(companyId);
-  try {
-    const { data, error } = await supabase
-      .from('invited_users')
-      .insert({
-        company_id: companyId,
-        user_email: email,
-      })
-      .select();
+	console.log(email);
+	console.log(companyId);
+	try {
+		const { data, error } = await supabase
+			.from('invited_users')
+			.insert({
+				company_id: companyId,
+				user_email: email,
+			})
+			.select();
 
-    if (error) throw error;
-    if (!data) throw new Error('No data object found, lost in space');
+		if (error) throw error;
+		if (!data) throw new Error('No data object found, lost in space');
 
-    return await supabaseSendLoginMail(data[0].user_email);
-  } catch (err) {
-    console.log(err);
-  }
+		return await supabaseSendLoginMail(data[0].user_email);
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 /*Not in use currently, due to maigc link creating user*/
@@ -60,39 +60,39 @@ export const createInvitedStudent = async (email: string, companyId: string) => 
 };*/
 
 export const createStudent = async (userId: string, email: string) => {
-  try {
-    const invitedUser = await getInvitedUser(email);
-    if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
+	try {
+		const invitedUser = await getInvitedUser(email);
+		if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
 
-    const { data, error } = await supabase
-      .from('users')
-      .insert({
-        user_id: userId,
-        company_id: invitedUser[0].company_id,
-        email: email,
-      })
-      .select();
+		const { data, error } = await supabase
+			.from('users')
+			.insert({
+				user_id: userId,
+				company_id: invitedUser[0].company_id,
+				email: email,
+			})
+			.select();
 
-    if (error) throw error;
-    await deleteInvitedUser(email);
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
+		if (error) throw error;
+		await deleteInvitedUser(email);
+		return data;
+	} catch (err) {
+		console.log(err);
+	}
 };
 
 export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
-  try {
-    const authUser = await getAuthUser();
-    if (!authUser) throw new Error('no user data');
-    if (!authUser.user || !authUser.user.email) throw new Error('no user found');
+	try {
+		const authUser = await getAuthUser();
+		if (!authUser) throw new Error('no user data');
+		if (!authUser.user || !authUser.user.email) throw new Error('no user found');
 
-    await createStudent(authUser.user.id, authUser.user.email);
+		await createStudent(authUser.user.id, authUser.user.email);
 
-    await Promise.all([updateAuthUserPassword(password), updateFirstnameAndLastName(firstname, lastname)]);
+		await Promise.all([updateAuthUserPassword(password), updateFirstnameAndLastName(firstname, lastname)]);
 
-    return true;
-  } catch (err) {
-    console.log(err);
-  }
+		return true;
+	} catch (err) {
+		console.log(err);
+	}
 };

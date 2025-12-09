@@ -16,9 +16,9 @@ const courseStore = useCourseStore();
 /*onmounted clear og hent courses til store*/
 
 onMounted(async () => {
-  const data = await getAllCoursePagesByCourseId(props.course_id);
-  if (!data) return;
-  courseStore.listOfCoursePages = data;
+	const data = await getAllCoursePagesByCourseId(props.course_id);
+	if (!data) return;
+	courseStore.listOfCoursePages = data;
 });
 </script>
 
