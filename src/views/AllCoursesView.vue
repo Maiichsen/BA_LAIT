@@ -1,24 +1,15 @@
 <script setup lang="ts">
 import {createTemplateCourse} from '@/services/courseService.ts';
-import {ref} from 'vue';
 import {useRouter} from 'vue-router';
-
 
 const router = useRouter();
 
-
-const courseId = ref<string | null>('');
-
-const handleCreateNewCourseClick = async () => {
-  try {
-    const course = await createTemplateCourse();
-    if (!course) return;
-    courseId.value = course.course_id;
-
-    router.push({ name: 'frontpage', params: {course_id: courseId.value } });
-  } catch (error) {
-    console.error(error);
-  }
+const handleCreateNewCourseClick = () => {
+  createTemplateCourse().then((course) => {
+    router.push({ name: 'frontpage', params: {course_id: course.course_id } });
+  }).catch(err => {
+    console.log(err);
+  });
 };
 </script>
 

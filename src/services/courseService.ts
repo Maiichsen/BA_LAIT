@@ -1,44 +1,29 @@
 import {supabase} from '../db/connection.ts';
 import type {
-  CourseRow,
-  newCourseParams,
+  NewCourseParams,
   CourseParams,
 } from '../types/courseTypes.ts';
+import type {Course, CoursePage} from '../types/db.ts';
 import {downloadImageFromSupabaseBucket} from './imageService.ts';
 
-export const createTemplateCourse = async () => {
-  try {
-    const {data, error} = await supabase
-      .from('courses')
-      .insert([{
-        title: 'Nyt kursus',
-        short_course_description: 'Beskrivelse af kursus',
-        is_published: false,
-      }])
-      .select()
-      .single();
+export const createTemplateCourse = (): Promise<Course> => new Promise(async (resolve, reject) => {
+  createCourse({
+    title: 'Nyt kurses',
+    short_course_description: 'Kort beskrivelse af kurset',
+  }).then(course => {
+    createCoursePage('Side 1', course.course_id,  1).then(() => {
+      resolve(course);
+    }).catch(() => reject('error creating empty page'));
+  }).catch(() => reject('error creating new course'));
+});
 
-    if (error) throw error;
-
-    const courseId = data.course_id;
-
-    await createCoursePage(courseId, 1);
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const createCourse = (newCourseParams: newCourseParams): Promise<CourseRow> => new Promise(async (resolve, reject) => {
-  if (!newCourseParams) return reject('missing newCourseParams');
-
+export const createCourse = (newCourseParams: NewCourseParams): Promise<Course> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
       .insert([{
         title: newCourseParams.title,
         short_course_description: newCourseParams.short_course_description,
-        long_course_description: newCourseParams.long_course_description,
       }])
       .select();
 
@@ -73,7 +58,7 @@ export const updateCourse = async (courseId: string, updateCourseParams: CourseP
   }
 };
 
-export const getCourseById = (courseId: string): Promise<CourseRow> => new Promise(async (resolve, reject) => {
+export const getCourseById = (courseId: string): Promise<Course> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -114,7 +99,7 @@ export const getCoverImgUrlByCourseId = (courseId: string): Promise<string | nul
   }).catch(() => reject('error fetching course with that id'));
 });
 
-export const getAllPublicCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
+export const getAllPublicCourses = (): Promise<Course[]> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -130,7 +115,7 @@ export const getAllPublicCourses = (): Promise<CourseRow[]> => new Promise(async
   }
 });
 
-export const getAllCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
+export const getAllCourses = (): Promise<Course[]> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('courses')
@@ -176,19 +161,25 @@ export const permDeleteCourseById = (courseId: string): Promise<void> => new Pro
 
 
 ///////*COURSE PAGES*////////
-export const createCoursePage = async (courseId: string, orderIndex: number) => {
+export const createCoursePage = (title: string, courseId: string, orderIndex: number): Promise<CoursePage> => new Promise(async (resolve, reject) => {
   try {
     const {data, error} = await supabase
       .from('course_pages')
-      .insert([{course_id: courseId, order_index: orderIndex}])
+      .insert([{
+        course_id: courseId,
+        course_page_title: title,
+        order_index: orderIndex,
+      }])
       .select();
 
-    if (error) throw error;
-    return data;
+    if (error) return reject(error);
+    if (!data || !data[0]) return reject('error creating course page. Got null');
+
+    resolve(data[0]);
   } catch (err) {
-    console.log(err);
+    reject(err);
   }
-};
+});
 
 export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
   try {

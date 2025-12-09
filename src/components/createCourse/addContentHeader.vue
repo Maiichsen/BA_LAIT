@@ -8,9 +8,7 @@ interface Props {
 const props = defineProps<Props>();
 
 const handleCreateNewContentPage = () => {
-  try {
-    createCoursePage(props.course_id, )
-  }
+  createCoursePage('Ny side', props.course_id, 10);
 };
 </script>
 

@@ -1,9 +1,8 @@
 import {type Database} from '../../database.types.ts';
 
-export interface newCourseParams {
+export interface NewCourseParams {
   title: string
   short_course_description: string
-  long_course_description: string
 }
 
 export interface CourseParams {
