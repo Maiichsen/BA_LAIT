@@ -2,8 +2,32 @@ import {supabase} from '../db/connection.ts';
 import type {
   CourseRow,
   newCourseParams,
+  CourseParams,
 } from '../types/courseTypes.ts';
 import {downloadImageFromSupabaseBucket} from './imageService.ts';
+
+export const createTemplateCourse = async () => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .insert([{
+        title: 'Nyt kursus',
+        short_course_description: 'Beskrivelse af kursus',
+        is_published: false,
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+
+    const courseId = data.course_id;
+
+    await createCoursePage(courseId, 1);
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const createCourse = (newCourseParams: newCourseParams): Promise<CourseRow> => new Promise(async (resolve, reject) => {
   if (!newCourseParams) return reject('missing newCourseParams');
@@ -15,8 +39,6 @@ export const createCourse = (newCourseParams: newCourseParams): Promise<CourseRo
         title: newCourseParams.title,
         short_course_description: newCourseParams.short_course_description,
         long_course_description: newCourseParams.long_course_description,
-        cover_image_url: newCourseParams.cover_image_url,
-        estimated_time_minutes: newCourseParams.estimated_time_minutes,
       }])
       .select();
 
@@ -28,6 +50,28 @@ export const createCourse = (newCourseParams: newCourseParams): Promise<CourseRo
     reject(err);
   }
 });
+
+export const updateCourse = async (courseId: string, updateCourseParams: CourseParams) => {
+  try {
+    const {data, error} = await supabase
+      .from('courses')
+      .update({
+        long_course_description: updateCourseParams.long_course_description,
+        short_course_description: updateCourseParams.short_course_description,
+        cover_image_url: updateCourseParams.cover_image_url,
+        estimated_time_minutes: updateCourseParams.estimated_time_minutes,
+        title: updateCourseParams.title,
+        author_name: updateCourseParams.author_name,
+      })
+      .eq('course_id', courseId)
+      .select();
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 export const getCourseById = (courseId: string): Promise<CourseRow> => new Promise(async (resolve, reject) => {
   try {
@@ -160,3 +204,24 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
   }
 };
 
+const createNewContent = async (coursePageId: string) => {
+  try {
+    const {data, error} = await supabase
+      .from('contents')
+      .insert([
+        {
+          course_page_id: coursePageId,
+          content_json:
+            {
+              text: 'her skal content værdien være i stedet..',
+            },
+        },
+
+      ]);
+
+    if (error) throw error;
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+};

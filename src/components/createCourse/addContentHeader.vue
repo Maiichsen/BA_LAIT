@@ -1,10 +1,22 @@
 <script setup lang="ts">
+import {createCoursePage} from '@/services/courseService.ts';
 
+interface Props {
+  course_id: string;
+}
+
+const props = defineProps<Props>();
+
+const handleCreateNewContentPage = () => {
+  try {
+    createCoursePage(props.course_id, )
+  }
+};
 </script>
 
 <template>
   <div class="flex gap-8 border-2 border-red-500">
-    <p>
+    <p @click="handleCreateNewContentPage">
       tilføj indhold
     </p>
     <p>

@@ -68,6 +68,7 @@ export type Database = {
         Row: {
           course_id: string
           course_page_id: string
+          course_page_title: string
           is_required: boolean | null
           is_visible: boolean | null
           order_index: number
@@ -76,6 +77,7 @@ export type Database = {
         Insert: {
           course_id: string
           course_page_id?: string
+          course_page_title?: string
           is_required?: boolean | null
           is_visible?: boolean | null
           order_index: number
@@ -84,6 +86,7 @@ export type Database = {
         Update: {
           course_id?: string
           course_page_id?: string
+          course_page_title?: string
           is_required?: boolean | null
           is_visible?: boolean | null
           order_index?: number

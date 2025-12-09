@@ -2,10 +2,16 @@
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {onMounted, ref} from 'vue';
 import {
-  downloadImageFromSupabaseBucket, downloadImageFromSupabaseBucketByCourseId,
+  downloadImageFromSupabaseBucketByCourseId,
   uploadImageToSupabaseBucket,
 } from '@/services/imageService.ts';
-import {createCourse, getCourseById, getCoverImgByCourseId} from '@/services/courseService.ts';
+import {updateCourse} from '@/services/courseService.ts';
+
+interface Props {
+  course_id: string;
+}
+
+const props = defineProps<Props>();
 
 const title = ref('');
 const shortDescription = ref('');
@@ -17,47 +23,34 @@ const longDescription = ref('');
 const imgFile = ref<File | null>(null);
 const UniqueImgFileName = Date.now().toString();
 
-
 const handleFileNameChange = (event: Event) => {
   const input = event.target as HTMLInputElement;
   imgFile.value = input.files?.[0] ?? null;
 };
 
-const savetest = () => {
-  console.log({
-    title: title.value,
-    short_course_description: shortDescription.value,
-    cover_image_url: imgFile.value,
-    estimated_time_minutes: timeEstimate.value,
-    authorName: authorName.value,
-    long_course_description: longDescription.value,
-  });
+/*Update course*/
+const handleUpdateCourse = async () => {
 
-  if (!imgFile.value) {
-    return;
-  }
-  uploadImageToSupabaseBucket(UniqueImgFileName, imgFile.value);
-  createCourse({
+  await updateCourse(props.course_id, {
     title: title.value,
     short_course_description: shortDescription.value,
     cover_image_url: UniqueImgFileName,
     estimated_time_minutes: timeEstimate.value,
     author_name: authorName.value,
     long_course_description: longDescription.value,
-    isPublished: false,
   });
-};
 
-savetest();
+  if (!imgFile.value) {
+    return;
+  }
+  await uploadImageToSupabaseBucket(UniqueImgFileName, imgFile.value);
+};
 
 const coverUrl = ref<string | null>(null);
 
 onMounted(async () => {
   const img = await downloadImageFromSupabaseBucketByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8');
   coverUrl.value = img ?? null;
-
-  /*const test = await getCoverImgByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8');
-  console.log(test[0].cover_image_url);*/
 });
 </script>
 
@@ -115,11 +108,11 @@ onMounted(async () => {
     </div>
   </form>
 
-  <div @click="savetest">
-    KLIK HER
+  <div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">
+    GEM
   </div>
 
-  <div v-if="coverUrl">
-    <img :src="coverUrl">
-  </div>
+  <!--  <div v-if="coverUrl">
+      <img :src="coverUrl">
+    </div>-->
 </template>
