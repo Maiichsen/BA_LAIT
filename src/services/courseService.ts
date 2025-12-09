@@ -129,6 +129,8 @@ export const getAllCourses = (): Promise<Course[]> => new Promise(async (resolve
   }
 });
 
+
+
 export const deleteCourseById = (courseId: string): Promise<void> => new Promise(async (resolve, reject) => {
   try {
     const {error} = await supabase
