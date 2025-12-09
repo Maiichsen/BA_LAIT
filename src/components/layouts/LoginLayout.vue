@@ -1,12 +1,9 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <main>
-      <slot/>
-    </main>
-  </div>
+	<div>
+		<main>
+			<slot />
+		</main>
+	</div>
 </template>
-
