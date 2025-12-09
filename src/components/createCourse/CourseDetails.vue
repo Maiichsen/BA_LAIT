@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import { onMounted, ref } from 'vue';
-import { uploadImageToSupabaseBucket } from '@/services/imageService.ts';
-import { getCoverImgUrlByCourseId } from '@/services/courseService.ts';
-import { updateCourse } from '@/services/courseService.ts';
+import {computed, onMounted, ref} from 'vue';
+import {uploadImageToSupabaseBucket} from '@/services/imageService.ts';
+import {getCourseById, getCoverImgUrlByCourseId} from '@/services/courseService.ts';
+import {updateCourse} from '@/services/courseService.ts';
 
 interface Props {
 	course_id: string;
@@ -13,13 +13,16 @@ const props = defineProps<Props>();
 
 const title = ref('');
 const shortDescription = ref('');
-const timeEstimate = ref(null);
-const authorName = ref('');
+const timeEstimate = ref<number | null>(null);
+const authorName = ref<string | null>('');
 const longDescription = ref('');
-
-/*Imagefile and unique name for upload*/
 const imgFile = ref<File | null>(null);
-const UniqueImgFileName = Date.now().toString();
+let coverImgUrl: string | null = null;
+const existingCoverUrl = ref<string | null>(null);
+const displayedCoverUrl = computed(() => {
+	if (imgFile.value) return URL.createObjectURL(imgFile.value);
+	return existingCoverUrl.value;
+});
 
 const handleFileNameChange = (event: Event) => {
 	const input = event.target as HTMLInputElement;
@@ -28,27 +31,35 @@ const handleFileNameChange = (event: Event) => {
 
 /*Update course*/
 const handleUpdateCourse = async () => {
+	if (imgFile.value) {
+		coverImgUrl = Date.now().toString();
+		await uploadImageToSupabaseBucket(coverImgUrl, imgFile.value);
+	}
+
 	await updateCourse(props.course_id, {
 		title: title.value,
 		short_course_description: shortDescription.value,
-		cover_image_url: UniqueImgFileName,
+		cover_image_url: coverImgUrl,
 		estimated_time_minutes: timeEstimate.value,
 		author_name: authorName.value,
 		long_course_description: longDescription.value,
 	});
-
-	if (!imgFile.value) {
-		return;
-	}
-	await uploadImageToSupabaseBucket(UniqueImgFileName, imgFile.value);
 };
 
-const coverUrl = ref<string | null>(null);
-
 onMounted(() => {
-	getCoverImgUrlByCourseId('7c97008e-6258-4138-ac18-5c5848a8abd8')
+	getCourseById(props.course_id).then((course) => {
+		title.value = course.title;
+		shortDescription.value = course.short_course_description;
+		timeEstimate.value = course.estimated_time_minutes;
+		authorName.value = course.author_name;
+		longDescription.value = course.long_course_description;
+		coverImgUrl = course.cover_image_url;
+	}).catch((err) => {
+		console.log(err);
+	});
+	getCoverImgUrlByCourseId(props.course_id)
 		.then(imgUrl => {
-			coverUrl.value = imgUrl;
+			existingCoverUrl.value = imgUrl;
 		})
 		.catch(err => console.log(err));
 });
@@ -59,52 +70,52 @@ onMounted(() => {
 		<div class="border-2 border-green-500">
 			<BaseInput
 				input-type="text"
-				placeholder="overskrift"
+				:placeholder="title"
 				input-id="overskrift"
 				label-text="Overskrift"
 				layout="inline"
-				v-model="title" />
+				v-model="title"/>
 			<BaseInput
 				input-type="text"
 				placeholder="kort beskrivelse"
 				input-id="kortbeskrivelse"
 				label-text="Kort beskrivelse"
 				layout="inline"
-				v-model="shortDescription" />
+				v-model="shortDescription"/>
 			<BaseInput
 				input-type="file"
 				input-id="image"
 				label-text="Billede"
 				layout="inline"
 				accept="image/*"
-				@change="handleFileNameChange" />
+				@change="handleFileNameChange"/>
 			<BaseInput
 				input-type="number"
 				placeholder="varighed"
 				input-id="varighed"
 				label-text="Varighed i minutter"
 				layout="inline"
-				v-model="timeEstimate" />
+				v-model="timeEstimate"/>
 			<BaseInput
 				input-type="text"
 				placeholder="oprettet af"
 				input-id="oprettet"
 				label-text="Oprettet af"
 				layout="inline"
-				v-model="authorName" />
+				v-model="authorName"/>
 			<BaseInput
 				input-type="text"
 				placeholder="indhold"
 				input-id="indhold"
 				label-text="Indhold"
 				layout="stacked"
-				v-model="longDescription" />
+				v-model="longDescription"/>
 		</div>
 	</form>
 
 	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>
 
-	<div v-if="coverUrl">
-		<img :src="coverUrl" />
+	<div v-if="displayedCoverUrl">
+		<img :src="displayedCoverUrl"/>
 	</div>
 </template>

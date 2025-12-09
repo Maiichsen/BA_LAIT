@@ -11,7 +11,7 @@ export const useCourseStore = defineStore('course', () => {
 
 	const nextOrderIndex = computed(() => {
 		if (!listOfCoursePages.value.length) return 1;
-		/*+64 to make space for new inserted pages*/
+		/* add 64 to make space for new inserted pages */
 		return Math.max(...listOfCoursePages.value.map(course => course.order_index)) + 64;
 	});
 
