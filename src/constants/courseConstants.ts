@@ -1,4 +1,3 @@
-
 export const defaultPageContent = {
   backgroundColor: 'ADD8E6',
   content: [

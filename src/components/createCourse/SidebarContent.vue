@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {getAllCoursePagesByCourseId} from '@/services/courseService.ts';
-import type {CoursePage} from '@/types/db.ts';
-import {useRouter} from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { getAllCoursePagesByCourseId } from '@/services/courseService.ts';
+import type { CoursePage } from '@/types/db.ts';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 interface Props {
-  course_id: string;
+	course_id: string;
 }
 
 const props = defineProps<Props>();
@@ -29,22 +29,23 @@ const routeToContent = (pageId: string) => {
 };
 
 const routeToDetails = () => {
-  router.push({ name: 'frontpage'});
+  router.push({ name: 'frontpage' });
 };
 
 onMounted(async () => {
   await getCoursePages();
-
 });
 </script>
 
 <template>
-  <div class="flex-col border-2 border-yellow-500">
-    <p @click="routeToDetails()" class="hover:text-amber-600 cursor-pointer">
-      Forside
-    </p>
-    <p v-for="coursePage in listOfCoursePages" :key="coursePage.course_page_id" @click="routeToContent(coursePage.course_page_id)" class="hover:text-amber-600 cursor-pointer">
-      {{ coursePage.course_page_title }}
-    </p>
-  </div>
+	<div class="flex-col border-2 border-yellow-500">
+		<p @click="routeToDetails()" class="hover:text-amber-600 cursor-pointer">Forside</p>
+		<p
+			v-for="coursePage in listOfCoursePages"
+			:key="coursePage.course_page_id"
+			@click="routeToContent(coursePage.course_page_id)"
+			class="hover:text-amber-600 cursor-pointer">
+			{{ coursePage.course_page_title }}
+		</p>
+	</div>
 </template>

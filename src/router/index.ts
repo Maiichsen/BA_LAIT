@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import LoginLayout from '@/components/layouts/LoginLayout.vue';
 import DefaultLayout from '@/components/layouts/DefaultLayout.vue';
-import {getAuthUser} from '@/services/userService.ts';
+import { getAuthUser } from '@/services/userService.ts';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -76,10 +76,10 @@ const router = createRouter({
         layout: DefaultLayout,
       },
       component: () => import('../views/UpdateUserView.vue'),
-      beforeEnter: async (_to, _from,next) => {
+      beforeEnter: async (_to, _from, next) => {
         const user = await getAuthUser();
         if (!user) {
-          return next({name: 'login'});
+          return next({ name: 'login' });
         }
         return next();
       },

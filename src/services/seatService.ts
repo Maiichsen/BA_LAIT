@@ -1,14 +1,12 @@
-import {supabase} from '../db/connection.ts';
-import type {
-  NewCourseSeatParams,
-} from '../types/courseTypes.ts';
+import { supabase } from '../db/connection.ts';
+import type { NewCourseSeatParams } from '../types/courseTypes.ts';
 
 ///////*COURSE PAGES*////////
 export const createCoursePage = async (courseId: string, orderIndex: number) => {
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('course_pages')
-      .insert([{course_id: courseId, order_index: orderIndex}])
+      .insert([{ course_id: courseId, order_index: orderIndex }])
       .select();
 
     if (!data) return;
@@ -24,9 +22,9 @@ export const createCoursePage = async (courseId: string, orderIndex: number) => 
 
 export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('course_pages')
-      .update({is_visible: isVisible})
+      .update({ is_visible: isVisible })
       .eq('course_page_id', coursePageId);
 
     if (error) throw error;
@@ -38,11 +36,11 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
 
 export const getAllCoursePagesByCourseId = async (courseId: string) => {
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('course_pages')
       .select('*')
       .eq('course_id', courseId)
-      .order('order_index', {ascending: true});
+      .order('order_index', { ascending: true });
 
     if (error) throw error;
     if (!data) throw new Error('course pages not found');
@@ -57,18 +55,19 @@ export const getAllCoursePagesByCourseId = async (courseId: string) => {
 /*CREATE CONTENT*/
 /*CREATE CONTENT*/
 
-
 ///////*COURSE SEATS*////////
 export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams) => {
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('course_seats')
-      .insert([{
-        course_id: newCourseSeatParams.course_id,
-        company_id: newCourseSeatParams.company_id,
-        user_id: newCourseSeatParams.user_id,
-        reserved_for_email: newCourseSeatParams.reserved_for_email,
-      }])
+      .insert([
+        {
+          course_id: newCourseSeatParams.course_id,
+          company_id: newCourseSeatParams.company_id,
+          user_id: newCourseSeatParams.user_id,
+          reserved_for_email: newCourseSeatParams.reserved_for_email,
+        },
+      ])
       .select();
 
     if (error) throw error;
@@ -80,10 +79,7 @@ export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams)
 
 export const deleteCourseSeat = async (courseSeatId: string) => {
   try {
-    const {error} = await supabase
-      .from('course_seats')
-      .delete()
-      .eq('course_seat_id', courseSeatId);
+    const { error } = await supabase.from('course_seats').delete().eq('course_seat_id', courseSeatId);
 
     if (error) throw error;
     return true;
@@ -92,21 +88,19 @@ export const deleteCourseSeat = async (courseSeatId: string) => {
   }
 };
 
-
-
-
-
 ///////*COURSE SEATS*////////
 export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('course_seats')
-      .insert([{
-        course_id: newCourseSeatParams.course_id,
-        company_id: newCourseSeatParams.company_id,
-        user_id: newCourseSeatParams.user_id,
-        reserved_for_email: newCourseSeatParams.reserved_for_email,
-      }])
+      .insert([
+        {
+          course_id: newCourseSeatParams.course_id,
+          company_id: newCourseSeatParams.company_id,
+          user_id: newCourseSeatParams.user_id,
+          reserved_for_email: newCourseSeatParams.reserved_for_email,
+        },
+      ])
       .select();
 
     if (error) throw error;
@@ -118,10 +112,7 @@ export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams)
 
 export const deleteCourseSeat = async (courseSeatId: string) => {
   try {
-    const {error} = await supabase
-      .from('course_seats')
-      .delete()
-      .eq('course_seat_id', courseSeatId);
+    const { error } = await supabase.from('course_seats').delete().eq('course_seat_id', courseSeatId);
 
     if (error) throw error;
     return true;

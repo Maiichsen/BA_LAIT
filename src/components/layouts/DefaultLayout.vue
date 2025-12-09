@@ -4,12 +4,11 @@ import TheFooter from '@/components/footer/TheFooter.vue';
 </script>
 
 <template>
-<div>
-  <TheHeader />
-  <main>
-    <slot />
-  </main>
-  <TheFooter  />
-</div>
+	<div>
+		<TheHeader />
+		<main>
+			<slot />
+		</main>
+		<TheFooter />
+	</div>
 </template>
-

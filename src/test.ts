@@ -1,18 +1,18 @@
-import {
-  getCoverImgUrlByCourseId,
-} from './services/courseService.ts';
+import { getCoverImgUrlByCourseId } from './services/courseService.ts';
 
 console.log('Running test file');
 // 20ff15e0-7cd7-432b-bbf5-9f9ebe48e82e has img
 // 55b8bf91-82b9-4c75-980a-29d14cc89c9d no img
 (async () => {
-  await getCoverImgUrlByCourseId('20ff15e0-7cd7-432b-bbf5-9f9ebe48e82e').then(imgUrl => {
-    console.log('yess');
-    console.log(imgUrl);
-  }).catch(err => {
-    console.log('noo');
-    console.log(err);
-  });
+  await getCoverImgUrlByCourseId('20ff15e0-7cd7-432b-bbf5-9f9ebe48e82e')
+    .then(imgUrl => {
+      console.log('yess');
+      console.log(imgUrl);
+    })
+    .catch(err => {
+      console.log('noo');
+      console.log(err);
+    });
   /*createCourse({
     title: 'Wow cool types 123!',
     short_course_description: 'This is my short description',

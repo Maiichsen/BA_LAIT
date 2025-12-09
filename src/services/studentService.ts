@@ -1,16 +1,18 @@
-import {supabase} from '@/db/connection.ts';
+import { supabase } from '@/db/connection.ts';
 import {
   deleteInvitedUser,
   getAuthUser,
-  getInvitedUser, supabaseSendLoginMail,
-  updateAuthUserPassword, updateFirstnameAndLastName,
+  getInvitedUser,
+  supabaseSendLoginMail,
+  updateAuthUserPassword,
+  updateFirstnameAndLastName,
 } from '@/services/userService.ts';
 
 export const createInvitedStudent = async (email: string, companyId: string) => {
   console.log(email);
   console.log(companyId);
   try {
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('invited_users')
       .insert({
         company_id: companyId,
@@ -62,7 +64,7 @@ export const createStudent = async (userId: string, email: string) => {
     const invitedUser = await getInvitedUser(email);
     if (!invitedUser || invitedUser?.length === 0) throw new Error('User is not invited');
 
-    const {data, error} = await supabase
+    const { data, error } = await supabase
       .from('users')
       .insert({
         user_id: userId,
@@ -81,17 +83,13 @@ export const createStudent = async (userId: string, email: string) => {
 
 export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
   try {
-
     const authUser = await getAuthUser();
     if (!authUser) throw new Error('no user data');
     if (!authUser.user || !authUser.user.email) throw new Error('no user found');
 
     await createStudent(authUser.user.id, authUser.user.email);
 
-    await Promise.all([
-      updateAuthUserPassword(password),
-      updateFirstnameAndLastName(firstname, lastname),
-    ]);
+    await Promise.all([updateAuthUserPassword(password), updateFirstnameAndLastName(firstname, lastname)]);
 
     return true;
   } catch (err) {

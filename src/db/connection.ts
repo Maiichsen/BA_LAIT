@@ -1,7 +1,7 @@
 // import dotenv from 'dotenv';
 // dotenv.config();
-import {createClient} from '@supabase/supabase-js';
-import type {Database} from '../../database.types.ts';
+import { createClient } from '@supabase/supabase-js';
+import type { Database } from '../../database.types.ts';
 
 export const supabase = createClient<Database>(
   // String(process.env.VITE_SUPABASE_URL),
