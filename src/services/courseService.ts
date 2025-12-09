@@ -68,18 +68,6 @@ export const getCoverImgUrlByCourseId = (courseId: string): Promise<string | nul
       resolve(imgUrl);
     }).catch(() => reject('error fetching image from storage'));
   }).catch(() => reject('error fetching course with that id'));
-
-  /*try {
-    const {data, error} = await supabase.storage
-      .from('courseCovers')
-      .download(`public/${imgFilename}`);
-
-    if (error) return reject(error);
-
-    resolve(URL.createObjectURL(data));
-  } catch (err) {
-    reject(err);
-  }*/
 });
 
 export const getAllPublicCourses = (): Promise<CourseRow[]> => new Promise(async (resolve, reject) => {
