@@ -1,15 +1,13 @@
 import {supabase} from '../db/connection.ts';
 import {
+	checkIfEmailIsAlreadyInvited, checkIfEmailIsAlreadyVerifiedUser,
 	createInvitedUser,
-	deleteInvitedUser,
 	getAuthUser,
-	getInvitedUser,
-	supabaseSendLoginMail,
 	updateAuthUserPassword,
 } from '@/services/userService.ts';
 import type {Company} from '@/types/db.ts';
 
-export const createCompany = (companyName: string): Promise<Company> => new Promise(async (resolve, reject) => {
+const createCompany = (companyName: string): Promise<Company> => new Promise(async (resolve, reject) => {
 	try {
 		const {data, error} = await supabase
 			.from('companies')
@@ -32,6 +30,18 @@ export const createCompany = (companyName: string): Promise<Company> => new Prom
 /*INVITE COMPANY*/
 /****************/
 export const createInvitedCompany = (companyName: string, companyEmail: string): Promise<Company> => new Promise(async (resolve, reject) => {
+	try {
+		const [emailIsAlreadyInvited, emailIsAlreadyVerifiedUser] = await Promise.all([
+			checkIfEmailIsAlreadyInvited(companyEmail),
+			checkIfEmailIsAlreadyVerifiedUser(companyEmail),
+		]);
+
+		if (emailIsAlreadyInvited) return reject('email is already invited');
+		if (emailIsAlreadyVerifiedUser) return reject('email is already used');
+	} catch (err) {
+		return reject(err);
+	}
+
 	createCompany(companyName)
 		.then(company => {
 			createInvitedUser(companyEmail, company.company_id, true)
@@ -71,7 +81,7 @@ export const createInvitedCompany = (companyName: string, companyEmail: string):
 /****************/
 /*UPDATE COMPANY*/
 /****************/
-export const updateNewCompany = async (password: string) => {
+/*export const updateNewCompany = async (password: string) => {
 	try {
 		const authUser = await getAuthUser();
 		if (!authUser) throw new Error('no user data');
@@ -85,7 +95,7 @@ export const updateNewCompany = async (password: string) => {
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
 
 /*************/
 /*GET COMPANY*/
@@ -120,19 +130,20 @@ export const getAllCompanies = (): Promise<Company[]> => new Promise(async (reso
 	}
 });
 
-export const updateCompanyNameById = async (companyId: string, companyName: string) => {
+export const updateCompanyNameById = (companyId: string, companyName: string): Promise<void> => new Promise(async (resolve, reject) => {
 	try {
-		const {data, error} = await supabase
+		const {error} = await supabase
 			.from('companies')
 			.update({company_name: companyName})
 			.eq('company_id', companyId);
 
-		if (error) throw error;
-		return data;
+		if (error) return reject(error);
+
+		resolve();
 	} catch (err) {
-		console.log(err);
+		reject(err);
 	}
-};
+});
 
 export const deleteCompanyById = (companyId: string): Promise<void> => new Promise(async (resolve, reject) => {
 	try {
