@@ -1,4 +1,4 @@
-import type {Database} from '../../database.types.ts';
+import type { Database } from '../../database.types.ts';
 
 //Easier to use types for each table
 //Read = Row

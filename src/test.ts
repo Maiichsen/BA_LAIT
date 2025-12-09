@@ -5,9 +5,7 @@ import {checkIfUserExists} from './services/userService.ts';*/
 import {supabase} from './db/connection.ts';
 */
 
-
 console.log('hey');
-
 
 /*checkIfUserExists('test@test.dk').then((data) => {
   console.log(data);

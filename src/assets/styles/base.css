@@ -1,8 +1,8 @@
-body{
-  font-family: 'SuisseIntl', sans-serif;
-  background-color: var(--color-tutara-50);
-  color: var(--color-tutara-900);
-  max-width: 100%;
+body {
+	font-family: 'SuisseIntl', sans-serif;
+	background-color: var(--color-tutara-50);
+	color: var(--color-tutara-900);
+	max-width: 100%;
 	/* padding-left: 16px;
 	padding-right: 16px; */
 	/* margin-left: auto;

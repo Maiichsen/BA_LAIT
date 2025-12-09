@@ -5,11 +5,11 @@ import AddQuestionOption from '@/components/createCourse/quiz/AddQuestionOption.
 </script>
 
 <template>
-<div>
-  <BaseInput input-type="text" input-id="quizquestion" placeholder="Spørgsmål"/>
-  <QuestionOption name="test"/>
-  <QuestionOption name="test"/>
-  <QuestionOption name="test"/>
-  <AddQuestionOption/>
-</div>
+	<div>
+		<BaseInput input-type="text" input-id="quizquestion" placeholder="Spørgsmål" />
+		<QuestionOption name="test" />
+		<QuestionOption name="test" />
+		<QuestionOption name="test" />
+		<AddQuestionOption />
+	</div>
 </template>
