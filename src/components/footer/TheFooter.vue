@@ -29,12 +29,12 @@ const contactInfo = {
 			<div class="container-row">
 				<!-- Logo -->
 				<div class="col-span-full mb-12 lg:mb-[100px]">
-					<LaitLogo class="h-12 lg:h-16 w-auto text-tutara-50" />
+					<LaitLogo fillClass="fill-tutara-50"/>
 				</div>
 
 				<!-- Navigation Links -->
 				<nav class="col-span-full mb-12 lg:mb-16" aria-label="Footer navigation">
-					<ul class="flex flex-wrap gap-6 lg:gap-8 text-base lg:text-lg">
+					<ul class="flex flex-col lg:flex-row gap-6 lg:gap-8 text-base lg:text-lg">
 						<li v-for="link in navigationLinks" :key="link.url">
 							<a :href="link.url" class="hover:text-tutara-300 transition-colors duration-200">
 								{{ link.name }}
@@ -47,7 +47,7 @@ const contactInfo = {
 				<div class="col-span-full border-t border-tutara-400 mb-8 lg:mb-16"></div>
 
 				<!-- Contact Info -->
-				<div class="flex gap-8 lg:gap-6 lg:flex-row flex-col flex-wrap lg:items-center col-span-full">
+				<div class="flex gap-8 lg:gap-6 lg:flex-row flex-col lg:items-center col-span-full">
           <div class="flex flex-col max-lg:gap-4">
             <p>{{ contactInfo.address }}</p>
             <p>{{ contactInfo.zipCity }}</p>
