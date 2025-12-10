@@ -3,12 +3,14 @@ import {computed, ref} from 'vue';
 import type {CoursePage} from '@/types/db.ts';
 import {createCoursePage, getAllCoursePagesByCourseId} from '@/services/courseService.ts';
 import {pageOrderIndexDefaultGab} from '@/constants/courseConstants.ts';
+import type {RichCoursePage} from '@/types/courseTypes.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
 	const currentEditedCourseId = ref('');
 	const currentEditedCoursePageId = ref<string | null>(null);
 	const unsortedListOfCoursePages = ref<CoursePage[]>([]);
+	const coursePageContent = ref<Record<string, RichCoursePage>>({});
 
 	const listOfCoursePages = computed(() => {
 		return unsortedListOfCoursePages.value.sort((a, b) => a.order_index - b.order_index);
@@ -23,6 +25,14 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		getAllCoursePagesByCourseId(courseId)
 			.then(coursePages => {
 				unsortedListOfCoursePages.value = coursePages;
+
+				coursePageContent.value = coursePages.reduce<Record<string, RichCoursePage>>((lookupSet, page) => {
+					lookupSet[page.course_page_id] = {
+						...page,
+						content: null,
+					};
+					return lookupSet;
+				}, {});
 			})
 			.catch(err => {
 				console.log(err);
@@ -65,15 +75,36 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const addNewCoursePage = (): Promise<CoursePage> => new Promise((resolve, reject) => {
 		const newOrderIndex = getNewOrderIndexAfterPageId(currentEditedCoursePageId.value);
 
-		createCoursePage('Ny side', currentEditedCourseId.value, newOrderIndex)
+		let tempPageName = generateTemporaryRandomName();
+		if (Math.random() > 0.5) {
+			tempPageName += ` ${generateTemporaryRandomName()}`;
+
+			if (Math.random() > 0.5) {
+				tempPageName += ` ${generateTemporaryRandomName()}`;
+			}
+		}
+
+		createCoursePage(/*'Ny side*'´*/ tempPageName, currentEditedCourseId.value, newOrderIndex)
 			.then(coursePage => {
 				unsortedListOfCoursePages.value.push(coursePage);
+
+				coursePageContent.value[coursePage.course_page_id] = {
+					...coursePage,
+					content: null,
+				};
+
 				resolve(coursePage);
 			})
 			.catch(err => {
 				reject(err);
 			});
 	});
+
+	const generateTemporaryRandomName = (): string => {
+		const tempRandomName = Array.from({length: Math.floor(2 + Math.random() * 4)}, () =>
+			String.fromCharCode(97 + Math.floor(Math.random() * 26))).join('');
+		return tempRandomName[0]!.toUpperCase() + tempRandomName.slice(1);
+	};
 
 	const setCurrentEditedCoursePage = (pageId?: string) => {
 		currentEditedCoursePageId.value = pageId ?? null;
@@ -83,6 +114,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		listOfCoursePages,
 		courseGlobalLoading,
 		currentEditedCourseId,
+		coursePageContent,
 		loadCourse,
 		addNewCoursePage,
 		setCurrentEditedCoursePage,

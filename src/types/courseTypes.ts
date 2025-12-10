@@ -1,4 +1,4 @@
-import { type Database } from '../../database.types.ts';
+import type {CoursePage} from '@/types/db.ts';
 
 export interface NewCourseParams {
 	title: string;
@@ -21,4 +21,6 @@ export interface NewCourseSeatParams {
 	user_id: string | null;
 }
 
-export type CourseRow = Database['public']['Tables']['courses']['Row'];
+export interface RichCoursePage extends CoursePage {
+	content: null
+}

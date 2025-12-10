@@ -22,7 +22,7 @@ const routeToDetails = () => {
 			:key="coursePage.course_page_id"
 			@click="routeToContent(coursePage.course_page_id)"
 			class="hover:text-amber-600 cursor-pointer">
-			{{ coursePage.course_page_title }} ({{ coursePage.order_index }})
+			{{ coursePage.course_page_title }}
 		</p>
 	</div>
 </template>
