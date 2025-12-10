@@ -73,9 +73,9 @@ const router = createRouter({
 			path: '/opret',
 			name: 'updateUser',
 			meta: {
-				layout: DefaultLayout,
+				layout: LoginLayout,
 			},
-			component: () => import('../views/UpdateUserView.vue'),
+			component: () => import('../views/SignupView.vue'),
 			beforeEnter: async (_to, _from, next) => {
 				const user = await getAuthUser();
 				if (!user) {
