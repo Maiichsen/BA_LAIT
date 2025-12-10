@@ -1,4 +1,4 @@
-import {supabase} from '@/db/connection.ts';
+import { supabase } from '@/db/connection.ts';
 import {
 	deleteInvitedUser,
 	getAuthUser,
@@ -7,13 +7,13 @@ import {
 	updateAuthUserPassword,
 	updateFirstnameAndLastName,
 } from '@/services/userService.ts';
-import type {User} from '@/types/db.ts';
+import type { User } from '@/types/db.ts';
 
 export const createInvitedStudent = async (email: string, companyId: string) => {
 	console.log(email);
 	console.log(companyId);
 	try {
-		const {data, error} = await supabase
+		const { data, error } = await supabase
 			.from('invited_users')
 			.insert({
 				company_id: companyId,
@@ -61,30 +61,33 @@ export const createInvitedStudent = async (email: string, companyId: string) => 
   }
 };*/
 
-export const createStudent = (userId: string, email: string): Promise<User> => new Promise(async (resolve, reject) => {
-	getInvitedUserByEmail(email).then(async (invitedUser) => {
-		if (!invitedUser) return reject('Invited User not found');
-		try {
-			const {data, error} = await supabase
-				.from('users')
-				.insert({
-					user_id: userId,
-					company_id: invitedUser.company_id,
-					email: email,
-				})
-				.select()
-				.single();
+export const createStudent = (userId: string, email: string): Promise<User> =>
+	new Promise(async (resolve, reject) => {
+		getInvitedUserByEmail(email)
+			.then(async invitedUser => {
+				if (!invitedUser) return reject('Invited User not found');
+				try {
+					const { data, error } = await supabase
+						.from('users')
+						.insert({
+							user_id: userId,
+							company_id: invitedUser.company_id,
+							email: email,
+						})
+						.select()
+						.single();
 
-			if (error) return reject(error);
-			await deleteInvitedUser(email);
-			return resolve(data);
-		} catch (error) {
-			reject(error);
-		}
-	}).catch((error) => {
-		reject(error);
+					if (error) return reject(error);
+					await deleteInvitedUser(email);
+					return resolve(data);
+				} catch (error) {
+					reject(error);
+				}
+			})
+			.catch(error => {
+				reject(error);
+			});
 	});
-});
 
 export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
 	try {

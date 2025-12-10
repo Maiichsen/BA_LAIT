@@ -2,7 +2,7 @@
 import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
-import {onMounted, watch} from 'vue';
+import { onMounted, watch } from 'vue';
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 interface Props {
@@ -17,17 +17,18 @@ onMounted(async () => {
 	editorStore.loadCourse(props.course_id);
 });
 
-watch(() => props.page_id, (newVal) => {
-	console.log('ARGH');
-	console.log(newVal);
-});
+watch(
+	() => props.page_id,
+	newVal => {
+		console.log('ARGH');
+		console.log(newVal);
+	},
+);
 </script>
 
 <template>
 	<div class="flex">
-		<div v-if="editorStore.courseGlobalLoading">
-			LOADING...
-		</div>
+		<div v-if="editorStore.courseGlobalLoading">LOADING...</div>
 		<SidebarContent />
 		<div>
 			<AddContentHeader />

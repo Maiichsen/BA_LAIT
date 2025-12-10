@@ -7,5 +7,5 @@ const props = defineProps<Props>();
 </script>
 
 <template>
-	<h1>PAGE VIEW {{props.page_id}}</h1>
+	<h1>PAGE VIEW {{ props.page_id }}</h1>
 </template>

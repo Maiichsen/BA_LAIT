@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import {computed, onMounted, ref} from 'vue';
-import {uploadImageToSupabaseBucket} from '@/services/imageService.ts';
-import {getCourseById, getCoverImgUrlByCourseId} from '@/services/courseService.ts';
-import {updateCourse} from '@/services/courseService.ts';
-import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
+import { computed, onMounted, ref } from 'vue';
+import { uploadImageToSupabaseBucket } from '@/services/imageService.ts';
+import { getCourseById, getCoverImgUrlByCourseId } from '@/services/courseService.ts';
+import { updateCourse } from '@/services/courseService.ts';
+import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 const courseStore = useCourseEditorStore();
 
@@ -44,16 +44,18 @@ const handleUpdateCourse = async () => {
 };
 
 onMounted(() => {
-	getCourseById(courseStore.currentEditedCourseId).then((course) => {
-		title.value = course.title;
-		shortDescription.value = course.short_course_description;
-		timeEstimate.value = course.estimated_time_minutes;
-		authorName.value = course.author_name;
-		longDescription.value = course.long_course_description;
-		coverImgUrl = course.cover_image_url;
-	}).catch((err) => {
-		console.log(err);
-	});
+	getCourseById(courseStore.currentEditedCourseId)
+		.then(course => {
+			title.value = course.title;
+			shortDescription.value = course.short_course_description;
+			timeEstimate.value = course.estimated_time_minutes;
+			authorName.value = course.author_name;
+			longDescription.value = course.long_course_description;
+			coverImgUrl = course.cover_image_url;
+		})
+		.catch(err => {
+			console.log(err);
+		});
 	getCoverImgUrlByCourseId(courseStore.currentEditedCourseId)
 		.then(imgUrl => {
 			existingCoverUrl.value = imgUrl;
@@ -71,48 +73,48 @@ onMounted(() => {
 				input-id="overskrift"
 				label-text="Overskrift"
 				layout="inline"
-				v-model="title"/>
+				v-model="title" />
 			<BaseInput
 				input-type="text"
 				placeholder="kort beskrivelse"
 				input-id="kortbeskrivelse"
 				label-text="Kort beskrivelse"
 				layout="inline"
-				v-model="shortDescription"/>
+				v-model="shortDescription" />
 			<BaseInput
 				input-type="file"
 				input-id="image"
 				label-text="Billede"
 				layout="inline"
 				accept="image/*"
-				@change="handleFileNameChange"/>
+				@change="handleFileNameChange" />
 			<BaseInput
 				input-type="number"
 				placeholder="varighed"
 				input-id="varighed"
 				label-text="Varighed i minutter"
 				layout="inline"
-				v-model="timeEstimate"/>
+				v-model="timeEstimate" />
 			<BaseInput
 				input-type="text"
 				placeholder="oprettet af"
 				input-id="oprettet"
 				label-text="Oprettet af"
 				layout="inline"
-				v-model="authorName"/>
+				v-model="authorName" />
 			<BaseInput
 				input-type="text"
 				placeholder="indhold"
 				input-id="indhold"
 				label-text="Indhold"
 				layout="stacked"
-				v-model="longDescription"/>
+				v-model="longDescription" />
 		</div>
 	</form>
 
 	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>
 
 	<div v-if="displayedCoverUrl">
-		<img :src="displayedCoverUrl"/>
+		<img :src="displayedCoverUrl" />
 	</div>
 </template>

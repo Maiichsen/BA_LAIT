@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
-import {useCompaniesStore} from '@/stores/companiesStore.ts';
-import type {Company} from '@/types/db.ts';
+import { onMounted, ref } from 'vue';
+import { useCompaniesStore } from '@/stores/companiesStore.ts';
+import type { Company } from '@/types/db.ts';
 
 const companiesStore = useCompaniesStore();
 
@@ -34,10 +34,11 @@ const inviteCompany = () => {
 
 	inviteNewCompanyIsLoading.value = true;
 
-	companiesStore.inviteNewCompany(newCompanyName.value, newCompanyEmail.value)
+	companiesStore
+		.inviteNewCompany(newCompanyName.value, newCompanyEmail.value)
 		.then(() => closeNewCompanyForm())
 		.catch(err => console.log(err))
-		.finally(() => inviteNewCompanyIsLoading.value = false);
+		.finally(() => (inviteNewCompanyIsLoading.value = false));
 };
 
 const tryDeleteCompany = (company: Company) => {
@@ -57,13 +58,15 @@ const tryDeleteCompany = (company: Company) => {
 		<label for="newCompanyNameField">Company name</label>
 		<input id="newCompanyNameField" type="text" v-model="newCompanyName" placeholder="Name" />
 		<label for="newCompanyEmailField">Company e-mail</label>
-		<input id="newCompanyEmailField" type="text" v-model="newCompanyEmail" placeholder="E-mail">
-		<br/>
+		<input id="newCompanyEmailField" type="text" v-model="newCompanyEmail" placeholder="E-mail" />
+		<br />
 		<button @click="inviteCompany" :disabled="inviteNewCompanyIsLoading">Invite</button>
 	</div>
-	<hr>
+	<hr />
 	<ul>
-		<li v-for="company in companiesStore.listOfCompanies" :key="company.company_id">{{company.company_name}}<span @click="tryDeleteCompany(company)">x</span></li>
+		<li v-for="company in companiesStore.listOfCompanies" :key="company.company_id">
+			{{ company.company_name }}<span @click="tryDeleteCompany(company)">x</span>
+		</li>
 	</ul>
 </template>
 

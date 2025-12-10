@@ -46,38 +46,35 @@ export const createCourse = (newCourseParams: NewCourseParams): Promise<Course> 
 		}
 	});
 
-export const updateCourse = (courseId: string, updateCourseParams: CourseParams): Promise<Course> => new Promise(async (resolve, reject) => {
-	try {
-		const { data, error } = await supabase
-			.from('courses')
-			.update({
-				long_course_description: updateCourseParams.long_course_description,
-				short_course_description: updateCourseParams.short_course_description,
-				cover_image_url: updateCourseParams.cover_image_url,
-				estimated_time_minutes: updateCourseParams.estimated_time_minutes,
-				title: updateCourseParams.title,
-				author_name: updateCourseParams.author_name,
-			})
-			.eq('course_id', courseId)
-			.select()
-			.single();
-
-		if (error) return reject(error);
-
-		resolve(data);
-	} catch (err) {
-		reject(err);
-	}
-});
-
-export const getCourseById = (courseId: string): Promise<Course> =>
+export const updateCourse = (courseId: string, updateCourseParams: CourseParams): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
 				.from('courses')
-				.select()
+				.update({
+					long_course_description: updateCourseParams.long_course_description,
+					short_course_description: updateCourseParams.short_course_description,
+					cover_image_url: updateCourseParams.cover_image_url,
+					estimated_time_minutes: updateCourseParams.estimated_time_minutes,
+					title: updateCourseParams.title,
+					author_name: updateCourseParams.author_name,
+				})
 				.eq('course_id', courseId)
+				.select()
 				.single();
+
+			if (error) return reject(error);
+
+			resolve(data);
+		} catch (err) {
+			reject(err);
+		}
+	});
+
+export const getCourseById = (courseId: string): Promise<Course> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const { data, error } = await supabase.from('courses').select().eq('course_id', courseId).single();
 
 			if (error) return reject(error);
 			resolve(data);

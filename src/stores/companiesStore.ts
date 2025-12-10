@@ -1,11 +1,7 @@
-import {defineStore} from 'pinia';
-import {ref} from 'vue';
-import type {Company} from '@/types/db.ts';
-import {
-	createInvitedCompany,
-	deleteCompanyById,
-	getAllCompanies,
-} from '@/services/companyService.ts';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
+import type { Company } from '@/types/db.ts';
+import { createInvitedCompany, deleteCompanyById, getAllCompanies } from '@/services/companyService.ts';
 
 export const useCompaniesStore = defineStore('companies', () => {
 	const listOfCompanies = ref<Company[]>([]);
@@ -17,9 +13,9 @@ export const useCompaniesStore = defineStore('companies', () => {
 		listOfCompanies.value = [];
 
 		getAllCompanies()
-			.then(companies => listOfCompanies.value = companies)
+			.then(companies => (listOfCompanies.value = companies))
 			.catch(err => console.log(err))
-			.finally(() => isLoading.value = false);
+			.finally(() => (isLoading.value = false));
 	};
 
 	const deleteCompany = (companyId: string) => {
@@ -28,18 +24,20 @@ export const useCompaniesStore = defineStore('companies', () => {
 		deleteCompanyById(companyId)
 			.then(() => {
 				listOfCompanies.value = listOfCompanies.value.filter(company => company.company_id !== companyId);
-			}).catch(err => console.log(err))
-			.finally(() => isLoading.value = false);
+			})
+			.catch(err => console.log(err))
+			.finally(() => (isLoading.value = false));
 	};
 
-	const inviteNewCompany = (companyName: string, companyEmail: string) => new Promise(async (resolve, reject) => {
-		createInvitedCompany(companyName, companyEmail)
-			.then(company => {
-				listOfCompanies.value.push(company);
-				resolve(company);
-			})
-			.catch(err => reject(err));
-	});
+	const inviteNewCompany = (companyName: string, companyEmail: string) =>
+		new Promise(async (resolve, reject) => {
+			createInvitedCompany(companyName, companyEmail)
+				.then(company => {
+					listOfCompanies.value.push(company);
+					resolve(company);
+				})
+				.catch(err => reject(err));
+		});
 
 	return {
 		isLoading,

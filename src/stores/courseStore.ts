@@ -1,10 +1,7 @@
-import {defineStore} from 'pinia';
-import {computed, ref} from 'vue';
-import type {CoursePage} from '@/types/db.ts';
-import {
-	createCoursePage,
-	getAllCoursePagesByCourseId,
-} from '@/services/courseService.ts';
+import { defineStore } from 'pinia';
+import { computed, ref } from 'vue';
+import type { CoursePage } from '@/types/db.ts';
+import { createCoursePage, getAllCoursePagesByCourseId } from '@/services/courseService.ts';
 
 export const useCourseStore = defineStore('course', () => {
 	const listOfCoursePages = ref<CoursePage[]>([]);
@@ -17,19 +14,23 @@ export const useCourseStore = defineStore('course', () => {
 
 	const loadCourse = (courseId: string) => {
 		listOfCoursePages.value = [];
-		getAllCoursePagesByCourseId(courseId).then((coursePages) => {
-			listOfCoursePages.value = coursePages;
-		}).catch((err) => {
-			console.log(err);
-		});
+		getAllCoursePagesByCourseId(courseId)
+			.then(coursePages => {
+				listOfCoursePages.value = coursePages;
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	};
 
 	const addNewCoursePage = (courseId: string) => {
-		createCoursePage('Ny side', courseId, nextOrderIndex.value).then((coursePage) => {
-			listOfCoursePages.value.push(coursePage);
-		}).catch((err) => {
-			console.log(err);
-		});
+		createCoursePage('Ny side', courseId, nextOrderIndex.value)
+			.then(coursePage => {
+				listOfCoursePages.value.push(coursePage);
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	};
 
 	return {
