@@ -4,7 +4,7 @@ import type {Company} from '@/types/db.ts';
 import {
 	createInvitedCompany,
 	deleteCompanyById,
-	getAllCompanies
+	getAllCompanies,
 } from '@/services/companyService.ts';
 
 export const useCompaniesStore = defineStore('companies', () => {

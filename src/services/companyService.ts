@@ -2,8 +2,6 @@ import {supabase} from '../db/connection.ts';
 import {
 	checkIfEmailIsAlreadyInvited, checkIfEmailIsAlreadyVerifiedUser,
 	createInvitedUser,
-	getAuthUser,
-	updateAuthUserPassword,
 } from '@/services/userService.ts';
 import type {Company} from '@/types/db.ts';
 
