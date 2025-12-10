@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
+import LaitLogo from '@/assets/icons/LaitLogo.vue';
 
 const isProfileOpen = ref(false);
 const isMobileMenuOpen = ref(false);
@@ -26,9 +27,15 @@ onUnmounted(() => {
 		<div class="container">
 			<div class="container-row items-center">
 				<!-- Logo -->
-				<router-link to="/all_courses" class="col col-span-2 lg:col-span-3">
+				 <RouterLink to="/all_courses" class="col-span-2 lg:col-span-3">
+						<LaitLogo/>
+				 </RouterLink>
+
+				<!-- <router-link to="/all_courses" class="col col-span-2 lg:col-span-3">
 					<img class="w-[70px] h-[25px] lg:w-20 lg:h-[27px]" src="/logo.svg" alt="Lait logo" width="80" height="30" />
-				</router-link>
+				</router-link> -->
+
+
 
 				<!-- Desktop Navigation -->
 				<nav class="hidden lg:block col-span-9">
@@ -158,3 +165,5 @@ onUnmounted(() => {
 		</div>
 	</header>
 </template>
+
+
