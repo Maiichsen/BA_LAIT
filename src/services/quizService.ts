@@ -26,7 +26,7 @@ export const createQuiz = async (newQuizParams: newQuizParams) => {
 /******************/
 /* QUESTION TYPES */
 /******************/
-export const createQuestionTypes = async (title: string, description: string) => {
+/*export const createQuestionTypes = async (title: string, description: string) => {
 	try {
 		const { data, error } = await supabase.from('question_types').insert([title, description]).select();
 
@@ -35,7 +35,7 @@ export const createQuestionTypes = async (title: string, description: string) =>
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
 
 export const getQuestionType = async (questionTypeId: string) => {
 	try {

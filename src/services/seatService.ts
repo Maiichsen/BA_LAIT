@@ -21,7 +21,7 @@ export const setCoursePageVisibilityById = async (coursePageId: string, isVisibl
 /*CREATE CONTENT*/
 
 ///////*COURSE SEATS*////////
-export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams) => {
+/*export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams) => {
 	try {
 		const { data, error } = await supabase
 			.from('course_seats')
@@ -40,9 +40,9 @@ export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams)
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
 
-export const deleteCourseSeat = async (courseSeatId: string) => {
+/*export const deleteCourseSeat = async (courseSeatId: string) => {
 	try {
 		const { error } = await supabase.from('course_seats').delete().eq('course_seat_id', courseSeatId);
 
@@ -51,10 +51,10 @@ export const deleteCourseSeat = async (courseSeatId: string) => {
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
 
 ///////*COURSE SEATS*////////
-export const createCourseSeat = async (newCourseSeatParams: newCourseSeatParams) => {
+export const createCourseSeat = async (newCourseSeatParams: NewCourseSeatParams) => {
 	try {
 		const { data, error } = await supabase
 			.from('course_seats')
