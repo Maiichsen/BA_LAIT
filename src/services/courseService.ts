@@ -1,7 +1,7 @@
 import { supabase } from '../db/connection.ts';
 import type { NewCourseParams, CourseParams } from '../types/courseTypes.ts';
 import type { Content, Course, CoursePage } from '../types/db.ts';
-import { defaultPageContent } from '../constants/courseConstants.ts';
+import {defaultPageContent, pageOrderIndexDefaultGab} from '../constants/courseConstants.ts';
 import { downloadImageFromSupabaseBucket } from './imageService.ts';
 
 export const createTemplateCourse = (): Promise<Course> =>
@@ -11,7 +11,7 @@ export const createTemplateCourse = (): Promise<Course> =>
 			short_course_description: 'Kort beskrivelse af kurset',
 		})
 			.then(course => {
-				createCoursePage('Side 1', course.course_id, 1)
+				createCoursePage('Side 1', course.course_id, pageOrderIndexDefaultGab)
 					.then(page => {
 						createNewPageContent(page.course_page_id)
 							.then(() => {

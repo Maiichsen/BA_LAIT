@@ -11,3 +11,5 @@ export const defaultPageContent = {
 		},
 	],
 };
+
+export const pageOrderIndexDefaultGab = 64;

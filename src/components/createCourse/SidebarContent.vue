@@ -1,18 +1,16 @@
 <script setup lang="ts">
-//import { onMounted } from 'vue';
-//import { getAllCoursePagesByCourseId } from '@/services/courseService.ts';
-import { useRouter } from 'vue-router';
-import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
+import {useRouter} from 'vue-router';
+import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
 
 const router = useRouter();
 const editorStore = useCourseEditorStore();
 
 const routeToContent = (pageId: string) => {
-	router.push({ name: 'courseEditorPage', params: { page_id: pageId } });
+	router.push({name: 'courseEditorPage', params: {page_id: pageId}});
 };
 
 const routeToDetails = () => {
-	router.push({ name: 'courseEditorFrontpage' });
+	router.push({name: 'courseEditorFrontpage'});
 };
 </script>
 
@@ -24,7 +22,7 @@ const routeToDetails = () => {
 			:key="coursePage.course_page_id"
 			@click="routeToContent(coursePage.course_page_id)"
 			class="hover:text-amber-600 cursor-pointer">
-			{{ coursePage.course_page_title }}
+			{{ coursePage.course_page_title }} ({{ coursePage.order_index }})
 		</p>
 	</div>
 </template>

@@ -7,7 +7,7 @@ const router = useRouter();
 const handleCreateNewCourseClick = () => {
 	createTemplateCourse()
 		.then(course => {
-			router.push({ name: 'frontpage', params: { course_id: course.course_id } });
+			router.push({ name: 'courseEditorFrontpage', params: { course_id: course.course_id } });
 		})
 		.catch(err => console.log(err));
 };
@@ -15,5 +15,5 @@ const handleCreateNewCourseClick = () => {
 
 <template>
 	<h1>ALL KURSER</h1>
-	<button class="hover:text-amber-600" @click="handleCreateNewCourseClick">Opret kursus knap</button>
+	<button class="hover:text-amber-600 cursor-pointer" @click="handleCreateNewCourseClick">Opret kursus knap</button>
 </template>
