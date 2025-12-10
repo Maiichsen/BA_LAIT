@@ -29,7 +29,7 @@ const contactInfo = {
 			<div class="container-row">
 				<!-- Logo -->
 				<RouterLink to="/all_courses" class="col-span-full mb-12 lg:mb-[100px]">
-					<LaitLogo fillClass="fill-tutara-50" :height="70"/>
+					<LaitLogo fillClass="fill-tutara-50" :height="70" />
 				</RouterLink>
 
 				<!-- Navigation Links -->
@@ -48,18 +48,18 @@ const contactInfo = {
 
 				<!-- Contact Info -->
 				<div class="flex gap-8 lg:gap-6 lg:flex-row flex-col lg:items-center col-span-full">
-          <div class="flex flex-col max-lg:gap-4">
-            <p>{{ contactInfo.address }}</p>
-            <p>{{ contactInfo.zipCity }}</p>
-          </div>
-          <div class="flex flex-col max-lg:gap-4">
-            <a :href="`tel:${contactInfo.phoneHref}`" class="hover:text-tutara-50 transition-colors duration-200">
-              {{ contactInfo.phone }}
-            </a>
-            <a :href="`mailto:${contactInfo.email}`" class="hover:text-tutara-50 transition-colors duration-200">
-              {{ contactInfo.email }}
-            </a>
-          </div>
+					<div class="flex flex-col max-lg:gap-4">
+						<p>{{ contactInfo.address }}</p>
+						<p>{{ contactInfo.zipCity }}</p>
+					</div>
+					<div class="flex flex-col max-lg:gap-4">
+						<a :href="`tel:${contactInfo.phoneHref}`" class="hover:text-tutara-50 transition-colors duration-200">
+							{{ contactInfo.phone }}
+						</a>
+						<a :href="`mailto:${contactInfo.email}`" class="hover:text-tutara-50 transition-colors duration-200">
+							{{ contactInfo.email }}
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
