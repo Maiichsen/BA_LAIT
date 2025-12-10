@@ -27,15 +27,13 @@ onUnmounted(() => {
 		<div class="container">
 			<div class="container-row items-center">
 				<!-- Logo -->
-				 <RouterLink to="/all_courses" class="col-span-2 lg:col-span-3">
-						<LaitLogo/>
-				 </RouterLink>
+				<RouterLink to="/all_courses" class="col-span-2 lg:col-span-3">
+					<LaitLogo />
+				</RouterLink>
 
 				<!-- <router-link to="/all_courses" class="col col-span-2 lg:col-span-3">
 					<img class="w-[70px] h-[25px] lg:w-20 lg:h-[27px]" src="/logo.svg" alt="Lait logo" width="80" height="30" />
 				</router-link> -->
-
-
 
 				<!-- Desktop Navigation -->
 				<nav class="hidden lg:block col-span-9">
@@ -165,5 +163,3 @@ onUnmounted(() => {
 		</div>
 	</header>
 </template>
-
-
