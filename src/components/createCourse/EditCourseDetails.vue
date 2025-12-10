@@ -4,12 +4,9 @@ import {computed, onMounted, ref} from 'vue';
 import {uploadImageToSupabaseBucket} from '@/services/imageService.ts';
 import {getCourseById, getCoverImgUrlByCourseId} from '@/services/courseService.ts';
 import {updateCourse} from '@/services/courseService.ts';
+import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
 
-interface Props {
-	course_id: string;
-}
-
-const props = defineProps<Props>();
+const courseStore = useCourseEditorStore();
 
 const title = ref('');
 const shortDescription = ref('');
@@ -36,7 +33,7 @@ const handleUpdateCourse = async () => {
 		await uploadImageToSupabaseBucket(coverImgUrl, imgFile.value);
 	}
 
-	await updateCourse(props.course_id, {
+	await updateCourse(courseStore.currentEditedCourseId, {
 		title: title.value,
 		short_course_description: shortDescription.value,
 		cover_image_url: coverImgUrl,
@@ -47,7 +44,7 @@ const handleUpdateCourse = async () => {
 };
 
 onMounted(() => {
-	getCourseById(props.course_id).then((course) => {
+	getCourseById(courseStore.currentEditedCourseId).then((course) => {
 		title.value = course.title;
 		shortDescription.value = course.short_course_description;
 		timeEstimate.value = course.estimated_time_minutes;
@@ -57,7 +54,7 @@ onMounted(() => {
 	}).catch((err) => {
 		console.log(err);
 	});
-	getCoverImgUrlByCourseId(props.course_id)
+	getCoverImgUrlByCourseId(courseStore.currentEditedCourseId)
 		.then(imgUrl => {
 			existingCoverUrl.value = imgUrl;
 		})

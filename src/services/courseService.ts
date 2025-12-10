@@ -46,7 +46,7 @@ export const createCourse = (newCourseParams: NewCourseParams): Promise<Course> 
 		}
 	});
 
-export const updateCourse = async (courseId: string, updateCourseParams: CourseParams) => {
+export const updateCourse = (courseId: string, updateCourseParams: CourseParams): Promise<Course> => new Promise(async (resolve, reject) => {
 	try {
 		const { data, error } = await supabase
 			.from('courses')
@@ -59,14 +59,16 @@ export const updateCourse = async (courseId: string, updateCourseParams: CourseP
 				author_name: updateCourseParams.author_name,
 			})
 			.eq('course_id', courseId)
-			.select();
+			.select()
+			.single();
 
-		if (error) throw error;
-		return data;
+		if (error) return reject(error);
+
+		resolve(data);
 	} catch (err) {
-		console.log(err);
+		reject(err);
 	}
-};
+});
 
 export const getCourseById = (courseId: string): Promise<Course> =>
 	new Promise(async (resolve, reject) => {

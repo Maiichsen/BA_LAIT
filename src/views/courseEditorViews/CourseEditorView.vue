@@ -2,26 +2,35 @@
 import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
-import { onMounted } from 'vue';
-import { useCourseStore } from '@/stores/courseStore.ts';
+import {onMounted, watch} from 'vue';
+import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 interface Props {
 	course_id: string;
+	page_id: string;
 }
 
 const props = defineProps<Props>();
-const courseStore = useCourseStore();
+const editorStore = useCourseEditorStore();
 
 onMounted(async () => {
-	courseStore.loadCourse(props.course_id);
+	editorStore.loadCourse(props.course_id);
+});
+
+watch(() => props.page_id, (newVal) => {
+	console.log('ARGH');
+	console.log(newVal);
 });
 </script>
 
 <template>
 	<div class="flex">
-		<SidebarContent :course_id="props.course_id" />
+		<div v-if="editorStore.courseGlobalLoading">
+			LOADING...
+		</div>
+		<SidebarContent />
 		<div>
-			<AddContentHeader :course_id="props.course_id" />
+			<AddContentHeader />
 			<div>
 				<router-view />
 			</div>

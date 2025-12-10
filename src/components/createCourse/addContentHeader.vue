@@ -1,21 +1,16 @@
 <script setup lang="ts">
-import {useCourseStore} from '@/stores/courseStore.ts';
+import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
 
-interface Props {
-	course_id: string;
-}
-
-const props = defineProps<Props>();
-const courseStore = useCourseStore();
+const courseStore = useCourseEditorStore();
 
 const handleCreateNewContentPage = async () => {
-	courseStore.addNewCoursePage(props.course_id);
+	courseStore.addNewCoursePage();
 };
 </script>
 
 <template>
 	<div class="flex gap-8 border-2 border-red-500">
-		<p @click="handleCreateNewContentPage">tilføj indhold</p>
+		<p @click="handleCreateNewContentPage" class="cursor-pointer">tilføj indhold</p>
 		<p>tilføj quiz</p>
 		<p>tilføj slut-test</p>
 	</div>
