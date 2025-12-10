@@ -17,7 +17,7 @@ export default defineConfigWithVueTs(
 		files: ['**/*.{ts,mts,tsx,vue}'],
 	},
 
-	globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+	globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**', 'database.types.ts']),
 
 	pluginVue.configs['flat/essential'],
 	vueTsConfigs.recommended,
@@ -42,7 +42,7 @@ export default defineConfigWithVueTs(
 			'eqeqeq': ['error', 'always'],
 			'indent': ['error', 'tab'],
 			'no-eval': ['error'],
-			'no-unused-vars': ['error'],
+			'no-unused-vars': ['warn'],
 			'no-var': ['error'],
 			'prefer-const': ['error'],
 			'quotes': ['error', 'single'],

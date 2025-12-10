@@ -1,3 +1,5 @@
 <script setup lang="ts"></script>
 
-<template></template>
+<template>
+	<h1>add question</h1>
+</template>

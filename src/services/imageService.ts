@@ -1,5 +1,4 @@
-import { supabase } from '@/db/connection.ts';
-import { getCoverImgByCourseId } from '@/services/courseService.ts';
+import { supabase } from '../db/connection.ts';
 
 export const uploadImageToSupabaseBucket = async (fileName: string, coverImage: File) => {
 	try {
@@ -12,31 +11,15 @@ export const uploadImageToSupabaseBucket = async (fileName: string, coverImage: 
 	}
 };
 
-export const downloadImageFromSupabaseBucketByCourseId = async (courseId: string) => {
-	try {
-		const fileName = await getCoverImgByCourseId(courseId);
-		if (!fileName) {
-			return;
+export const downloadImageFromSupabaseBucket = (storageName: string, fileName: string): Promise<string | null> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const { data, error } = await supabase.storage.from(storageName).download(`public/${fileName}`);
+
+			if (error) return reject(error);
+
+			resolve(URL.createObjectURL(data));
+		} catch (err) {
+			reject(err);
 		}
-		const { data, error } = await supabase.storage
-			.from('courseCovers')
-			.download(`public/${fileName[0].cover_image_url}`);
-
-		if (error) throw error;
-
-		return URL.createObjectURL(data);
-	} catch (err) {
-		console.log(err);
-	}
-};
-
-export const downloadImageFromSupabaseBucket = async (fileName: string) => {
-	try {
-		const { data, error } = await supabase.storage.from('courseCovers').download(`public/${fileName}`);
-
-		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
-	}
-};
+	});
