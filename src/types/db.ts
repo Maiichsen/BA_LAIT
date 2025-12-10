@@ -59,3 +59,8 @@ export type UpdateQuiz = Database['public']['Tables']['quizzes']['Update'];
 export type User = Database['public']['Tables']['users']['Row'];
 export type NewUser = Database['public']['Tables']['users']['Insert'];
 export type UpdateUser = Database['public']['Tables']['users']['Update'];
+
+// INVITED USER
+export type InvitedUser = Database['public']['Tables']['invited_users']['Row'];
+export type NewInvitedUser = Database['public']['Tables']['invited_users']['Insert'];
+export type UpdateInvitedUser = Database['public']['Tables']['invited_users']['Update'];

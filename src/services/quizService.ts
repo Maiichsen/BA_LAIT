@@ -1,7 +1,8 @@
 import { supabase } from '../db/connection.ts';
 import type { newQuizParams } from '@/types/quizTypes.ts';
-
-/////////* QUIZ */////////
+/********/
+/* QUIZ */
+/********/
 export const createQuiz = async (newQuizParams: newQuizParams) => {
 	try {
 		const { data, error } = await supabase
@@ -14,7 +15,6 @@ export const createQuiz = async (newQuizParams: newQuizParams) => {
 					title: newQuizParams.title,
 				},
 			])
-			// To get the created question type returned, if needed
 			.select();
 
 		if (error) throw error;
@@ -23,18 +23,19 @@ export const createQuiz = async (newQuizParams: newQuizParams) => {
 		console.log(err);
 	}
 };
-
-/////////* QUESTION TYPES */////////
-export const createQuestionTypes = async (title: string, description: string) => {
+/******************/
+/* QUESTION TYPES */
+/******************/
+/*export const createQuestionTypes = async (title: string, description: string) => {
 	try {
-		const { data, error } = await supabase.from('question_types').insert([title, description]).select(); // To get the created question type returned, if needed
+		const { data, error } = await supabase.from('question_types').insert([title, description]).select();
 
 		if (error) throw error;
 		return data;
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
 
 export const getQuestionType = async (questionTypeId: string) => {
 	try {

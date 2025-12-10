@@ -19,7 +19,7 @@ const onInput = (event: Event) => {
 </script>
 
 <template>
-	<div :class="props.layout === 'stacked' ? 'flex flex-col gap-1' : 'flex items-center gap-3'">
+	<div :class="props.layout === 'stacked' ? 'flex flex-col gap-1' : 'flex justify-between'">
 		<label :for="props.inputId">
 			{{ props.labelText }}
 		</label>
