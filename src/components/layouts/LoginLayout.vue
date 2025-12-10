@@ -1,9 +1,8 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <template>
-	<div>
-		<main>
+		<main class="h-full bg-blue-700 flex flex-col justify-center">
 			<slot />
 		</main>
-	</div>
 </template>

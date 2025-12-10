@@ -55,10 +55,10 @@ export const supabaseSignUpNewUser = async (email: string, password: string) => 
 
 export const deleteInvitedUser = async (email: string) => {
 	try {
-		const {
-			data,
-			error
-		} = await supabase.from('invited_users').delete().eq('user_email', email.toLowerCase());
+		const {data, error} = await supabase
+			.from('invited_users')
+			.delete()
+			.eq('user_email', email.toLowerCase());
 
 		if (error) throw error;
 		return data;
@@ -157,21 +157,22 @@ export const createInvitedUser = (email: string, companyId: string, isCompanyOwn
 	}
 });
 
-/*export const getInvitedUserByEmail = (email: string): Promise<InvitedUser> => new Promise(async (resolve, reject) => {
+export const getInvitedUserByEmail = (email: string): Promise<InvitedUser | null> => new Promise(async (resolve, reject) => {
 	try {
 		const {data, error} = await supabase
 			.from('invited_users')
 			.select()
-			.eq('user_email', email.toLowerCase())
-			.single();
+			.eq('user_email', email.toLowerCase());
 
 		if (error) return reject(error);
+		if (!data) return reject('No data object found, lost in space');
+		if (!data[0]) return resolve(null);
 
-		resolve(data);
+		resolve(data[0]);
 	} catch (err) {
 		reject(err);
 	}
-});*/
+});
 
 export const checkIfEmailIsAlreadyInvited = (email: string): Promise<boolean> => new Promise(async (resolve, reject) => {
 	try {
