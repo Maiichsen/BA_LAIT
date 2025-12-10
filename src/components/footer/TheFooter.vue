@@ -28,9 +28,9 @@ const contactInfo = {
 		<div class="container">
 			<div class="container-row">
 				<!-- Logo -->
-				<div class="col-span-full mb-12 lg:mb-[100px]">
-					<LaitLogo fillClass="fill-tutara-50"/>
-				</div>
+				<RouterLink to="/all_courses" class="col-span-full mb-12 lg:mb-[100px]">
+					<LaitLogo fillClass="fill-tutara-50" :height="70"/>
+				</RouterLink>
 
 				<!-- Navigation Links -->
 				<nav class="col-span-full mb-12 lg:mb-16" aria-label="Footer navigation">

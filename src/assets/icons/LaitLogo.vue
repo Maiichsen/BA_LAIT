@@ -2,7 +2,7 @@
 defineProps({
 	fillClass: {
 		type: String,
-		default: 'fill-tutara-400',
+		default: 'fill-tutara-900',
 	},
 	height:{
 		type: Number,
