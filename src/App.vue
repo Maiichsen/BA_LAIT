@@ -3,11 +3,11 @@
 </script>
 
 <template class="">
-  <component :is="$route.meta.layout">
-    <RouterView />
-  </component>
+	<component :is="$route.meta.layout">
+		<RouterView />
+	</component>
 
-<!--  <header class="">
+	<!--  <header class="">
       <nav class="flex space-x-4 border-b border-tutara-200 h-20 items-center px-4">
         <div>
           <img alt="lait logo" class="" src="@/assets/images/logo.png" width="100" height="100" />
