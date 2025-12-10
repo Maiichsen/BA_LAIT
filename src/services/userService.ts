@@ -1,5 +1,6 @@
-import { supabase } from '../db/connection.ts';
-import type { InvitedUser } from '@/types/db.ts';
+import {supabase} from '../db/connection.ts';
+import type {InvitedUser} from '@/types/db.ts';
+import type {User as AuthUser} from '@supabase/supabase-js';
 
 /*EMAIL STUFF*/
 /*EMAIL STUFF*/
@@ -7,7 +8,7 @@ import type { InvitedUser } from '@/types/db.ts';
 export const sendSignInOtpMail = (email: string): Promise<void> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { error } = await supabase.auth.signInWithOtp({
+			const {error} = await supabase.auth.signInWithOtp({
 				email: email,
 				options: {
 					/*shouldCreateUser: false, means "do not create a user", but the link only works on users that exists in auth*/
@@ -42,7 +43,7 @@ export const sendSignInOtpMail = (email: string): Promise<void> =>
 
 export const supabaseSignUpNewUser = async (email: string, password: string) => {
 	try {
-		const { data, error } = await supabase.auth.signUp({
+		const {data, error} = await supabase.auth.signUp({
 			email: email,
 			password: password,
 		});
@@ -56,7 +57,10 @@ export const supabaseSignUpNewUser = async (email: string, password: string) => 
 
 export const deleteInvitedUser = async (email: string) => {
 	try {
-		const { data, error } = await supabase.from('invited_users').delete().eq('user_email', email.toLowerCase());
+		const {
+			data,
+			error,
+		} = await supabase.from('invited_users').delete().eq('user_email', email.toLowerCase());
 
 		if (error) throw error;
 		return data;
@@ -70,7 +74,7 @@ export const deleteInvitedUser = async (email: string) => {
 /*LOGIN USER*/
 export const signInUser = async (email: string, password: string) => {
 	try {
-		const { data, error } = await supabase.auth.signInWithPassword({
+		const {data, error} = await supabase.auth.signInWithPassword({
 			email: email,
 			password: password,
 		});
@@ -83,23 +87,23 @@ export const signInUser = async (email: string, password: string) => {
 };
 
 /*AUTH STUFF*/
-export const getAuthUser = async () => {
+export const getAuthUser = (): Promise<AuthUser> => new Promise(async (resolve, reject) => {
 	try {
-		const { data, error } = await supabase.auth.getUser();
-
-		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
+		const {data, error} = await supabase.auth.getUser();
+		if (error) return reject(error);
+		if (!data || !data.user) return reject('User doesn\'t exist');
+		resolve(data.user);
+	} catch (error) {
+		reject(error);
 	}
-};
+});
 
 /*UPDATE USER*/
 /*UPDATE USER*/
 /*UPDATE USER*/
 export const updateAuthUserPassword = async (password: string) => {
 	try {
-		const { data, error } = await supabase.auth.updateUser({
+		const {data, error} = await supabase.auth.updateUser({
 			password: password,
 		});
 
@@ -116,7 +120,7 @@ export const updateFirstnameAndLastName = async (firstname: string, lastname: st
 		if (!userData) throw new Error('no user data');
 		if (!userData.user) throw new Error('no user');
 
-		const { data, error } = await supabase
+		const {data, error} = await supabase
 			.from('users')
 			.update({
 				first_name: firstname,
@@ -131,10 +135,11 @@ export const updateFirstnameAndLastName = async (firstname: string, lastname: st
 	}
 };
 
+/*TODO: hvis der er en user med samme email inviteret allerede, slet den gamle og sæt den nye ind*/
 export const createInvitedUser = (email: string, companyId: string, isCompanyOwner: boolean): Promise<InvitedUser> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase
+			const {data, error} = await supabase
 				.from('invited_users')
 				.insert({
 					company_id: companyId,
@@ -159,7 +164,10 @@ export const createInvitedUser = (email: string, companyId: string, isCompanyOwn
 export const getInvitedUserByEmail = (email: string): Promise<InvitedUser | null> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('invited_users').select().eq('user_email', email.toLowerCase());
+			const {data, error} = await supabase
+				.from('invited_users')
+				.select()
+				.eq('user_email', email.toLowerCase());
 
 			if (error) return reject(error);
 			if (!data) return reject('No data object found, lost in space');
@@ -174,7 +182,7 @@ export const getInvitedUserByEmail = (email: string): Promise<InvitedUser | null
 export const checkIfEmailIsAlreadyInvited = (email: string): Promise<boolean> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase
+			const {data, error} = await supabase
 				.from('invited_users')
 				.select('invited_user_id')
 				.eq('user_email', email.toLowerCase());
@@ -190,7 +198,10 @@ export const checkIfEmailIsAlreadyInvited = (email: string): Promise<boolean> =>
 export const checkIfEmailIsAlreadyVerifiedUser = (email: string): Promise<boolean> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('users').select('user_id').eq('email', email.toLowerCase());
+			const {
+				data,
+				error,
+			} = await supabase.from('users').select('user_id').eq('email', email.toLowerCase());
 
 			if (error) return reject(error);
 

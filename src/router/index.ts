@@ -70,6 +70,14 @@ const router = createRouter({
 			component: () => import('../views/ContactView.vue'),
 		},
 		{
+			path: '/tester',
+			name: 'tester',
+			meta: {
+				layout: DefaultLayout,
+			},
+			component: () => import('../views/UpdateUserView.vue'),
+		},
+		{
 			path: '/opret',
 			name: 'updateUser',
 			meta: {

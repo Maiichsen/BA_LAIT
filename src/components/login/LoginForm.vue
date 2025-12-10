@@ -14,7 +14,7 @@ const handleLogin = () => {
 				<BaseInput input-type="text" input-id="loginpassword" label-text="Adgangskode"
 									 layout="stacked"  class="mt-[0.8rem]"/>
 				<p class="text-p1 text-tutara-600 text-right mt-[1rem]">Glemt adgangskode?</p>
-				<BaseButton label="Login" class="">Log ind</BaseButton>
+				<BaseButton type="submit" label="Login">Log ind</BaseButton>
 		</form>
 	</div>
 </template>

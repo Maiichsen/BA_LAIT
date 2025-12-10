@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
-import {signInUser} from '@/services/userService.ts';
+import {getAuthUser, getInvitedUserByEmail, signInUser} from '@/services/userService.ts';
 import {supabase} from '@/db/connection.ts';
 import {createInvitedStudent, createStudent} from '@/services/studentService.ts';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 
-const userEmail = ref('');
+const userFirstname = ref('');
+const userLastname = ref('');
 const userPassword = ref('');
+const repeatUserPassword = ref('');
 const companyId = ref('');
 
 /*admin email, inviting user*/
@@ -19,7 +21,6 @@ const handleCreateStudent = async () => {
 		console.error(e);
 	}
 };
-
 /*invited user, creates auth account*/
 const handleSignUp = async () => {
 	try {
@@ -29,7 +30,6 @@ const handleSignUp = async () => {
 		console.error(e);
 	}
 };
-
 const handleLogin = async () => {
 	try {
 		const data = await signInUser(userEmail.value, userPassword.value);
@@ -39,12 +39,24 @@ const handleLogin = async () => {
 	}
 };
 
-const test = async () => {
-	const data = await supabase.auth.getUser();
-	console.log(data);
+const authUserMail = ref('');
+
+const getUser = async () => {
+	getAuthUser().then((user) => {
+		authUserMail.value = user.email!;
+	}).catch((err) => {
+		console.log(err);
+	});
 };
 
-test();
+const handleCreateNewUser = async () => {
+	await getUser();
+	getInvitedUserByEmail(authUserMail.value).then((invitedUser) => {
+		console.log(invitedUser);
+	}).catch((err) => {
+		console.log(err);
+	});
+};
 </script>
 
 <template>
@@ -56,27 +68,31 @@ test();
 					input-id="registerfirstname"
 					label-text="Fornavn"
 					layout="stacked"
+					v-model="userFirstname"
 				/>
 				<BaseInput
 					input-type="text"
 					input-id="registerlastname"
 					label-text="Efternavn"
 					layout="stacked"
+					v-model="userLastname"
 				/>
 				<BaseInput
 					input-type="text"
 					input-id="registerpassword"
 					label-text="Adgangskode"
 					layout="stacked"
+					v-model="userPassword"
 				/>
 				<BaseInput
 					input-type="text"
 					input-id="repeatregisterpassword"
 					label-text="Gentag adgangskode"
 					layout="stacked"
+					v-model="repeatUserPassword"
 				/>
 			</div>
-			<BaseButton label="register" class="mt-[3rem]">Opret bruger</BaseButton>
+			<BaseButton label="register" class="mt-[3rem]" type="submit">Opret bruger</BaseButton>
 		</form>
 	</div>
 	<!--	<h1>ADMIN OPRET STUDENT</h1>
