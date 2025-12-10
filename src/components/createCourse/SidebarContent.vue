@@ -3,7 +3,6 @@
 //import { getAllCoursePagesByCourseId } from '@/services/courseService.ts';
 import { useRouter } from 'vue-router';
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
-import {computed} from 'vue';
 
 const router = useRouter();
 const editorStore = useCourseEditorStore();
