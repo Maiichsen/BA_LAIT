@@ -4,9 +4,9 @@ import TheFooter from '@/components/footer/TheFooter.vue';
 </script>
 
 <template>
-	<div>
+	<div class="flex flex-col h-full">
 		<TheHeader />
-		<main>
+		<main class="flex-1">
 			<slot />
 		</main>
 		<TheFooter />
