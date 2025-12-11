@@ -1,32 +1,14 @@
 import {supabase} from '../db/connection.ts';
 import type {InvitedUser, User} from '@/types/db.ts';
-import type {User as AuthUser} from '@supabase/supabase-js';
-import type {inviteUserParams, newUserParams} from '@/types/userTypes.ts';
+import type {AuthResponse, User as AuthUser} from '@supabase/supabase-js';
+import type {inviteUserParams, newUserParams, SignInResponse} from '@/types/userTypes.ts';
 
-/*EMAIL STUFF*/
-/*EMAIL STUFF*/
-/*EMAIL STUFF*/
-export const sendSignInOtpMail = (email: string): Promise<void> =>
-	new Promise(async (resolve, reject) => {
-		try {
-			const {error} = await supabase.auth.signInWithOtp({
-				email: email,
-				options: {
-					emailRedirectTo: `${import.meta.env.VITE_HOST_URL}/opret`,
-				},
-			});
-
-			if (error) return reject(error);
-
-			resolve();
-		} catch (err) {
-			reject(err);
-		}
-	});
-
-export const createUser = (newUserParams: newUserParams):Promise<User> => new Promise(async (resolve, reject) => {
+/*************/
+/*CREATE USER*/
+/*************/
+export const createUser = (newUserParams: newUserParams): Promise<User> => new Promise(async (resolve, reject) => {
 	try {
-		const { data, error } = await supabase
+		const {data, error} = await supabase
 			.from('users')
 			.insert({
 				company_id: newUserParams.company_id,
@@ -48,8 +30,21 @@ export const createUser = (newUserParams: newUserParams):Promise<User> => new Pr
 	}
 });
 
-/*CREATING AUTH USERS*/
-/*CREATING AUTH USERS*/
+export const getUserById = (userId: string): Promise<User> => new Promise(async (resolve, reject) => {
+	try {
+		const {data, error} = await supabase
+			.from('users')
+			.select('*')
+			.eq('user_id', userId)
+			.single();
+
+		if (error) return reject(error);
+		return resolve(data);
+	} catch (error) {
+		reject(error);
+	}
+});
+
 /*CREATING AUTH USERS*/
 /*export const checkIfUserExists = async (email: string) => {
 	try {
@@ -64,8 +59,7 @@ export const createUser = (newUserParams: newUserParams):Promise<User> => new Pr
 		console.log(err);
 	}
 };*/
-
-export const supabaseSignUpNewUser = async (email: string, password: string) => {
+/*export const supabaseSignUpNewUser = async (email: string, password: string) => {
 	try {
 		const {data, error} = await supabase.auth.signUp({
 			email: email,
@@ -77,7 +71,24 @@ export const supabaseSignUpNewUser = async (email: string, password: string) => 
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
+export const sendSignInOtpMail = (email: string): Promise<void> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const {error} = await supabase.auth.signInWithOtp({
+				email: email,
+				options: {
+					emailRedirectTo: `${import.meta.env.VITE_HOST_URL}/opret`,
+				},
+			});
+
+			if (error) return reject(error);
+
+			resolve();
+		} catch (err) {
+			reject(err);
+		}
+	});
 
 export const deleteInvitedUser = async (email: string) => {
 	try {
@@ -93,24 +104,26 @@ export const deleteInvitedUser = async (email: string) => {
 	}
 };
 
+/************/
 /*LOGIN USER*/
-/*LOGIN USER*/
-/*LOGIN USER*/
-export const signInUser = async (email: string, password: string) => {
+/************/
+export const signInUser = (email: string, password: string): Promise<SignInResponse> => new Promise(async (resolve, reject) => {
 	try {
 		const {data, error} = await supabase.auth.signInWithPassword({
 			email: email,
 			password: password,
 		});
 
-		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
+		if (error) return reject(error);
+		resolve(data);
+	} catch (error) {
+		reject(error);
 	}
-};
+});
 
+/************/
 /*AUTH STUFF*/
+/************/
 export const getAuthUser = (): Promise<AuthUser> => new Promise(async (resolve, reject) => {
 	try {
 		const {data, error} = await supabase.auth.getUser();
@@ -122,9 +135,9 @@ export const getAuthUser = (): Promise<AuthUser> => new Promise(async (resolve, 
 	}
 });
 
+/*************/
 /*UPDATE USER*/
-/*UPDATE USER*/
-/*UPDATE USER*/
+/*************/
 export const updateAuthUserPassword = (password: string) => new Promise(async (resolve, reject) => {
 	try {
 		const {data, error} = await supabase.auth

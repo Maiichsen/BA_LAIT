@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { createTemplateCourse } from '@/services/courseService.ts';
 import { useRouter } from 'vue-router';
+import {onMounted} from 'vue';
+import {getUserById} from '@/services/userService.ts';
 
 const router = useRouter();
 
@@ -11,6 +13,7 @@ const handleCreateNewCourseClick = () => {
 		})
 		.catch(err => console.log(err));
 };
+
 </script>
 
 <template>

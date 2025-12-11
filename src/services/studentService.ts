@@ -89,7 +89,7 @@ export const createStudent = (userId: string, email: string): Promise<User> =>
 			});
 	});
 
-export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
+/*export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
 	try {
 		const authUser = await getAuthUser();
 		if (!authUser) throw new Error('no user data');
@@ -103,4 +103,4 @@ export const updateNewStudent = async (password: string, firstname: string, last
 	} catch (err) {
 		console.log(err);
 	}
-};
+};*/
