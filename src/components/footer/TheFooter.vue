@@ -7,11 +7,11 @@ interface FooterLink {
 }
 
 const navigationLinks: FooterLink[] = [
-	{ name: 'Alle kurser', url: '/all_courses' },
-	{ name: 'Tilgængelige kurser', url: '/my_courses' },
-	{ name: 'Virksomheder', url: '/companies' },
+	{ name: 'Alle kurser', url: '/alle-kurser' },
+	{ name: 'Tilgængelige kurser', url: '/mine-kurser' },
+	{ name: 'Virksomheder', url: '/virksomheder' },
 	{ name: 'Kursister', url: '/kursister' },
-	{ name: 'Kontakt', url: '/contact' },
+	{ name: 'Kontakt', url: '/kontakt' },
 ];
 
 const contactInfo = {
@@ -28,7 +28,7 @@ const contactInfo = {
 		<div class="container">
 			<div class="container-row">
 				<!-- Logo -->
-				<RouterLink to="/all_courses" class="col-span-full mb-12 lg:mb-[100px]">
+				<RouterLink to="/alle-kurser" class="col-span-full mb-12 lg:mb-[100px]">
 					<LaitLogo fillClass="fill-tutara-50" :height="70" />
 				</RouterLink>
 
