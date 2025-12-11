@@ -169,8 +169,8 @@ export const createInvitedUser = (inviteUserParams: inviteUserParams): Promise<I
 					company_id: inviteUserParams.company_id,
 					user_email: inviteUserParams.email.toLowerCase(),
 					is_company_user: inviteUserParams.is_company_user,
-					first_name: inviteUserParams.first_name,
-					last_name: inviteUserParams.last_name,
+					first_name: inviteUserParams.first_name ?? null,
+					last_name: inviteUserParams.last_name ?? null,
 				})
 				.select();
 

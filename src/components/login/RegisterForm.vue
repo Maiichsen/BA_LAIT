@@ -87,6 +87,11 @@ const handleCreateNewUser = async () => {
 		return;
 	}
 
+	if (userPassword.value.length < 6) {
+		errorMessage.value = 'Adgangskode skal bestå af mindst 6 tegn';
+		return;
+	}
+
 	await updateAuthUserPassword(userPassword.value);
 	await createUser({
 		company_id: invitedUser.value.company_id,
@@ -126,6 +131,7 @@ onMounted(async () => {
 		<form @submit.prevent="handleCreateNewUser">
 			<div class="flex flex-col gap-[1.5rem]">
 				<BaseInput
+					v-if="invitedUser && !invitedUser.is_company_user"
 					input-type="text"
 					input-id="registerfirstname"
 					label-text="Fornavn"
@@ -133,6 +139,7 @@ onMounted(async () => {
 					v-model="userFirstname"
 				/>
 				<BaseInput
+					v-if="invitedUser && !invitedUser.is_company_user"
 					input-type="text"
 					input-id="registerlastname"
 					label-text="Efternavn"

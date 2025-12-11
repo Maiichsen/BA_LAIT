@@ -1,17 +1,5 @@
 <script setup lang="ts">
 import RegisterForm from '@/components/login/RegisterForm.vue';
-import {onMounted, ref} from 'vue';
-import {getAuthUser} from '@/services/userService.ts';
-/*import type {User} from '@supabase/supabase-js';
-
-const currentUser = ref<User| null>(null);
-onMounted(async () => {
-	await getAuthUser().then((user) => {
-		currentUser.value = user;
-	}).catch((error) => {
-		console.log(error);
-	});
-});*/
 </script>
 
 <template>
