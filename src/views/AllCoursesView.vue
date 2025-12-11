@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createTemplateCourse } from '@/services/courseService.ts';
 import { useRouter } from 'vue-router';
+import CourseGrid from '@/components/course/CourseGrid.vue';
 
 const router = useRouter();
 
@@ -19,10 +20,10 @@ const handleCreateNewCourseClick = () => {
 			<div class="lg:col-start-2 lg:col-span-11 col-span-full">
 				<h1 class="text-h1">Kursusoversigt</h1>
 				<button class="hover:text-amber-600" @click="handleCreateNewCourseClick">Opret kursus knap</button>
-
-				<!-- Indhold her -->
-				<div></div>
 			</div>
+
+			<!-- Course Grid -->
+			<CourseGrid />
 		</div>
 	</div>
 </template>
