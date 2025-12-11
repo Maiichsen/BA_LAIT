@@ -85,11 +85,16 @@ const router = createRouter({
 			},
 			component: () => import('../views/SignupView.vue'),
 			beforeEnter: async (_to, _from, next) => {
-				const user = await getAuthUser();
-				if (!user) {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
 					return next({ name: 'login' });
 				}
-				return next();
 			},
 		},
 	],

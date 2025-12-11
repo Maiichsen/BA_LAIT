@@ -1,6 +1,7 @@
 import {supabase} from '../db/connection.ts';
-import type {InvitedUser} from '@/types/db.ts';
+import type {InvitedUser, User} from '@/types/db.ts';
 import type {User as AuthUser} from '@supabase/supabase-js';
+import type {inviteUserParams, newUserParams} from '@/types/userTypes.ts';
 
 /*EMAIL STUFF*/
 /*EMAIL STUFF*/
@@ -11,7 +12,6 @@ export const sendSignInOtpMail = (email: string): Promise<void> =>
 			const {error} = await supabase.auth.signInWithOtp({
 				email: email,
 				options: {
-					/*shouldCreateUser: false, means "do not create a user", but the link only works on users that exists in auth*/
 					emailRedirectTo: `${import.meta.env.VITE_HOST_URL}/opret`,
 				},
 			});
@@ -23,6 +23,30 @@ export const sendSignInOtpMail = (email: string): Promise<void> =>
 			reject(err);
 		}
 	});
+
+export const createUser = (newUserParams: newUserParams):Promise<User> => new Promise(async (resolve, reject) => {
+	try {
+		const { data, error } = await supabase
+			.from('users')
+			.insert({
+				company_id: newUserParams.company_id,
+				email: newUserParams.email,
+				first_name: newUserParams.first_name,
+				is_company_user: newUserParams.is_company_user,
+				last_name: newUserParams.last_name,
+				user_id: newUserParams.user_id,
+				is_admin: false,
+			})
+			.select()
+			.single();
+
+		if (error) return reject(error);
+		await deleteInvitedUser(newUserParams.email);
+		return resolve(data);
+	} catch (error) {
+		reject(error);
+	}
+});
 
 /*CREATING AUTH USERS*/
 /*CREATING AUTH USERS*/
@@ -101,24 +125,24 @@ export const getAuthUser = (): Promise<AuthUser> => new Promise(async (resolve, 
 /*UPDATE USER*/
 /*UPDATE USER*/
 /*UPDATE USER*/
-export const updateAuthUserPassword = async (password: string) => {
+export const updateAuthUserPassword = (password: string) => new Promise(async (resolve, reject) => {
 	try {
-		const {data, error} = await supabase.auth.updateUser({
-			password: password,
-		});
+		const {data, error} = await supabase.auth
+			.updateUser({password: password});
 
-		if (error) throw error;
-		return data;
-	} catch (err) {
-		console.log(err);
+		if (error) return reject(error);
+		resolve(data);
+	} catch (error) {
+		console.log(error);
 	}
-};
+});
+
 
 export const updateFirstnameAndLastName = async (firstname: string, lastname: string) => {
 	try {
 		const userData = await getAuthUser();
 		if (!userData) throw new Error('no user data');
-		if (!userData.user) throw new Error('no user');
+		if (!userData) throw new Error('no user');
 
 		const {data, error} = await supabase
 			.from('users')
@@ -126,7 +150,7 @@ export const updateFirstnameAndLastName = async (firstname: string, lastname: st
 				first_name: firstname,
 				last_name: lastname,
 			})
-			.eq('user_id', userData.user?.id);
+			.eq('user_id', userData.id);
 
 		if (error) throw error;
 		return data;
@@ -136,15 +160,17 @@ export const updateFirstnameAndLastName = async (firstname: string, lastname: st
 };
 
 /*TODO: hvis der er en user med samme email inviteret allerede, slet den gamle og sæt den nye ind*/
-export const createInvitedUser = (email: string, companyId: string, isCompanyOwner: boolean): Promise<InvitedUser> =>
+export const createInvitedUser = (inviteUserParams: inviteUserParams): Promise<InvitedUser> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const {data, error} = await supabase
 				.from('invited_users')
 				.insert({
-					company_id: companyId,
-					user_email: email.toLowerCase(),
-					is_company_user: isCompanyOwner,
+					company_id: inviteUserParams.company_id,
+					user_email: inviteUserParams.email.toLowerCase(),
+					is_company_user: inviteUserParams.is_company_user,
+					first_name: inviteUserParams.first_name,
+					last_name: inviteUserParams.last_name,
 				})
 				.select();
 

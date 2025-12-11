@@ -1,5 +1,17 @@
 <script setup lang="ts">
 import RegisterForm from '@/components/login/RegisterForm.vue';
+import {onMounted, ref} from 'vue';
+import {getAuthUser} from '@/services/userService.ts';
+/*import type {User} from '@supabase/supabase-js';
+
+const currentUser = ref<User| null>(null);
+onMounted(async () => {
+	await getAuthUser().then((user) => {
+		currentUser.value = user;
+	}).catch((error) => {
+		console.log(error);
+	});
+});*/
 </script>
 
 <template>
@@ -12,7 +24,7 @@ import RegisterForm from '@/components/login/RegisterForm.vue';
 			<div class="col-start-9 col-span-7 flex flex-col justify-center">
 				<h1 class="text-h1 text-tutara-900">Velkommen</h1>
 				<h2 class="text-t1 text-tutara-900">Opret din bruger</h2>
-				<RegisterForm/>
+				<RegisterForm />
 			</div>
 		</div>
 	</div>

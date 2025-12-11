@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import {ref} from 'vue';
-import {signInUser} from '@/services/userService.ts';
+import {createInvitedUser, signInUser} from '@/services/userService.ts';
 import {supabase} from '@/db/connection.ts';
 import {createInvitedStudent, createStudent} from '@/services/studentService.ts';
 
 const userEmail = ref('');
 const userPassword = ref('');
 const companyId = ref('');
+const userfirstname = ref('');
+const userlastname = ref('');
+const companyname = ref('');
 
 /*const handleUpdateUser = async () => {
 	await updateNewStudent(userPassword.value, userFirstName.value, userLastName.value);
@@ -16,7 +19,13 @@ const companyId = ref('');
 /*admin email, inviting user*/
 const handleCreateStudent = async () => {
 	try {
-		const data = await createInvitedStudent(userEmail.value, companyId.value);
+		const data = await createInvitedUser({
+			email: userEmail.value,
+			company_id: companyId.value,
+			is_company_user: false,
+			first_name: userfirstname.value,
+			last_name: userlastname.value,
+		});
 		console.log(data);
 	} catch (e) {
 		console.error(e);
@@ -54,6 +63,32 @@ test();*/
 <template>
 	<h1>ADMIN OPRET STUDENT</h1>
 	<form @submit.prevent="handleCreateStudent">
+		<BaseInput
+			input-type="text"
+			placeholder="name"
+			input-id="name"
+			label-text="fornavn"
+			layout="stacked"
+			v-model="userfirstname"/>
+		<br>
+
+		<BaseInput
+			input-type="text"
+			placeholder="efternavn"
+			input-id="efternavn"
+			label-text="efternavn"
+			layout="stacked"
+			v-model="userlastname"/>
+		<br>
+
+		<BaseInput
+			input-type="text"
+			placeholder="companyname"
+			input-id="companyname"
+			label-text="companyname"
+			layout="stacked"
+			v-model="companyname"/>
+		<br>
 		<BaseInput
 			input-type="text"
 			placeholder="mail"
