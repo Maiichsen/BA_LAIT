@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, type ComputedRef} from 'vue';
+import { computed } from 'vue';
 import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
 
 const editorStore = useCourseEditorStore();
@@ -16,7 +16,7 @@ const pageData = computed(() => {
 </script>
 
 <template>
-	<div v-if="!pageData">LOADING...</div>
+	<div v-if="!pageData || !pageData.content">LOADING...</div>
 	<div v-else>
 		<h1>{{ pageData.course_page_title }} ({{pageData.contentType}})</h1>
 		<p>Order index {{pageData.order_index}}</p>

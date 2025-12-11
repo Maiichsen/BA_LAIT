@@ -25,6 +25,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		_unsortedListOfCoursePages.value = [];
 		currentEditedCourseId.value = courseId;
 		currentEditedCoursePageId.value = '';
+		coursePageContent.value = {};
 
 		getAllCoursePagesByCourseId(courseId)
 			.then(coursePages => {
@@ -39,6 +40,11 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 					};
 					return lookupSet;
 				}, {});
+
+				// If page is reloaded on an existing page, fetch that page's content when the course meta-data is fetched
+				if (currentEditedCoursePageId.value) {
+					_loadPageContent(currentEditedCoursePageId.value);
+				}
 			})
 			.catch(err => {
 				console.log(err);
@@ -46,6 +52,17 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 			.finally(() => {
 				courseGlobalLoading.value = false;
 			});
+	};
+
+	const _loadPageContent = (pageId: string) => {
+		if (!coursePageContent.value[pageId]) return;
+
+		// This page's content is already fetched and stored locally. Don't fetch again
+		if (coursePageContent.value[pageId].content) return;
+
+		// TODO: Load content
+		coursePageContent.value[pageId].contentType = Math.random() > 0.5 ? CoursePageType.ARTICLE : CoursePageType.QUIZ;
+		coursePageContent.value[pageId].content = 'Hey';
 	};
 
 	const _getNewOrderIndexAfterPageId = (pageId: string | null): number => {
@@ -103,6 +120,10 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 
 	const setCurrentEditedCoursePage = (pageId?: string) => {
 		currentEditedCoursePageId.value = pageId ?? null;
+
+		if (pageId) {
+			_loadPageContent(pageId);
+		}
 	};
 
 	const addNewPageTypeArticle = () => {
