@@ -7,7 +7,7 @@ import CourseCard from './CourseCard.vue';
 type CourseStatus = 'not_started' | 'in_progress' | 'completed';
 
 interface CourseWithStatus extends Course {
-  status?: CourseStatus;
+	status?: CourseStatus;
 }
 
 const courses = ref<CourseWithStatus[]>([]);
@@ -43,25 +43,26 @@ onMounted(() => {
 </script>
 
 <template>
-  <div v-if="loading" class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
-  </div>
+	<div v-if="loading" class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
+		<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+	</div>
 
-  <div v-else-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
-    <p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
-  </div>
+	<div v-else-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
+		<p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
+	</div>
 
-  <div v-else class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
-    <CourseCard
-      v-for="course in courses"
-      :key="course.course_id"
-      :course-id="course.course_id"
-      :title="course.title"
-      :description="course.short_course_description"
-      :estimated-time-minutes="course.estimated_time_minutes"
-      :cover-image-url="course.cover_image_url"
-      :author-name="course.author_name"
-      :status="course.status"
-    />
-  </div>
+	<div
+		v-else
+		class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
+		<CourseCard
+			v-for="course in courses"
+			:key="course.course_id"
+			:course-id="course.course_id"
+			:title="course.title"
+			:description="course.short_course_description"
+			:estimated-time-minutes="course.estimated_time_minutes"
+			:cover-image-url="course.cover_image_url"
+			:author-name="course.author_name"
+			:status="course.status" />
+	</div>
 </template>

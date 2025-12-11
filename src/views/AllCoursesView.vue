@@ -19,9 +19,7 @@ const handleCreateNewCourseClick = () => {
 		<div class="container-row">
 			<div class="lg:col-start-2 lg:col-span-11 col-span-full">
 				<h1 class="text-h1">Kursusoversigt</h1>
-				<button class="hover:text-amber-600" @click="handleCreateNewCourseClick">
-					Opret kursus knap
-				</button>
+				<button class="hover:text-amber-600" @click="handleCreateNewCourseClick">Opret kursus knap</button>
 			</div>
 
 			<!-- Course Grid -->

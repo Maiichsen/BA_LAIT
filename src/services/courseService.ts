@@ -252,7 +252,10 @@ export const createNewPageContent = (coursePageId: string): Promise<Content> =>
 		}
 	});
 
-export const getCourseStatusForUser = (courseId: string, userId: string): Promise<'not_started' | 'in_progress' | 'completed'> =>
+export const getCourseStatusForUser = (
+	courseId: string,
+	userId: string,
+): Promise<'not_started' | 'in_progress' | 'completed'> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			// Tjek om brugeren har nogen progress på dette kursus
@@ -277,9 +280,7 @@ export const getCourseStatusForUser = (courseId: string, userId: string): Promis
 
 			// Find progress for dette kursus
 			const coursePageIds = pagesData.map(p => p.course_page_id);
-			const completedPages = progressData?.filter(p =>
-				coursePageIds.includes(p.course_page_id),
-			) || [];
+			const completedPages = progressData?.filter(p => coursePageIds.includes(p.course_page_id)) || [];
 
 			if (completedPages.length === 0) {
 				return resolve('not_started');
