@@ -251,3 +251,44 @@ export const createNewPageContent = (coursePageId: string): Promise<Content> =>
 			reject(err);
 		}
 	});
+
+export const getCourseStatusForUser = (courseId: string, userId: string): Promise<'not_started' | 'in_progress' | 'completed'> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			// Tjek om brugeren har nogen progress på dette kursus
+			const { data: progressData, error: progressError } = await supabase
+				.from('course_progress')
+				.select('course_page_id')
+				.eq('user_id', userId);
+
+			if (progressError) return reject(progressError);
+
+			// Hent alle sider for kurset
+			const { data: pagesData, error: pagesError } = await supabase
+				.from('course_pages')
+				.select('course_page_id')
+				.eq('course_id', courseId);
+
+			if (pagesError) return reject(pagesError);
+
+			if (!pagesData || pagesData.length === 0) {
+				return resolve('not_started');
+			}
+
+			// Find progress for dette kursus
+			const coursePageIds = pagesData.map(p => p.course_page_id);
+			const completedPages = progressData?.filter(p =>
+				coursePageIds.includes(p.course_page_id),
+			) || [];
+
+			if (completedPages.length === 0) {
+				return resolve('not_started');
+			} else if (completedPages.length === pagesData.length) {
+				return resolve('completed');
+			} else {
+				return resolve('in_progress');
+			}
+		} catch (err) {
+			reject(err);
+		}
+	});
