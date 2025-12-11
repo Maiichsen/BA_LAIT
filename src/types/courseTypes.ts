@@ -1,4 +1,5 @@
 import type {CoursePage} from '@/types/db.ts';
+import { CoursePageType } from '@/constants/courseConstants.ts';
 
 export interface NewCourseParams {
 	title: string;
@@ -22,5 +23,6 @@ export interface NewCourseSeatParams {
 }
 
 export interface RichCoursePage extends CoursePage {
+	contentType: CoursePageType,
 	content: null
 }

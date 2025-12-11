@@ -13,3 +13,15 @@ export const defaultPageContent = {
 };
 
 export const pageOrderIndexDefaultGab = 64;
+
+export enum CoursePageType {
+	UNKNOWN,
+	ARTICLE,
+	QUIZ,
+}
+
+export const DefaultCoursePageName: Record<CoursePageType, string> = {
+	[CoursePageType.UNKNOWN]: '',
+	[CoursePageType.ARTICLE]: 'Ny side',
+	[CoursePageType.QUIZ]: 'Ny quiz',
+};

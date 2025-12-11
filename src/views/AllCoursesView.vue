@@ -14,6 +14,15 @@ const handleCreateNewCourseClick = () => {
 </script>
 
 <template>
-	<h1>ALL KURSER</h1>
-	<button class="hover:text-amber-600 cursor-pointer" @click="handleCreateNewCourseClick">Opret kursus knap</button>
+	<div class="container">
+		<div class="container-row">
+			<div class="lg:col-start-2 lg:col-span-11 col-span-full">
+				<h1 class="text-h1">Kursusoversigt</h1>
+				<button class="hover:text-amber-600 cursor-pointer" @click="handleCreateNewCourseClick">Opret kursus knap</button>
+
+				<!-- Indhold her -->
+				<div></div>
+			</div>
+		</div>
+	</div>
 </template>

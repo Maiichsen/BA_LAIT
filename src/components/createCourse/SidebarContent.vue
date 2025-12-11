@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {useRouter} from 'vue-router';
 import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
+import { CoursePageType } from '@/constants/courseConstants.ts';
 
 const router = useRouter();
 const editorStore = useCourseEditorStore();
@@ -12,6 +13,12 @@ const routeToContent = (pageId: string) => {
 const routeToDetails = () => {
 	router.push({name: 'courseEditorFrontpage'});
 };
+
+const contentTypeIcon = (pageType: CoursePageType): string => {
+	if (pageType === CoursePageType.ARTICLE) return 'A';
+	if (pageType === CoursePageType.QUIZ) return 'Q';
+	return '?';
+};
 </script>
 
 <template>
@@ -22,7 +29,7 @@ const routeToDetails = () => {
 			:key="coursePage.course_page_id"
 			@click="routeToContent(coursePage.course_page_id)"
 			class="hover:text-amber-600 cursor-pointer">
-			{{ coursePage.course_page_title }}
+			({{contentTypeIcon(editorStore.coursePageContent[coursePage.course_page_id]?.contentType ?? CoursePageType.UNKNOWN)}}) {{ coursePage.course_page_title }}
 		</p>
 	</div>
 </template>

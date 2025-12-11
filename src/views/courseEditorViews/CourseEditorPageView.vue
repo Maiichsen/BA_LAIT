@@ -18,7 +18,7 @@ const pageData = computed(() => {
 <template>
 	<div v-if="!pageData">LOADING...</div>
 	<div v-else>
-		<h1>{{ pageData.course_page_title }}</h1>
+		<h1>{{ pageData.course_page_title }} ({{pageData.contentType}})</h1>
 		<p>Order index {{pageData.order_index}}</p>
 		{{ pageData.content }}
 	</div>
