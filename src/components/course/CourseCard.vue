@@ -45,14 +45,14 @@ const statusText = computed(() => {
 	if (!props.status) return null;
 
 	switch (props.status) {
-	case 'not_started':
-		return 'Ikke påbegyndt';
-	case 'in_progress':
-		return 'Påbegyndt';
-	case 'completed':
-		return 'Gennemført';
-	default:
-		return null;
+		case 'not_started':
+			return 'Ikke påbegyndt';
+		case 'in_progress':
+			return 'Påbegyndt';
+		case 'completed':
+			return 'Gennemført';
+		default:
+			return null;
 	}
 });
 </script>
