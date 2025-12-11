@@ -7,7 +7,7 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes: [
 		{
-			path: '/login',
+			path: '/log-ind',
 			name: 'login',
 			meta: {
 				layout: LoginLayout,
@@ -15,7 +15,7 @@ const router = createRouter({
 			component: () => import('../views/LoginView.vue'),
 		},
 		{
-			path: '/all_courses',
+			path: '/alle-kurser',
 			name: 'allCourses',
 			meta: {
 				layout: DefaultLayout,
@@ -23,7 +23,23 @@ const router = createRouter({
 			component: () => import('../views/AllCoursesView.vue'),
 		},
 		{
-			path: '/create_course/:course_id',
+			path: '/',
+			name: 'frontpage',
+			meta: {
+				layout: DefaultLayout,
+			},
+			component: () => import('../views/AllCoursesView.vue'),
+		},
+		{
+			path: '/Kursister',
+			name: 'participants',
+			meta: {
+				layout: DefaultLayout,
+			},
+			component: () => import('../views/CourseParticipants.vue'),
+		},
+		{
+			path: '/opret-kursus/:course_id',
 			name: 'frontpageCreateCourse',
 			meta: {
 				layout: DefaultLayout,
@@ -46,7 +62,7 @@ const router = createRouter({
 			],
 		},
 		{
-			path: '/my_courses',
+			path: '/mine-kurser',
 			name: 'myCourses',
 			meta: {
 				layout: DefaultLayout,
@@ -54,7 +70,7 @@ const router = createRouter({
 			component: () => import('../views/MyCoursesView.vue'),
 		},
 		{
-			path: '/companies',
+			path: '/virksomheder',
 			name: 'companies',
 			meta: {
 				layout: DefaultLayout,
@@ -62,7 +78,7 @@ const router = createRouter({
 			component: () => import('../views/CompaniesView.vue'),
 		},
 		{
-			path: '/contact',
+			path: '/kontakt',
 			name: 'contact',
 			meta: {
 				layout: DefaultLayout,

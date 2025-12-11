@@ -27,26 +27,27 @@ onUnmounted(() => {
 		<div class="container">
 			<div class="container-row items-center">
 				<!-- Logo -->
-				<RouterLink to="/all_courses" class="col-span-2 lg:col-span-3">
+				<RouterLink to="/alle-kurser" class="col-span-2 lg:col-span-3">
 					<LaitLogo />
 				</RouterLink>
 
-				<!-- <router-link to="/all_courses" class="col col-span-2 lg:col-span-3">
+				<!-- <router-link to="/alle-kurser" class="col col-span-2 lg:col-span-3">
 					<img class="w-[70px] h-[25px] lg:w-20 lg:h-[27px]" src="/logo.svg" alt="Lait logo" width="80" height="30" />
 				</router-link> -->
 
 				<!-- Desktop Navigation -->
 				<nav class="hidden lg:block col-span-9">
 					<ul class="flex gap-[100px]">
-						<li><router-link to="/all_courses" class="text-nav">Alle kurser</router-link></li>
-						<li><router-link to="/my_courses" class="text-nav">Mine kurser</router-link></li>
-						<li><router-link to="/companies" class="text-nav">Virksomheder</router-link></li>
+						<li><router-link to="/alle-kurser" class="text-nav">Alle kurser</router-link></li>
+						<li><router-link to="/mine-kurser" class="text-nav">Mine kurser</router-link></li>
+						<li><router-link to="/virksomheder" class="text-nav">Virksomheder</router-link></li>
+						<li><router-link to="/Kursister" class="text-nav">Kursister</router-link></li>
 					</ul>
 				</nav>
 
 				<!-- Desktop Kontakt og profil -->
 				<div class="hidden lg:flex col-span-3 lg:col-span-4 justify-end items-center gap-3">
-					<BaseButton variant="primary-small" as="router-link" to="/contact"> Kontakt </BaseButton>
+					<BaseButton variant="primary-small" as="router-link" to="/kontakt"> Kontakt </BaseButton>
 
 					<div class="profile-dropdown relative">
 						<BaseButton variant="primary-tiny" @click="isProfileOpen = !isProfileOpen" aria-label="Profil menu">
@@ -92,24 +93,24 @@ onUnmounted(() => {
 			<div v-if="isMobileMenuOpen" class="lg:hidden mt-4 pb-4">
 				<ul class="flex flex-col gap-4 mb-4">
 					<li>
-						<router-link to="/all_courses" class="text-nav block" @click="isMobileMenuOpen = false">
+						<router-link to="/alle-kurser" class="text-nav block" @click="isMobileMenuOpen = false">
 							Alle kurser
 						</router-link>
 					</li>
 					<li>
-						<router-link to="/my_courses" class="text-nav block" @click="isMobileMenuOpen = false">
+						<router-link to="/mine-kurser" class="text-nav block" @click="isMobileMenuOpen = false">
 							Mine kurser
 						</router-link>
 					</li>
 					<li>
-						<router-link to="/companies" class="text-nav block" @click="isMobileMenuOpen = false">
+						<router-link to="/virksomheder" class="text-nav block" @click="isMobileMenuOpen = false">
 							Virksomheder
 						</router-link>
 					</li>
 				</ul>
 
 				<div class="pt-4 border-t border-tutara-100 flex flex-col gap-3">
-					<router-link to="/contact" class="text-nav block text-center" @click="isMobileMenuOpen = false">
+					<router-link to="/kontakt" class="text-nav block text-center" @click="isMobileMenuOpen = false">
 						Kontakt
 					</router-link>
 
