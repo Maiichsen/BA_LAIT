@@ -1,17 +1,16 @@
 <script setup lang="ts">
 interface Props {
-  name: string
+	name: string;
 }
 
 const props = defineProps<Props>();
-
 </script>
 
 <template>
-  <div>
-    <label>
-      <input type="radio" :name="props.name" />
-      <input type="text" placeholder="Valgmulighed">
-    </label>
-  </div>
+	<div>
+		<label>
+			<input type="radio" :name="props.name" />
+			<input type="text" placeholder="Valgmulighed" />
+		</label>
+	</div>
 </template>

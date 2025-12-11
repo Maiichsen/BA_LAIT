@@ -1,12 +1,7 @@
-<script setup lang="ts">
-
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <div>
-    <main>
-      <slot/>
-    </main>
-  </div>
+	<main class="h-full bg-blue-700 flex flex-col justify-center">
+		<slot />
+	</main>
 </template>
-
