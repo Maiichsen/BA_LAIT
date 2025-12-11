@@ -49,12 +49,21 @@ const tryDeleteCompany = (company: Company) => {
 </script>
 
 <template>
-	<h1>ADMINISTRER VIRKSOMHEDER</h1>
+	<div class="container">
+		<div class="container-row">
+			<div class="lg:col-start-2 lg:col-span-11 col-span-full">
+				<h1 class="text-h1">
+					Virksomheder
+				</h1>
+			</div>
+
+				<!-- Indhold -->
+<div class=" col-span-10 lg:col-start-2">
 	<div v-if="companiesStore.isLoading">LOADING</div>
 	<button @click="openNewCompanyForm()">Add new company</button>
 	<div v-if="newCompanyFormIsOpen" class="border">
 		<button @click="closeNewCompanyForm()">close</button>
-		<h1>New company form</h1>
+		<h2>New company form</h2>
 		<label for="newCompanyNameField">Company name</label>
 		<input id="newCompanyNameField" type="text" v-model="newCompanyName" placeholder="Name" />
 		<label for="newCompanyEmailField">Company e-mail</label>
@@ -68,6 +77,13 @@ const tryDeleteCompany = (company: Company) => {
 			{{ company.company_name }}<span @click="tryDeleteCompany(company)">x</span>
 		</li>
 	</ul>
+
+</div>
+			</div>
+		</div>
+
 </template>
+
+
 
 <style scoped></style>

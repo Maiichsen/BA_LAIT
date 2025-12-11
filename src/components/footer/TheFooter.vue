@@ -29,7 +29,7 @@ const contactInfo = {
 			<div class="container-row">
 				<!-- Logo -->
 				<RouterLink to="/alle-kurser" class="col-span-full mb-12 lg:mb-[100px]">
-					<LaitLogo fillClass="fill-tutara-50" :height="70" />
+					<LaitLogo fillClass="fill-tutara-50" :height="55" />
 				</RouterLink>
 
 				<!-- Navigation Links -->
@@ -44,7 +44,7 @@ const contactInfo = {
 				</nav>
 
 				<!-- Divider -->
-				<div class="col-span-full border-t border-tutara-400 mb-8 lg:mb-16"></div>
+				<div class="col-span-full border-t border-tutara-600 mb-8 lg:mb-16"></div>
 
 				<!-- Contact Info -->
 				<div class="flex gap-8 lg:gap-6 lg:flex-row flex-col lg:items-center col-span-full">
