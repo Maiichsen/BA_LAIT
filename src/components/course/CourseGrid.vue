@@ -43,41 +43,25 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full">
-    <div v-if="loading" class="flex items-center justify-center py-12">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
-    </div>
+  <div v-if="loading" class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
+  </div>
 
-    <div v-else-if="error" class="text-center py-12">
-      <p class="text-info-red mb-4">{{ error }}</p>
-      <button
-        @click="fetchCourses"
-        class="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-100 transition-colors"
-      >
-        Prøv igen
-      </button>
-    </div>
+  <div v-else-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
+    <p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
+  </div>
 
-    <div v-else-if="courses.length === 0" class="text-center py-12">
-      <p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
-    </div>
-
-    <div v-else class="grid grid-cols-4 md:grid-cols-8 lg:grid-cols-12 gap-6">
-      <div
-        v-for="course in courses"
-        :key="course.course_id"
-        class="col-span-4"
-      >
-        <CourseCard
-          :course-id="course.course_id"
-          :title="course.title"
-          :description="course.short_course_description"
-          :estimated-time-minutes="course.estimated_time_minutes"
-          :cover-image-url="course.cover_image_url"
-          :author-name="course.author_name"
-          :status="course.status"
-        />
-      </div>
-    </div>
+  <div v-else class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
+    <CourseCard
+      v-for="course in courses"
+      :key="course.course_id"
+      :course-id="course.course_id"
+      :title="course.title"
+      :description="course.short_course_description"
+      :estimated-time-minutes="course.estimated_time_minutes"
+      :cover-image-url="course.cover_image_url"
+      :author-name="course.author_name"
+      :status="course.status"
+    />
   </div>
 </template>

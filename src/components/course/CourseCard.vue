@@ -89,7 +89,7 @@ const statusText = computed(() => {
     <!-- Content med padding -->
     <div class="flex flex-col p-4 lg:p-3 flex-1 gap-3">
       <!-- Tags -->
-      <div class="flex gap-3 flex-wrap [&>p]:border-tutara-200 [&>p]:first:bg-cornflower-blue-10">
+      <div class="flex gap-3 flex-wrap [&>p]:border-cornflower-blue-10 [&>p]:first:bg-cornflower-blue-10">
         <p v-if="estimatedHours" class="text-p2 px-4 border-2 rounded-full">
           {{ estimatedHours }} {{ estimatedHours === 1 ? 'time' : 'timer' }}
         </p>
@@ -102,9 +102,9 @@ const statusText = computed(() => {
           v-if="statusText"
           class="text-p2 px-4 border-2 rounded-full"
           :class="{
-            'bg-green-100 border-info-green text-green-700': status === 'completed',
-            'bg-purple-10 border-purple-100 text-purple-500': status === 'in_progress',
-            'bg-tutara-10 border-cornflower-blue-100 text-tutara-500': status === 'not_started'
+            'bg-info-green border-tutara-50! text-green-800': status === 'completed',
+            'bg-purple-10 border-tutara-50! text-purple-500': status === 'in_progress',
+            'bg-tutara-10 border-tutara-50! text-tutara-500': status === 'not_started'
           }"
         >
           {{ statusText }}
