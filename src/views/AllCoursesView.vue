@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue';
 import { createTemplateCourse } from '@/services/courseService.ts';
 import { useRouter } from 'vue-router';
 import CourseGrid from '@/components/course/CourseGrid.vue';
@@ -6,6 +7,11 @@ import BaseButton from '@/components/atoms/BaseButton.vue';
 import { EditIcon } from '@/assets/icons';
 
 const router = useRouter();
+const isEditMode = ref(false);
+
+const toggleEditMode = () => {
+	isEditMode.value = !isEditMode.value;
+};
 
 const handleCreateNewCourseClick = () => {
 	createTemplateCourse()
