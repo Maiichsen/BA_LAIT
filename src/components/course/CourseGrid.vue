@@ -10,6 +10,12 @@ interface CourseWithStatus extends Course {
 	status?: CourseStatus;
 }
 
+interface Props {
+	isEditMode: boolean;
+}
+
+const { isEditMode } = defineProps<Props>();
+
 const courses = ref<CourseWithStatus[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
@@ -63,6 +69,7 @@ onMounted(() => {
 			:estimated-time-minutes="course.estimated_time_minutes"
 			:cover-image-url="course.cover_image_url"
 			:author-name="course.author_name"
-			:status="course.status" />
+			:status="course.status"
+			:is-edit-mode="isEditMode" />
 	</div>
 </template>
