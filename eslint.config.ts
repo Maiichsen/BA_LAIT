@@ -40,7 +40,7 @@ export default defineConfigWithVueTs(
 			'brace-style': ['error', '1tbs'],
 			'comma-dangle': ['error', 'always-multiline'],
 			'eqeqeq': ['error', 'always'],
-			'indent': ['error', 'tab'],
+			'indent': ['error', 'tab', { 'SwitchCase': 1 }],
 			'no-eval': ['error'],
 			'no-unused-vars': ['warn'],
 			'no-var': ['error'],

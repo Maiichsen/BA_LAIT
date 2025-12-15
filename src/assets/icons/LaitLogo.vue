@@ -6,7 +6,7 @@ defineProps({
 	},
 	height: {
 		type: Number,
-		default: 30,
+		default: 26,
 	},
 	width: {
 		type: Number,
