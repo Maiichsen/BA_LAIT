@@ -38,7 +38,9 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 });
 
 // Only show breadcrumbs if we're not on the frontpage alone
-const showBreadcrumbs = computed(() => breadcrumbs.value.length > 1 || (breadcrumbs.value.length === 1 && route.name !== 'frontpage'));
+const showBreadcrumbs = computed(
+	() => breadcrumbs.value.length > 1 || (breadcrumbs.value.length === 1 && route.name !== 'frontpage'),
+);
 </script>
 
 <template>
@@ -48,18 +50,11 @@ const showBreadcrumbs = computed(() => breadcrumbs.value.length > 1 || (breadcru
 				<ol class="flex items-center gap-5 uppercase">
 					<template v-for="(item, index) in breadcrumbs" :key="item.path">
 						<li v-if="!item.isCurrentPage">
-							<router-link
-								:to="item.path"
-								class="text-c2 text-tutara-600 relative top-0.5"
-							>
+							<router-link :to="item.path" class="text-c2 text-tutara-600 relative top-0.5">
 								{{ item.name }}
 							</router-link>
 						</li>
-						<li
-							v-else
-							class="text-c2 text-tutara-900 relative top-0.5 font-medium"
-							aria-current="page"
-						>
+						<li v-else class="text-c2 text-tutara-900 relative top-0.5 font-medium" aria-current="page">
 							{{ item.name }}
 						</li>
 
@@ -67,8 +62,7 @@ const showBreadcrumbs = computed(() => breadcrumbs.value.length > 1 || (breadcru
 						<span
 							v-if="index < breadcrumbs.length - 1"
 							aria-hidden="true"
-							class="block w-0.5 h-3.5 rotate-25 bg-tutara-600"
-						></span>
+							class="block w-0.5 h-3.5 rotate-25 bg-tutara-600"></span>
 					</template>
 				</ol>
 			</nav>
