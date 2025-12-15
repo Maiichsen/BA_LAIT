@@ -58,9 +58,7 @@ const statusText = computed(() => {
 </script>
 
 <template>
-	<a
-		:href="`/kurser/${courseId}`"
-		class="group flex flex-col h-full border border-tutara-200 bg-white pb-20 rounded-md">
+	<a :href="`/kurser/${courseId}`" class="group flex flex-col h-full border border-tutara-200 rounded-md">
 		<!-- Billede med fast højde -->
 		<div class="w-full h-[199px] overflow-hidden relative">
 			<!-- Loading state -->
@@ -118,7 +116,7 @@ const statusText = computed(() => {
 			</h2>
 
 			<!-- Beskrivelse -->
-			<p class="text-p1 text-tutara-700">
+			<p class="text-p1 line-clamp-2 text-tutara-700">
 				{{ description }}
 			</p>
 		</div>
