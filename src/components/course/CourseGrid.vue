@@ -14,7 +14,7 @@ interface Props {
 	isEditMode: boolean;
 }
 
-const props = defineProps<Props>();
+const { isEditMode } = defineProps<Props>();
 
 const courses = ref<CourseWithStatus[]>([]);
 const loading = ref(true);

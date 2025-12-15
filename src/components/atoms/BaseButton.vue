@@ -1,6 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue';
+
 interface Props {
-	variant?: 'primary' | 'primary-small' | 'primary-tiny' | 'cta-white' | 'light-small' | 'dark-small' | 'stroke';
+	variant?:
+		| 'primary'
+		| 'primary-small'
+		| 'primary-tiny'
+		| 'cta-white'
+		| 'light-small'
+		| 'dark-small'
+		| 'stroke'
+		| 'stroke-small';
 	as?: 'button' | 'router-link' | 'a';
 	to?: string;
 	href?: string;
@@ -23,10 +33,11 @@ const variantClasses = {
 	'cta-white': 'py-4 px-6 bg-tutara-50 text-tutara-900 hover:bg-tutara-200 focus:outline-purple-100',
 	'light-small': 'py-2 px-3 bg-tutara-50 hover:bg-tutara-200 [&_*]:fill-tutara-900',
 	'dark-small': 'py-2 px-3 bg-tutara-900 hover:bg-tutara-700 [&_*]:fill-tutara-50',
-	stroke: 'py-2 px-3 border border-tutara-900 hover:outline-1',
+	stroke: 'py-4 px-6 border border-tutara-900 hover:outline-1',
+	'stroke-small': 'py-2 px-3 border border-tutara-900 hover:outline-1',
 };
 
-const buttonClasses = `${baseClasses} ${variantClasses[props.variant]}`;
+const buttonClasses = computed(() => `${baseClasses} ${variantClasses[props.variant]}`);
 </script>
 
 <template>
