@@ -135,6 +135,22 @@ export const getAuthUser = (): Promise<AuthUser> => new Promise(async (resolve, 
 	}
 });
 
+export const getUserRoleById = (userId: string):Promise<{'is_admin':boolean, 'is_company_user': boolean}> => new Promise(async (resolve, reject) => {
+	try {
+		const {data, error} = await supabase
+			.from('users')
+			.select('is_admin, is_company_user')
+			.eq('user_id', userId)
+			.single();
+
+		if (error) return reject(error);
+		if (!data) return reject('User doesn\'t exist');
+		resolve(data);
+	} catch (error) {
+		reject(error);
+	}
+});
+
 /*************/
 /*UPDATE USER*/
 /*************/
