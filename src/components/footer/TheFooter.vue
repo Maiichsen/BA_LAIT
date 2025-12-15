@@ -24,7 +24,7 @@ const contactInfo = {
 </script>
 
 <template>
-	<footer class="bg-tutara-900 text-tutara-50 py-12 lg:py-16">
+	<footer class="bg-tutara-900 text-tutara-50 py-6 lg:py-14 mt-[120px]">
 		<div class="container">
 			<div class="container-row">
 				<!-- Logo -->
