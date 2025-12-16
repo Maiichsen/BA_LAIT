@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 import CourseGrid from '@/components/course/CourseGrid.vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
-import { EditIcon } from '@/assets/icons';
 
 const isEditMode = ref(false);
 
@@ -17,11 +16,13 @@ const toggleEditMode = () => {
 		<div class="container-row space-y-20">
 			<div class="lg:col-start-2 lg:col-span-14 col-span-full flex items-center justify-between">
 				<h1 class="text-h1">Kursusoversigt</h1>
-				<BaseButton :variant="isEditMode ? 'stroke' : 'primary'" @click="toggleEditMode">
-					<span class="flex items-center gap-2.5">
+				<BaseButton :variant="isEditMode ? 'stroke' : 'primary'" icon-name="EditIcon" @click="toggleEditMode">
+					{{ isEditMode ? 'Deaktivér redigering' : 'Aktivér redigering' }}
+
+					<!-- <span class="flex items-center gap-2.5">
 						<EditIcon :strokeClass="isEditMode ? 'stroke-tutara-900' : 'stroke-tutara-50'" />
 						{{ isEditMode ? 'Deaktivér redigering' : 'Aktivér redigering' }}
-					</span>
+					</span> -->
 				</BaseButton>
 			</div>
 
