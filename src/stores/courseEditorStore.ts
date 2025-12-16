@@ -8,6 +8,7 @@ import {
 	pageOrderIndexDefaultGab,
 } from '@/constants/courseConstants.ts';
 import type { RichCoursePage } from '@/types/courseTypes.ts';
+import { getCoursePageContentByPageId } from '@/services/courseArticleService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
@@ -35,7 +36,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 				coursePageContent.value = coursePages.reduce<Record<string, RichCoursePage>>((lookupSet, page) => {
 					lookupSet[page.course_page_id] = {
 						...page,
-						contentType: CoursePageType.UNKNOWN,
+						contentType: CoursePageType.unknown,
 						content: null,
 					};
 					return lookupSet;
@@ -54,15 +55,30 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 			});
 	};
 
-	const _loadPageContent = (pageId: string) => {
+	const _loadPageContent = async (pageId: string) => {
 		if (!coursePageContent.value[pageId]) return;
 
 		// This page's content is already fetched and stored locally. Don't fetch again
 		if (coursePageContent.value[pageId].content) return;
 
-		// TODO: Load content
-		coursePageContent.value[pageId].contentType = Math.random() > 0.5 ? CoursePageType.ARTICLE : CoursePageType.QUIZ;
-		coursePageContent.value[pageId].content = 'Hey';
+		/* const [content, quiz] = await Promise.all([
+			getArticleById(id),
+			getQuizById(id)
+		]); */
+
+		getCoursePageContentByPageId(pageId).then((pageContent) => {
+			if (!coursePageContent.value[pageId]) return;
+
+			coursePageContent.value[pageId].contentType = CoursePageType.article;
+			coursePageContent.value[pageId].content = pageContent;
+		}).catch(() => {
+			// don't react to error. Page might be a quiz instead
+
+			// TODO: TEMPORARY
+			if (!coursePageContent.value[pageId]) return;
+			coursePageContent.value[pageId].contentType = CoursePageType.quiz;
+			coursePageContent.value[pageId].content = 'quiz !!';
+		});
 	};
 
 	const _getNewOrderIndexAfterPageId = (pageId: string | null): number => {
@@ -89,13 +105,13 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		if (newPageOrderIndex === orderIndexBeforeNewPage) {
 			// Indexes are too close to fit a new page in between. Move all indexes for this course
 			console.log('MOVE INDEXES OF ALL PAGES IN THIS COURSE');
-			return 10000;
+			return listOfCoursePages.value[listOfCoursePages.value.length - 1]!.order_index + pageOrderIndexDefaultGab;
 		}
 
 		return newPageOrderIndex;
 	};
 
-	const _addNewCoursePage = (contentType: CoursePageType.QUIZ | CoursePageType.ARTICLE): Promise<CoursePage> => new Promise((resolve, reject) => {
+	const _addNewCoursePage = (contentType: CoursePageType.quiz | CoursePageType.article): Promise<CoursePage> => new Promise((resolve, reject) => {
 		const newOrderIndex = _getNewOrderIndexAfterPageId(currentEditedCoursePageId.value);
 
 		createCoursePage(DefaultCoursePageName[contentType], currentEditedCourseId.value, newOrderIndex)
@@ -127,11 +143,11 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	};
 
 	const addNewPageTypeArticle = () => {
-		return _addNewCoursePage(CoursePageType.ARTICLE);
+		return _addNewCoursePage(CoursePageType.article);
 	};
 
 	const addNewPageTypeQuiz = () => {
-		return _addNewCoursePage(CoursePageType.QUIZ);
+		return _addNewCoursePage(CoursePageType.quiz);
 	};
 
 	return {

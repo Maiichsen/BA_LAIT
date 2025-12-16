@@ -1,4 +1,4 @@
-export const defaultPageContent = {
+export const defaultArticleData = {
 	backgroundColor: 'ADD8E6',
 	content: [
 		{
@@ -15,13 +15,13 @@ export const defaultPageContent = {
 export const pageOrderIndexDefaultGab = 64;
 
 export enum CoursePageType {
-	UNKNOWN,
-	ARTICLE,
-	QUIZ,
+	unknown,
+	article,
+	quiz,
 }
 
 export const DefaultCoursePageName: Record<CoursePageType, string> = {
-	[CoursePageType.UNKNOWN]: '',
-	[CoursePageType.ARTICLE]: 'Ny side',
-	[CoursePageType.QUIZ]: 'Ny quiz',
+	[CoursePageType.unknown]: '',
+	[CoursePageType.article]: 'Ny side',
+	[CoursePageType.quiz]: 'Ny quiz',
 };

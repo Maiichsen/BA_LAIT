@@ -5,8 +5,8 @@ import { CoursePageType } from '@/constants/courseConstants.ts';
 const editorStore = useCourseEditorStore();
 
 const contentTypeIcon = (pageType: CoursePageType): string => {
-	if (pageType === CoursePageType.ARTICLE) return 'A';
-	if (pageType === CoursePageType.QUIZ) return 'Q';
+	if (pageType === CoursePageType.article) return 'T';
+	if (pageType === CoursePageType.quiz) return 'Q';
 	return '?';
 };
 </script>
@@ -22,6 +22,6 @@ const contentTypeIcon = (pageType: CoursePageType): string => {
 			:key="coursePage.course_page_id"
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}/${coursePage.course_page_id}`"
 			class="editor-nav-link"
-		><p>({{contentTypeIcon(editorStore.coursePageContent[coursePage.course_page_id]?.contentType ?? CoursePageType.UNKNOWN)}}) {{ coursePage.course_page_title }}</p></RouterLink>
+		><p>({{contentTypeIcon(editorStore.coursePageContent[coursePage.course_page_id]?.contentType ?? CoursePageType.unknown)}}) {{ coursePage.course_page_title }}</p></RouterLink>
 	</div>
 </template>
