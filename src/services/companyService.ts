@@ -125,6 +125,47 @@ export const getAllCompanies = (): Promise<Company[]> =>
 		}
 	});
 
+export interface CompanyWithStats extends Company {
+	courseCount: number;
+	studentCount: number;
+}
+
+export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			// Get all companies
+			const { data: companies, error: companiesError } = await supabase.from('companies').select('*');
+
+			if (companiesError) return reject(companiesError);
+
+			// Get all course_seats
+			const { data: seats, error: seatsError } = await supabase.from('course_seats').select('company_id, course_id, user_id');
+
+			if (seatsError) return reject(seatsError);
+
+			// Aggregate stats for each company
+			const companiesWithStats: CompanyWithStats[] = companies.map(company => {
+				const companySeats = seats?.filter(seat => seat.company_id === company.company_id) || [];
+
+				// Count unique courses
+				const uniqueCourses = new Set(companySeats.map(seat => seat.course_id)).size;
+
+				// Count unique users (students) - only count non-null user_ids
+				const uniqueUsers = new Set(companySeats.filter(seat => seat.user_id).map(seat => seat.user_id)).size;
+
+				return {
+					...company,
+					courseCount: uniqueCourses,
+					studentCount: uniqueUsers,
+				};
+			});
+
+			resolve(companiesWithStats);
+		} catch (err) {
+			reject(err);
+		}
+	});
+
 export const updateCompanyNameById = (companyId: string, companyName: string): Promise<void> =>
 	new Promise(async (resolve, reject) => {
 		try {
