@@ -1,10 +1,14 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { Company } from '@/types/db.ts';
-import { createInvitedCompany, deleteCompanyById, getAllCompanies } from '@/services/companyService.ts';
+import {
+	createInvitedCompany,
+	deleteCompanyById,
+	getAllCompaniesWithStats,
+	type CompanyWithStats,
+} from '@/services/companyService.ts';
 
 export const useCompaniesStore = defineStore('companies', () => {
-	const listOfCompanies = ref<Company[]>([]);
+	const listOfCompanies = ref<CompanyWithStats[]>([]);
 
 	const isLoading = ref(false);
 
@@ -12,7 +16,7 @@ export const useCompaniesStore = defineStore('companies', () => {
 		isLoading.value = true;
 		listOfCompanies.value = [];
 
-		getAllCompanies()
+		getAllCompaniesWithStats()
 			.then(companies => (listOfCompanies.value = companies))
 			.catch(err => console.log(err))
 			.finally(() => (isLoading.value = false));
@@ -33,7 +37,13 @@ export const useCompaniesStore = defineStore('companies', () => {
 		new Promise(async (resolve, reject) => {
 			createInvitedCompany(companyName, companyEmail)
 				.then(company => {
-					listOfCompanies.value.push(company);
+					// Add stats to the new company (starts with 0 courses and students)
+					const companyWithStats: CompanyWithStats = {
+						...company,
+						courseCount: 0,
+						studentCount: 0,
+					};
+					listOfCompanies.value.push(companyWithStats);
 					resolve(company);
 				})
 				.catch(err => reject(err));
