@@ -114,10 +114,15 @@ function previousPage() {
 </script>
 
 <template>
-	<div class="base-table">
+	<div class="w-full flex flex-col gap-4">
 		<!-- Search -->
-		<div v-if="hasSearch" class="table-search">
-			<svg class="search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+		<div v-if="hasSearch" class="relative w-full">
+			<svg
+				class="absolute left-4 top-1/2 -translate-y-1/2 text-tutara-500"
+				width="16"
+				height="16"
+				viewBox="0 0 16 16"
+				fill="none">
 				<path
 					d="M7 12C9.76142 12 12 9.76142 12 7C12 4.23858 9.76142 2 7 2C4.23858 2 2 4.23858 2 7C2 9.76142 4.23858 12 7 12Z"
 					stroke="currentColor"
@@ -131,25 +136,29 @@ function previousPage() {
 					stroke-linecap="round"
 					stroke-linejoin="round" />
 			</svg>
-			<input v-model="searchQuery" type="text" :placeholder="searchPlaceholder" class="search-input" />
+			<input
+				v-model="searchQuery"
+				type="text"
+				:placeholder="searchPlaceholder"
+				class="w-full py-3 px-4 pl-11 border border-tutara-200 rounded-lg text-p1outline-none transition-colors focus:border-purple-500 placeholder:text-tutara-500 bg-white" />
 		</div>
 
 		<!-- Table -->
-		<div class="table-wrapper">
-			<table>
-				<thead>
+		<div class="w-full overflow-x-auto border border-tutara-200 rounded-xl">
+			<table class="w-full border-collapse bg-white">
+				<thead class="bg-tutara-50 border-b border-tutara-200">
 					<tr>
 						<th
 							v-for="(col, index) in cols"
 							:key="index"
 							@click="toggleSort(col)"
-							:class="{ sortable: true, sorted: sortColumn === col }">
-							<div class="th-content">
+							class="py-3.5 px-6 text-left text-p1 text-tutara-900 cursor-pointer select-none transition-colors hover:bg-tutara-200">
+							<div class="flex items-center gap-2">
 								<span>{{ col }}</span>
 								<svg
 									v-if="sortColumn === col"
-									class="sort-icon"
-									:class="{ 'sort-desc': sortDirection === 'desc' }"
+									class="text-tutara-900 transition-transform"
+									:class="{ 'rotate-180': sortDirection === 'desc' }"
 									width="12"
 									height="12"
 									viewBox="0 0 12 12"
@@ -161,8 +170,11 @@ function previousPage() {
 					</tr>
 				</thead>
 				<tbody v-if="!isLoading">
-					<tr v-for="(row, rowIndex) in paginatedRows" :key="rowIndex">
-						<td v-for="(cell, cellIndex) in row" :key="cellIndex">
+					<tr
+						v-for="(row, rowIndex) in paginatedRows"
+						:key="rowIndex"
+						class="border-b border-tutara-200 last:border-b-0 transition-colors hover:bg-purple-10">
+						<td v-for="(cell, cellIndex) in row" :key="cellIndex" class="py-4 px-6 text-p1 text-tutara-900">
 							<slot
 								:name="`cell-${cols[cellIndex]}`"
 								:value="cell"
@@ -174,14 +186,18 @@ function previousPage() {
 						</td>
 					</tr>
 					<tr v-if="paginatedRows.length === 0">
-						<td :colspan="cols.length" class="empty-state">Ingen data fundet</td>
+						<td :colspan="cols.length" class="text-center py-12 px-6 text-tutara-900 text-p1">
+							Ingen data fundet
+						</td>
 					</tr>
 				</tbody>
 				<tbody v-else>
 					<tr>
-						<td :colspan="cols.length" class="loading-state">
-							<div class="spinner"></div>
-							Indlæser...
+						<td :colspan="cols.length" class="text-center py-12 px-6 text-tutara-900 text-p1">
+							<div class="flex items-center justify-center gap-3">
+								<div class="spinner"></div>
+								Indlæser...
+							</div>
 						</td>
 					</tr>
 				</tbody>
@@ -189,140 +205,30 @@ function previousPage() {
 		</div>
 
 		<!-- Pagination -->
-		<div v-if="totalPages > 1 && !isLoading" class="pagination">
-			<button @click="previousPage" :disabled="currentPage === 1" class="pagination-btn">Forrige</button>
-			<span class="pagination-info"> Side {{ currentPage }} af {{ totalPages }} </span>
-			<button @click="nextPage" :disabled="currentPage === totalPages" class="pagination-btn">Næste</button>
+		<div v-if="totalPages > 1 && !isLoading" class="flex items-center justify-center gap-4">
+			<button
+				@click="previousPage"
+				:disabled="currentPage === 1"
+				class="py-2 px-4 border border-tutara-200 rounded-lg bg-tutara-50 text-tutara-900 text-p1font-medium cursor-pointer transition-all hover:bg-tutara-100 hover:border-tutara-300 disabled:opacity-50 disabled:cursor-not-allowed">
+				Forrige
+			</button>
+			<span class="text-p1text-tutara-600"> Side {{ currentPage }} af {{ totalPages }} </span>
+			<button
+				@click="nextPage"
+				:disabled="currentPage === totalPages"
+				class="py-2 px-4 border border-tutara-200 rounded-lg bg-tutara-50 text-tutara-900 text-p1font-medium cursor-pointer transition-all hover:bg-tutara-100 hover:border-tutara-300 disabled:opacity-50 disabled:cursor-not-allowed">
+				Næste
+			</button>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-.base-table {
-	width: 100%;
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-}
-
-.table-search {
-	position: relative;
-	width: 100%;
-}
-
-.search-icon {
-	position: absolute;
-	left: 1rem;
-	top: 50%;
-	transform: translateY(-50%);
-	color: #9ca3af;
-}
-
-.search-input {
-	width: 100%;
-	padding: 0.75rem 1rem 0.75rem 2.75rem;
-	border: 1px solid #e5e7eb;
-	border-radius: 0.5rem;
-	font-size: 0.875rem;
-	outline: none;
-	transition: border-color 0.2s;
-}
-
-.search-input:focus {
-	border-color: #6366f1;
-}
-
-.search-input::placeholder {
-	color: #9ca3af;
-}
-
-.table-wrapper {
-	width: 100%;
-	overflow-x: auto;
-	border: 1px solid #e5e7eb;
-	border-radius: 0.75rem;
-}
-
-table {
-	width: 100%;
-	border-collapse: collapse;
-	background: white;
-}
-
-thead {
-	background-color: #f9fafb;
-	border-bottom: 1px solid #e5e7eb;
-}
-
-th {
-	padding: 0.875rem 1.5rem;
-	text-align: left;
-	font-weight: 500;
-	font-size: 0.875rem;
-	color: #6b7280;
-	cursor: pointer;
-	user-select: none;
-	transition: background-color 0.2s;
-}
-
-th:hover {
-	background-color: #f3f4f6;
-}
-
-.th-content {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-}
-
-.sort-icon {
-	color: #6b7280;
-	transition: transform 0.2s;
-}
-
-.sort-icon.sort-desc {
-	transform: rotate(180deg);
-}
-
-tbody tr {
-	border-bottom: 1px solid #e5e7eb;
-	transition: background-color 0.2s;
-}
-
-tbody tr:last-child {
-	border-bottom: none;
-}
-
-tbody tr:hover {
-	background-color: #f9fafb;
-}
-
-td {
-	padding: 1rem 1.5rem;
-	font-size: 0.875rem;
-	color: #1f2937;
-}
-
-.empty-state,
-.loading-state {
-	text-align: center;
-	padding: 3rem 1.5rem;
-	color: #6b7280;
-	font-size: 0.875rem;
-}
-
-.loading-state {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 0.75rem;
-}
-
 .spinner {
 	width: 1rem;
 	height: 1rem;
-	border: 2px solid #e5e7eb;
-	border-top-color: #6366f1;
+	border: 2px solid var(--color-tutara-200);
+	border-top-color: var(--color-purple-500);
 	border-radius: 50%;
 	animation: spin 0.6s linear infinite;
 }
@@ -331,39 +237,5 @@ td {
 	to {
 		transform: rotate(360deg);
 	}
-}
-
-.pagination {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 1rem;
-}
-
-.pagination-btn {
-	padding: 0.5rem 1rem;
-	border: 1px solid #e5e7eb;
-	border-radius: 0.5rem;
-	background: white;
-	color: #374151;
-	font-size: 0.875rem;
-	font-weight: 500;
-	cursor: pointer;
-	transition: all 0.2s;
-}
-
-.pagination-btn:hover:not(:disabled) {
-	background-color: #f9fafb;
-	border-color: #d1d5db;
-}
-
-.pagination-btn:disabled {
-	opacity: 0.5;
-	cursor: not-allowed;
-}
-
-.pagination-info {
-	font-size: 0.875rem;
-	color: #6b7280;
 }
 </style>

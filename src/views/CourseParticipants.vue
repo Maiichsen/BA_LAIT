@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
-import { EyeIcon, ChevronDownIcon, PencilIcon, TrashIcon } from '@/assets/icons';
+import { EyeIcon, PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 
 interface Participant {
@@ -134,7 +134,7 @@ function addParticipant() {
 			</div>
 			<div class="flex flex-col gap-6 lg:col-start-2 lg:col-span-14 col-span-full">
 				<div class="flex justify-between items-center">
-					<h2 class="text-xl font-semibold text-tutara-900">Brugeroversigt</h2>
+					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
 					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addParticipant"> Tilføj kursist </BaseButton>
 				</div>
 
@@ -155,28 +155,28 @@ function addParticipant() {
 					<template #cell-Kurser="{ value }">
 						<div class="flex items-center gap-2 text-tutara-900">
 							<span>{{ value }}</span>
-							<EyeIcon :width="16" :height="16" fill-class="fill-tutara-500" />
+							<EyeIcon :width="24" :height="17" fill-class="fill-tutara-900" />
 						</div>
 					</template>
 
 					<template #cell-Handlinger="{ value }">
 						<div class="flex gap-2 items-center">
 							<button
-								class="flex items-center justify-center w-8 h-8 hover:opacity-70 transition-opacity cursor-pointer"
+								class="tooltip-wrapper flex items-center justify-center w-8 h-8 cursor-pointer"
 								@click="viewParticipant(value as number)"
-								title="Vis deltager">
-								<ChevronDownIcon :width="13" :height="7" fill-class="fill-purple-500" />
+								data-tooltip="Vis deltager">
+								<UserPlusIcon :width="20" :height="25" fill-class="fill-purple-500" stroke-class="stroke-purple-500" />
 							</button>
 							<button
-								class="flex items-center justify-center w-8 h-8 hover:opacity-70 transition-opacity cursor-pointer"
+								class="tooltip-wrapper flex items-center justify-center w-8 h-8 cursor-pointer"
 								@click="editParticipant(value as number)"
-								title="Rediger deltager">
-								<PencilIcon :width="20" :height="20" fill-class="fill-purple-500" />
+								data-tooltip="Rediger">
+								<PencilIcon :width="20" :height="20" fill-class="fill-cornflower-blue-500" />
 							</button>
 							<button
-								class="flex items-center justify-center w-8 h-8 hover:opacity-70 transition-opacity cursor-pointer"
+								class="tooltip-wrapper flex items-center justify-center w-8 h-8 cursor-pointer"
 								@click="deleteParticipant(value as number)"
-								title="Slet deltager">
+								data-tooltip="Slet">
 								<TrashIcon :width="20" :height="20" fill-class="fill-info-red" />
 							</button>
 						</div>
@@ -186,3 +186,38 @@ function addParticipant() {
 		</div>
 	</div>
 </template>
+
+<style scoped>
+.tooltip-wrapper {
+	position: relative;
+}
+
+.tooltip-wrapper::after {
+	content: attr(data-tooltip);
+	position: absolute;
+	bottom: 100%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-8px) rotate(1.194deg);
+	display: inline-flex;
+	padding: 4px 10px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	border-radius: 4px;
+	border: 1px solid var(--color-tutara-200);
+	background: var(--color-white);
+	box-shadow: 0 5px 18px 0 rgba(0, 0, 0, 0.3);
+	color: var(--color-tutara-900);
+	font-size: var(--text-p1);
+	font-weight: var(--text-p1--font-weight);
+	line-height: var(--text-p1--line-height);
+	white-space: nowrap;
+	visibility: hidden;
+	pointer-events: none;
+	z-index: 10;
+}
+
+.tooltip-wrapper:hover::after {
+	visibility: visible;
+}
+</style>
