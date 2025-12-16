@@ -1,9 +1,37 @@
 import { supabase } from '../db/connection.ts';
 import type { newQuizParams } from '@/types/quizTypes.ts';
+import type { Quiz } from '@/types/db.ts';
 /********/
 /* QUIZ */
 /********/
-export const createQuiz = async (newQuizParams: newQuizParams) => {
+export const createDefaultQuiz = async (coursePageId: string): Promise<Quiz> => {
+	const quiz = await createQuiz({
+		course_page_id: coursePageId,
+		certification_requirement: true,
+		passing_percentage: null,
+		title: null,
+	});
+
+	return quiz;
+};
+
+export const getQuizByPageId = (pageId: string): Promise<Quiz> => new Promise(async (resolve, reject) => {
+	try {
+		const { data, error } = await supabase
+			.from('quizzes')
+			.select()
+			.eq('course_page_id', pageId)
+			.single();
+
+		if (error) return reject(error);
+
+		resolve(data);
+	} catch (err) {
+		reject(err);
+	}
+});
+
+export const createQuiz = async (newQuizParams: newQuizParams): Promise<Quiz> => {
 	try {
 		const { data, error } = await supabase
 			.from('quizzes')
@@ -18,9 +46,11 @@ export const createQuiz = async (newQuizParams: newQuizParams) => {
 			.select();
 
 		if (error) throw error;
-		return data;
+		if (!data || !data[0]) throw new Error('Encountered an error creating quiz. Got null');
+
+		return data[0];
 	} catch (err) {
-		console.log(err);
+		throw err;
 	}
 };
 /******************/

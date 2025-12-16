@@ -1,14 +1,16 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import type { CoursePage } from '@/types/db.ts';
-import { createCoursePage, getAllCoursePagesByCourseId } from '@/services/courseService.ts';
+import {
+	createCoursePageWithDefaultContent,
+	getAllCoursePagesByCourseId,
+	getCourseContentByPageId,
+} from '@/services/courseService.ts';
 import {
 	CoursePageType,
-	DefaultCoursePageName,
 	pageOrderIndexDefaultGab,
 } from '@/constants/courseConstants.ts';
 import type { RichCoursePage } from '@/types/courseTypes.ts';
-import { getCoursePageContentByPageId } from '@/services/courseArticleService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
@@ -61,24 +63,12 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		// This page's content is already fetched and stored locally. Don't fetch again
 		if (coursePageContent.value[pageId].content) return;
 
-		/* const [content, quiz] = await Promise.all([
-			getArticleById(id),
-			getQuizById(id)
-		]); */
-
-		getCoursePageContentByPageId(pageId).then((pageContent) => {
+		await getCourseContentByPageId(pageId).then(pageContent => {
 			if (!coursePageContent.value[pageId]) return;
 
-			coursePageContent.value[pageId].contentType = CoursePageType.article;
-			coursePageContent.value[pageId].content = pageContent;
-		}).catch(() => {
-			// don't react to error. Page might be a quiz instead
-
-			// TODO: TEMPORARY
-			if (!coursePageContent.value[pageId]) return;
-			coursePageContent.value[pageId].contentType = CoursePageType.quiz;
-			coursePageContent.value[pageId].content = 'quiz !!';
-		});
+			coursePageContent.value[pageId].contentType = pageContent.contentType;
+			coursePageContent.value[pageId].content = pageContent.content;
+		}).catch(error => console.log(error));
 	};
 
 	const _getNewOrderIndexAfterPageId = (pageId: string | null): number => {
@@ -114,7 +104,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const _addNewCoursePage = (contentType: CoursePageType.quiz | CoursePageType.article): Promise<CoursePage> => new Promise((resolve, reject) => {
 		const newOrderIndex = _getNewOrderIndexAfterPageId(currentEditedCoursePageId.value);
 
-		createCoursePage(DefaultCoursePageName[contentType], currentEditedCourseId.value, newOrderIndex)
+		createCoursePageWithDefaultContent(contentType, currentEditedCourseId.value, newOrderIndex)
 			.then(coursePage => {
 				// TODO: INSERT NEW DEFAULT PAGE CONTENT OR DEFAULT QUIZ CONTENT
 

@@ -1,4 +1,4 @@
-import type { Content, CoursePage } from '@/types/db.ts';
+import type { Content, CoursePage, Quiz } from '@/types/db.ts';
 import { CoursePageType } from '@/constants/courseConstants.ts';
 
 export interface NewCourseParams {
@@ -22,7 +22,11 @@ export interface NewCourseSeatParams {
 	user_id: string | null;
 }
 
+export type JoinedQuiz = Quiz;
+
+export type CoursePageContent = Content | JoinedQuiz;
+
 export interface RichCoursePage extends CoursePage {
 	contentType: CoursePageType,
-	content: null | Content | string
+	content: null | CoursePageContent
 }

@@ -2,7 +2,7 @@ import type { Content as Article } from '@/types/db.ts';
 import { supabase } from '@/db/connection.ts';
 import { defaultArticleData } from '@/constants/courseConstants.ts';
 
-export const createNewPageArticle = (coursePageId: string): Promise<Article> =>
+export const createDefaultArticle = (coursePageId: string): Promise<Article> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
@@ -24,17 +24,14 @@ export const createNewPageArticle = (coursePageId: string): Promise<Article> =>
 		}
 	});
 
-export const getCoursePageContentByPageId = (pageId: string): Promise<Article> => new Promise(async (resolve, reject) => {
-	try {
-		const { data, error } = await supabase
-			.from('contents')
-			.select()
-			.eq('course_page_id', pageId)
-			.single();
+export const getArticleByPageId = async (pageId: string): Promise<Article> => {
+	const { data, error } = await supabase
+		.from('contents')
+		.select()
+		.eq('course_page_id', pageId);
 
-		if (error) return reject(error);
-		resolve(data);
-	} catch (err) {
-		reject(err);
-	}
-});
+	if (error) throw error;
+	if (!data || !data[0]) throw new Error('No match');
+
+	return data[0];
+};

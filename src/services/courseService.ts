@@ -1,5 +1,10 @@
 import { supabase } from '../db/connection.ts';
-import type { NewCourseParams, CourseParams } from '../types/courseTypes.ts';
+import type {
+	NewCourseParams,
+	CourseParams,
+	RichCoursePage,
+	CoursePageContent,
+} from '../types/courseTypes.ts';
 import type { Course, CoursePage } from '../types/db.ts';
 import {
 	CoursePageType,
@@ -7,15 +12,17 @@ import {
 	pageOrderIndexDefaultGab,
 } from '../constants/courseConstants.ts';
 import { downloadImageFromSupabaseBucket } from './imageService.ts';
-import { createNewPageArticle } from '@/services/courseArticleService.ts';
+import {
+	createDefaultArticle, getArticleByPageId,
+} from '@/services/courseArticleService.ts';
+import { createDefaultQuiz, getQuizByPageId } from '@/services/quizService.ts';
 
 export const createTemplateCourse = async (): Promise<Course> => {
 	const course = await createCourse({
 		title: 'Nyt kurses',
 		short_course_description: 'Kort beskrivelse af kurset',
 	});
-	const page = await createCoursePage(DefaultCoursePageName[CoursePageType.article], course.course_id, pageOrderIndexDefaultGab);
-	await createNewPageArticle(page.course_page_id);
+	await createCoursePageWithDefaultContent(CoursePageType.article, course.course_id, pageOrderIndexDefaultGab);
 	return course;
 };
 
@@ -195,7 +202,7 @@ export const permDeleteCourseById = (courseId: string): Promise<void> =>
 	});
 
 ///////*COURSE PAGES*////////
-export const createCoursePage = (title: string, courseId: string, orderIndex: number): Promise<CoursePage> =>
+export const createCoursePage = (pageTitle: string, courseId: string, orderIndex: number): Promise<CoursePage> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
@@ -203,7 +210,7 @@ export const createCoursePage = (title: string, courseId: string, orderIndex: nu
 				.insert([
 					{
 						course_id: courseId,
-						course_page_title: title,
+						course_page_title: pageTitle,
 						order_index: orderIndex,
 					},
 				])
@@ -217,6 +224,31 @@ export const createCoursePage = (title: string, courseId: string, orderIndex: nu
 			reject(err);
 		}
 	});
+
+export const createCoursePageWithDefaultContent = async (pageType: CoursePageType, courseId: string, orderIndex: number): Promise<RichCoursePage> => {
+	const page = await createCoursePage(DefaultCoursePageName[pageType], courseId, orderIndex);
+
+	if (pageType === CoursePageType.article) {
+		const article = await createDefaultArticle(page.course_page_id);
+		return {
+			...page,
+			contentType: pageType,
+			content: article,
+		};
+	}
+
+	if (pageType === CoursePageType.quiz) {
+		const quiz = await createDefaultQuiz(page.course_page_id);
+
+		return {
+			...page,
+			contentType: pageType,
+			content: quiz,
+		};
+	}
+
+	throw new Error('Unknown page type can not be created');
+};
 
 export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
 	try {
@@ -250,6 +282,21 @@ export const getAllCoursePagesByCourseId = (courseId: string): Promise<CoursePag
 		}
 	});
 
-export const getCourseContentByPageId = (pageId: string) => {
-	return pageId;
+export const getCourseContentByPageId = async (pageId: string): Promise<{
+	content: CoursePageContent,
+	contentType: CoursePageType
+}> => {
+	try {
+		const article = await getArticleByPageId(pageId);
+		return { content: article, contentType: CoursePageType.article };
+	} catch {
+		// ignore "not found" and try quiz
+	}
+
+	try {
+		const quiz = await getQuizByPageId(pageId);
+		return { content: quiz, contentType: CoursePageType.quiz };
+	} catch {
+		throw new Error('No content found for page');
+	}
 };
