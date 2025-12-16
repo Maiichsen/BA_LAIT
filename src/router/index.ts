@@ -35,12 +35,12 @@ const router = createRouter({
 		},
 		{
 			path: '/Kursister',
-			name: 'participants',
+			name: 'students',
 			meta: {
 				layout: DefaultLayout,
 				breadcrumb: 'Kursister',
 			},
-			component: () => import('../views/CourseParticipants.vue'),
+			component: () => import('../views/CourseStudents.vue'),
 		},
 		{
 			path: '/opret-kursus/:course_id',

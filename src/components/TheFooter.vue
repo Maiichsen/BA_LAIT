@@ -10,7 +10,7 @@ const navigationLinks: FooterLink[] = [
 	{ name: 'Alle kurser', url: '/alle-kurser' },
 	{ name: 'Tilgængelige kurser', url: '/mine-kurser' },
 	{ name: 'Virksomheder', url: '/virksomheder' },
-	{ name: 'Kursister', url: '/kursister' },
+	{ name: 'Kursister', url: '/Kursister' },
 	{ name: 'Kontakt', url: '/kontakt' },
 ];
 
