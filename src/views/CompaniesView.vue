@@ -58,9 +58,7 @@ function addCompany() {
 			<div class="flex flex-col gap-6 lg:col-start-2 lg:col-span-14 col-span-full">
 				<div class="flex justify-between items-center">
 					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
-					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addCompany">
-						Tilføj Virksomhed
-					</BaseButton>
+					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addCompany"> Tilføj Virksomhed </BaseButton>
 				</div>
 				<BaseTable
 					:cols="tableColumns"
