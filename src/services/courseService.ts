@@ -88,6 +88,8 @@ export const updateCourse = (courseId: string, updateCourseParams: CourseParams)
 
 export const getCourseById = (courseId: string): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
+		if (!courseId) return reject('CourseId is required');
+
 		try {
 			const {
 				data,
