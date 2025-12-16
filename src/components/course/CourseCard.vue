@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import { getCoverImgUrlByCourseId } from '@/services/courseService';
+import InfoBadge from '@/components/atoms/InfoBadge.vue';
 // import type { Course } from '@/types/db';
 
 type CourseStatus = 'not_started' | 'in_progress' | 'completed';
@@ -57,6 +58,22 @@ const statusText = computed(() => {
 	}
 });
 
+// Status badge variant
+const statusVariant = computed(() => {
+	if (!props.status) return 'default';
+
+	switch (props.status) {
+		case 'completed':
+			return 'green';
+		case 'in_progress':
+			return 'purple';
+		case 'not_started':
+			return 'gray';
+		default:
+			return 'default';
+	}
+});
+
 // Beregn href baseret på edit mode
 const cardHref = computed(() => {
 	return props.isEditMode ? `/opret-kursus/${props.courseId}` : `/kurser/${props.courseId}`;
@@ -94,26 +111,19 @@ const cardHref = computed(() => {
 
 		<!-- Content med padding -->
 		<div class="flex flex-col p-4 lg:p-3 flex-1 gap-3">
-			<!-- Tags -->
-			<div class="flex gap-3 flex-wrap [&>p]:border-cornflower-blue-10 [&>p]:first:bg-cornflower-blue-10">
-				<p v-if="estimatedHours" class="text-p2 px-4 border-2 rounded-full">
+			<!-- badge -->
+			<div class="flex gap-3 flex-wrap">
+				<InfoBadge v-if="estimatedHours" :variant="'blue'">
 					{{ estimatedHours }} {{ estimatedHours === 1 ? 'time' : 'timer' }}
-				</p>
+				</InfoBadge>
 
-				<p v-if="authorName" class="text-p2 px-4 border-2 rounded-full">
+				<InfoBadge v-if="authorName">
 					{{ authorName }}
-				</p>
-				<!-- Status med conditional farve -->
-				<p
-					v-if="statusText"
-					class="text-p2 px-4 border-2 rounded-full"
-					:class="{
-						'bg-info-green border-tutara-50! text-green-800': status === 'completed',
-						'bg-purple-10 border-tutara-50! text-purple-500': status === 'in_progress',
-						'bg-tutara-10 border-tutara-50! text-tutara-500': status === 'not_started',
-					}">
+				</InfoBadge>
+
+				<InfoBadge v-if="statusText" :variant="statusVariant">
 					{{ statusText }}
-				</p>
+				</InfoBadge>
 			</div>
 
 			<!-- Titel -->
