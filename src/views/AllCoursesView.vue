@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import { createTemplateCourse } from '@/services/courseService.ts';
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import CourseGrid from '@/components/course/CourseGrid.vue';
+import BaseButton from '@/components/atoms/BaseButton.vue';
 
-const router = useRouter();
+const isEditMode = ref(false);
 
-const handleCreateNewCourseClick = () => {
-	createTemplateCourse()
-		.then(course => {
-			router.push({ name: 'courseEditorFrontpage', params: { course_id: course.course_id } });
-		})
-		.catch(err => console.log(err));
+const toggleEditMode = () => {
+	isEditMode.value = !isEditMode.value;
+	console.log('Edit mode:', isEditMode.value);
 };
 </script>
 
 <template>
 	<div class="container">
-		<div class="container-row">
-			<div class="lg:col-start-2 lg:col-span-11 col-span-full">
+		<div class="container-row space-y-20">
+			<div class="lg:col-start-2 lg:col-span-14 col-span-full flex items-center justify-between">
 				<h1 class="text-h1">Kursusoversigt</h1>
-				<button class="hover:text-amber-600 cursor-pointer" @click="handleCreateNewCourseClick">Opret kursus knap</button>
+				<BaseButton :variant="isEditMode ? 'stroke' : 'primary'" icon-name="EditIcon" @click="toggleEditMode">
+					{{ isEditMode ? 'Deaktivér redigering' : 'Aktivér redigering' }}
 
-				<!-- Indhold her -->
-				<div></div>
+					<!-- <span class="flex items-center gap-2.5">
+						<EditIcon :strokeClass="isEditMode ? 'stroke-tutara-900' : 'stroke-tutara-50'" />
+						{{ isEditMode ? 'Deaktivér redigering' : 'Aktivér redigering' }}
+					</span> -->
+				</BaseButton>
 			</div>
+
+			<!-- Course Grid -->
+			<CourseGrid :is-edit-mode="isEditMode" />
 		</div>
 	</div>
 </template>

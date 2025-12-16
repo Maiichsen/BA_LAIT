@@ -11,6 +11,7 @@ const router = createRouter({
 			name: 'login',
 			meta: {
 				layout: LoginLayout,
+				breadcrumb: 'Log Ind',
 			},
 			component: () => import('../views/LoginView.vue'),
 		},
@@ -19,6 +20,7 @@ const router = createRouter({
 			name: 'allCourses',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Alle Kurser',
 			},
 			component: () => import('../views/AllCoursesView.vue'),
 		},
@@ -27,6 +29,7 @@ const router = createRouter({
 			name: 'frontpage',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Forside',
 			},
 			component: () => import('../views/AllCoursesView.vue'),
 		},
@@ -35,6 +38,7 @@ const router = createRouter({
 			name: 'participants',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Kursister',
 			},
 			component: () => import('../views/CourseParticipants.vue'),
 		},
@@ -43,6 +47,7 @@ const router = createRouter({
 			name: 'frontpageCreateCourse',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Opret Kursus',
 			},
 			props: true,
 			component: () => import('@/views/courseEditorViews/CourseEditorView.vue'),
@@ -51,12 +56,18 @@ const router = createRouter({
 					path: '',
 					name: 'courseEditorFrontpage',
 					props: true,
+					meta: {
+						breadcrumb: 'Kursus Detaljer',
+					},
 					component: () => import('@/views/courseEditorViews/CourseEditorDetailsView.vue'),
 				},
 				{
 					path: ':page_id',
 					name: 'courseEditorPage',
 					props: true,
+					meta: {
+						breadcrumb: 'Kursus Side',
+					},
 					component: () => import('@/views/courseEditorViews/CourseEditorPageView.vue'),
 				},
 			],
@@ -66,6 +77,7 @@ const router = createRouter({
 			name: 'myCourses',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Mine Kurser',
 			},
 			component: () => import('../views/MyCoursesView.vue'),
 		},
@@ -74,6 +86,7 @@ const router = createRouter({
 			name: 'companies',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Virksomheder',
 			},
 			component: () => import('../views/CompaniesView.vue'),
 		},
@@ -82,6 +95,7 @@ const router = createRouter({
 			name: 'contact',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Kontakt',
 			},
 			component: () => import('../views/ContactView.vue'),
 		},
@@ -90,6 +104,7 @@ const router = createRouter({
 			name: 'updateUser',
 			meta: {
 				layout: DefaultLayout,
+				breadcrumb: 'Opret Bruger',
 			},
 			component: () => import('../views/UpdateUserView.vue'),
 			beforeEnter: async (_to, _from, next) => {

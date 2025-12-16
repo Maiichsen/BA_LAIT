@@ -1,17 +1,9 @@
 {
-  "files": [],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    },
-    {
-      "path": "./tsconfig.app.json"
-    },
-    {
-      "path": "./tsconfig.vitest.json"
+ "extends": "@vue/tsconfig/tsconfig.dom.json",
+ "compilerOptions": {
+    "verbatimModuleSyntax": false,
+    "paths": {
+      "@/*": ["./src/*"]
     }
-  ],
-  "compilerOptions": {
-    "module": "NodeNext",
-  }
+ }
 }
