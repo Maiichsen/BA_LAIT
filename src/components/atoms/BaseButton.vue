@@ -14,8 +14,7 @@ const variantClasses = {
 } as const;
 
 interface Props {
-	variant?:
-	keyof typeof variantClasses;
+	variant?: keyof typeof variantClasses;
 	iconName?: keyof typeof Icons;
 	as?: 'button' | 'router-link' | 'a';
 	to?: string;
@@ -23,7 +22,7 @@ interface Props {
 	type?: 'button' | 'submit' | 'reset';
 }
 
-const fillVariantClasses: {[key in NonNullable<Props['variant']>]?: string} = {
+const fillVariantClasses: { [key in NonNullable<Props['variant']>]?: string } = {
 	stroke: 'stroke-tutara-900',
 };
 
@@ -39,9 +38,11 @@ const baseClasses =
 
 const buttonClasses = computed(() => `${baseClasses} ${variantClasses[props.variant]}`);
 
-const currentIcon = computed(() => props.iconName ? Icons[props.iconName] : null);
+const currentIcon = computed(() => (props.iconName ? Icons[props.iconName] : null));
 
-const fillClass = computed(() => props.variant in fillVariantClasses ? fillVariantClasses[props.variant] : 'stroke-tutara-50');
+const fillClass = computed(() =>
+	props.variant in fillVariantClasses ? fillVariantClasses[props.variant] : 'stroke-tutara-50',
+);
 </script>
 
 <template>
@@ -53,9 +54,12 @@ const fillClass = computed(() => props.variant in fillVariantClasses ? fillVaria
 		:class="buttonClasses">
 		<span class="relative top-[1.5px]">
 			<span class="flex items-center gap-2.5">
-				<currentIcon  :width="20"
-								:height="20"	:stroke-class="fillClass"
-								fill-class="fill-tutara-50" v-if="currentIcon != null" />
+				<currentIcon
+					:width="20"
+					:height="20"
+					:stroke-class="fillClass"
+					fill-class="fill-tutara-50"
+					v-if="currentIcon != null" />
 				<slot />
 			</span>
 		</span>
