@@ -186,9 +186,7 @@ function previousPage() {
 						</td>
 					</tr>
 					<tr v-if="paginatedRows.length === 0">
-						<td :colspan="cols.length" class="text-center py-12 px-6 text-tutara-900 text-p1">
-							Ingen data fundet
-						</td>
+						<td :colspan="cols.length" class="text-center py-12 px-6 text-tutara-900 text-p1">Ingen data fundet</td>
 					</tr>
 				</tbody>
 				<tbody v-else>
