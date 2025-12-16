@@ -234,6 +234,7 @@ export const createCoursePageWithDefaultContent = async (pageType: CoursePageTyp
 			...page,
 			contentType: pageType,
 			content: article,
+			hasUnsavedData: false,
 		};
 	}
 
@@ -244,6 +245,7 @@ export const createCoursePageWithDefaultContent = async (pageType: CoursePageTyp
 			...page,
 			contentType: pageType,
 			content: quiz,
+			hasUnsavedData: false,
 		};
 	}
 

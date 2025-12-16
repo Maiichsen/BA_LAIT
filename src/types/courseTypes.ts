@@ -29,4 +29,5 @@ export type CoursePageContent = Content | JoinedQuiz;
 export interface RichCoursePage extends CoursePage {
 	contentType: CoursePageType,
 	content: null | CoursePageContent
+	hasUnsavedData: boolean;
 }

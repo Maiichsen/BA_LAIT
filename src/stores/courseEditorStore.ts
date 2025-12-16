@@ -23,6 +23,12 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		return _unsortedListOfCoursePages.value.sort((a, b) => a.order_index - b.order_index);
 	});
 
+	const courseHasAnyUnsavedChanges = computed(() => {
+		return Object.values(coursePageContent.value).some(
+			page => page.hasUnsavedData === true,
+		);
+	});
+
 	const loadCourse = (courseId: string) => {
 		courseGlobalLoading.value = true;
 		_unsortedListOfCoursePages.value = [];
@@ -40,6 +46,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 						...page,
 						contentType: CoursePageType.unknown,
 						content: null,
+						hasUnsavedData: false,
 					};
 					return lookupSet;
 				}, {});
@@ -106,15 +113,12 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 
 		createCoursePageWithDefaultContent(contentType, currentEditedCourseId.value, newOrderIndex)
 			.then(coursePage => {
-				// TODO: INSERT NEW DEFAULT PAGE CONTENT OR DEFAULT QUIZ CONTENT
-
 				_unsortedListOfCoursePages.value.push(coursePage);
 
 				coursePageContent.value[coursePage.course_page_id] = {
 					...coursePage,
 					contentType: contentType,
-					content: null,
-					// TODO: INSERT PAGE CONTENT
+					content: coursePage.content,
 				};
 
 				resolve(coursePage);
@@ -145,6 +149,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		courseGlobalLoading,
 		currentEditedCourseId,
 		coursePageContent,
+		courseHasAnyUnsavedChanges,
 		loadCourse,
 		setCurrentEditedCoursePage,
 		addNewPageTypeArticle,

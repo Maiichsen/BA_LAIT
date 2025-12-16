@@ -12,6 +12,8 @@ export const createDefaultQuiz = async (coursePageId: string): Promise<Quiz> => 
 		title: null,
 	});
 
+	// TODO: add default quiz items
+
 	return quiz;
 };
 
