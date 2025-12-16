@@ -139,7 +139,9 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 			if (companiesError) return reject(companiesError);
 
 			// Get all course_seats
-			const { data: seats, error: seatsError } = await supabase.from('course_seats').select('company_id, course_id, user_id');
+			const { data: seats, error: seatsError } = await supabase
+				.from('course_seats')
+				.select('company_id, course_id, user_id');
 
 			if (seatsError) return reject(seatsError);
 
