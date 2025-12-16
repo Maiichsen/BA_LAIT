@@ -6,7 +6,7 @@ import { EyeIcon, PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
 
-interface Participant {
+interface Student {
 	id: number;
 	firstName: string;
 	lastName: string;
@@ -19,7 +19,7 @@ interface Participant {
 const isLoading = ref(false);
 
 // dummy data - erstarttet med API call når den er klar
-const participants = ref<Participant[]>([
+const students = ref<Student[]>([
 	{
 		id: 1,
 		firstName: 'Mai',
@@ -95,34 +95,34 @@ const participants = ref<Participant[]>([
 ]);
 
 const tableData = computed(() => {
-	return participants.value.map(participant => [
-		participant.firstName,
-		participant.lastName,
-		participant.status,
-		participant.email,
-		participant.company,
-		participant.courses,
-		participant.id,
+	return students.value.map(student => [
+		student.firstName,
+		student.lastName,
+		student.status,
+		student.email,
+		student.company,
+		student.courses,
+		student.id,
 	]);
 });
 
-function viewParticipant(id: number) {
-	console.log('View participant:', id);
-	// Navigate to participant details or open modal
+function viewStudent(id: number) {
+	console.log('View student:', id);
+	// Navigate to student details or open modal
 }
 
-function editParticipant(id: number) {
-	console.log('Edit participant:', id);
+function editStudent(id: number) {
+	console.log('Edit student:', id);
 	// Navigate to edit page or open edit modal
 }
 
-function deleteParticipant(id: number) {
-	console.log('Delete participant:', id);
+function deleteStudent(id: number) {
+	console.log('Delete student:', id);
 	// Show confirmation dialog and delete
 }
 
-function addParticipant() {
-	console.log('Add new participant');
+function addStudent() {
+	console.log('Add new student');
 	// Navigate to create page or open create modal
 }
 </script>
@@ -136,7 +136,7 @@ function addParticipant() {
 			<div class="flex flex-col gap-6 lg:col-start-2 lg:col-span-14 col-span-full">
 				<div class="flex justify-between items-center">
 					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
-					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addParticipant"> Tilføj kursist </BaseButton>
+					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addStudent"> Tilføj kursist </BaseButton>
 				</div>
 
 				<BaseTable
@@ -165,7 +165,7 @@ function addParticipant() {
 							<ToolTip text="Tildel kursus">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="viewParticipant(value as number)">
+									@click="viewStudent(value as number)">
 									<UserPlusIcon
 										:width="20"
 										:height="25"
@@ -176,14 +176,14 @@ function addParticipant() {
 							<ToolTip text="Rediger">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="editParticipant(value as number)">
+									@click="editStudent(value as number)">
 									<PencilIcon :width="20" :height="20" fill-class="fill-cornflower-blue-500" />
 								</button>
 							</ToolTip>
 							<ToolTip text="Slet">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="deleteParticipant(value as number)">
+									@click="deleteStudent(value as number)">
 									<TrashIcon :width="20" :height="20" fill-class="fill-info-red" />
 								</button>
 							</ToolTip>
