@@ -1,4 +1,5 @@
-import { type Database } from '../../database.types.ts';
+import type { Content, CoursePage, Quiz } from '@/types/db.ts';
+import { CoursePageType } from '@/constants/courseConstants.ts';
 
 export interface NewCourseParams {
 	title: string;
@@ -21,4 +22,12 @@ export interface NewCourseSeatParams {
 	user_id: string | null;
 }
 
-export type CourseRow = Database['public']['Tables']['courses']['Row'];
+export type JoinedQuiz = Quiz;
+
+export type CoursePageContent = Content | JoinedQuiz;
+
+export interface RichCoursePage extends CoursePage {
+	contentType: CoursePageType;
+	content: null | CoursePageContent;
+	hasUnsavedData: boolean;
+}

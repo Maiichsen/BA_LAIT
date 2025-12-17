@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { getAllPublicCourses } from '@/services/courseService';
+import { createTemplateCourse, getAllPublicCourses } from '@/services/courseService';
 import type { Course } from '@/types/db';
 import CourseCard from './CourseCard.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 type CourseStatus = 'not_started' | 'in_progress' | 'completed';
 
@@ -46,6 +49,14 @@ const fetchCourses = async () => {
 onMounted(() => {
 	fetchCourses();
 });
+
+const handleCreateNewCourseClick = () => {
+	createTemplateCourse()
+		.then(course => {
+			router.push({ name: 'courseEditorFrontpage', params: { course_id: course.course_id } });
+		})
+		.catch(err => console.log(err));
+};
 </script>
 
 <template>
@@ -53,23 +64,27 @@ onMounted(() => {
 		<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
 	</div>
 
-	<div v-else-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
-		<p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
-	</div>
+	<template v-else>
+		<div v-if="isEditMode" class="bg-yellow-400 p-2 cursor-pointer" @click="handleCreateNewCourseClick">OPRET</div>
 
-	<div
-		v-else
-		class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
-		<CourseCard
-			v-for="course in courses"
-			:key="course.course_id"
-			:course-id="course.course_id"
-			:title="course.title"
-			:description="course.short_course_description"
-			:estimated-time-minutes="course.estimated_time_minutes"
-			:cover-image-url="course.cover_image_url"
-			:author-name="course.author_name"
-			:status="course.status"
-			:is-edit-mode="isEditMode" />
-	</div>
+		<div v-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
+			<p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
+		</div>
+
+		<div
+			v-else
+			class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
+			<CourseCard
+				v-for="course in courses"
+				:key="course.course_id"
+				:course-id="course.course_id"
+				:title="course.title"
+				:description="course.short_course_description"
+				:estimated-time-minutes="course.estimated_time_minutes"
+				:cover-image-url="course.cover_image_url"
+				:author-name="course.author_name"
+				:status="course.status"
+				:is-edit-mode="isEditMode" />
+		</div>
+	</template>
 </template>

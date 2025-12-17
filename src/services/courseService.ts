@@ -1,28 +1,38 @@
 import { supabase } from '../db/connection.ts';
-import type { NewCourseParams, CourseParams } from '../types/courseTypes.ts';
-import type { Content, Course, CoursePage } from '../types/db.ts';
-import { defaultPageContent } from '../constants/courseConstants.ts';
+import type { NewCourseParams, CourseParams, RichCoursePage, CoursePageContent } from '../types/courseTypes.ts';
+import type { Course, CoursePage } from '../types/db.ts';
+import { CoursePageType, DefaultCoursePageName, pageOrderIndexDefaultGab } from '../constants/courseConstants.ts';
 import { downloadImageFromSupabaseBucket } from './imageService.ts';
+import { createDefaultArticle, getArticleByPageId } from '@/services/courseArticleService.ts';
+import { createDefaultQuiz, getQuizByPageId } from '@/services/quizService.ts';
 
-export const createTemplateCourse = (): Promise<Course> =>
-	new Promise(async (resolve, reject) => {
-		createCourse({
-			title: 'Nyt kurses',
-			short_course_description: 'Kort beskrivelse af kurset',
-		})
-			.then(course => {
-				createCoursePage('Side 1', course.course_id, 1)
-					.then(page => {
-						createNewPageContent(page.course_page_id)
-							.then(() => {
-								resolve(course);
-							})
-							.catch(() => reject('error creating page content'));
-					})
-					.catch(() => reject('error creating empty page'));
-			})
-			.catch(() => reject('error creating new course'));
+export const createTemplateCourse = async (): Promise<Course> => {
+	const course = await createCourse({
+		title: 'Nyt kurses',
+		short_course_description: 'Kort beskrivelse af kurset',
 	});
+	await createCoursePageWithDefaultContent(CoursePageType.article, course.course_id, pageOrderIndexDefaultGab);
+	return course;
+};
+
+/*new Promise(async (resolve, reject) => {
+	createCourse({
+		title: 'Nyt kurses',
+		short_course_description: 'Kort beskrivelse af kurset',
+	})
+		.then(course => {
+			createCoursePage(DefaultCoursePageName[CoursePageType.article], course.course_id, pageOrderIndexDefaultGab)
+				.then(page => {
+					createNewPageArticle(page.course_page_id)
+						.then(() => {
+							resolve(course);
+						})
+						.catch(() => reject('error creating page content'));
+				})
+				.catch(() => reject('error creating empty page'));
+		})
+		.catch(() => reject('error creating new course'));
+});*/
 
 export const createCourse = (newCourseParams: NewCourseParams): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
@@ -73,6 +83,8 @@ export const updateCourse = (courseId: string, updateCourseParams: CourseParams)
 
 export const getCourseById = (courseId: string): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
+		if (!courseId) return reject('CourseId is required');
+
 		try {
 			const { data, error } = await supabase.from('courses').select().eq('course_id', courseId).single();
 
@@ -175,7 +187,7 @@ export const permDeleteCourseById = (courseId: string): Promise<void> =>
 	});
 
 ///////*COURSE PAGES*////////
-export const createCoursePage = (title: string, courseId: string, orderIndex: number): Promise<CoursePage> =>
+export const createCoursePage = (pageTitle: string, courseId: string, orderIndex: number): Promise<CoursePage> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
@@ -183,7 +195,7 @@ export const createCoursePage = (title: string, courseId: string, orderIndex: nu
 				.insert([
 					{
 						course_id: courseId,
-						course_page_title: title,
+						course_page_title: pageTitle,
 						order_index: orderIndex,
 					},
 				])
@@ -197,6 +209,37 @@ export const createCoursePage = (title: string, courseId: string, orderIndex: nu
 			reject(err);
 		}
 	});
+
+export const createCoursePageWithDefaultContent = async (
+	pageType: CoursePageType,
+	courseId: string,
+	orderIndex: number,
+): Promise<RichCoursePage> => {
+	const page = await createCoursePage(DefaultCoursePageName[pageType], courseId, orderIndex);
+
+	if (pageType === CoursePageType.article) {
+		const article = await createDefaultArticle(page.course_page_id);
+		return {
+			...page,
+			contentType: pageType,
+			content: article,
+			hasUnsavedData: false,
+		};
+	}
+
+	if (pageType === CoursePageType.quiz) {
+		const quiz = await createDefaultQuiz(page.course_page_id);
+
+		return {
+			...page,
+			contentType: pageType,
+			content: quiz,
+			hasUnsavedData: false,
+		};
+	}
+
+	throw new Error('Unknown page type can not be created');
+};
 
 export const setCoursePageVisibilityById = async (coursePageId: string, isVisible: boolean) => {
 	try {
@@ -230,27 +273,26 @@ export const getAllCoursePagesByCourseId = (courseId: string): Promise<CoursePag
 		}
 	});
 
-export const createNewPageContent = (coursePageId: string): Promise<Content> =>
-	new Promise(async (resolve, reject) => {
-		try {
-			const { data, error } = await supabase
-				.from('contents')
-				.insert([
-					{
-						course_page_id: coursePageId,
-						content_json: defaultPageContent,
-					},
-				])
-				.select();
+export const getCourseContentByPageId = async (
+	pageId: string,
+): Promise<{
+	content: CoursePageContent;
+	contentType: CoursePageType;
+}> => {
+	try {
+		const article = await getArticleByPageId(pageId);
+		return { content: article, contentType: CoursePageType.article };
+	} catch {
+		// ignore "not found" and try quiz
+	}
 
-			if (error) return reject(error);
-			if (!data || !data[0]) return reject('error creating page content. Got null');
-
-			resolve(data[0]);
-		} catch (err) {
-			reject(err);
-		}
-	});
+	try {
+		const quiz = await getQuizByPageId(pageId);
+		return { content: quiz, contentType: CoursePageType.quiz };
+	} catch {
+		throw new Error('No content found for page');
+	}
+};
 
 export const getCourseStatusForUser = (
 	courseId: string,
