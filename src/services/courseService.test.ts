@@ -12,6 +12,7 @@ vi.mock('../db/connection.ts', () => {
 	return {
 		supabase: {
 			from: vi.fn(() => chain),
+			// eslint-disable-next-line
 			__setResponse: (res: any) => (state.response = res),
 			__chain: chain,
 		},
@@ -29,6 +30,7 @@ type SupabaseChainMock = {
 
 type SupabaseMock = {
 	from: ReturnType<typeof vi.fn>;
+	// eslint-disable-next-line
 	__setResponse: (res: { data: unknown; error: unknown }) => void;
 	__chain: SupabaseChainMock;
 };

@@ -17,9 +17,13 @@ export const defaultArticleData = {
 
 export const pageOrderIndexDefaultGab = 64;
 
+// ES-lint says these are unused even when they are literally used 3 lines below
 export enum CoursePageType {
+	// eslint-disable-next-line
 	unknown,
+	// eslint-disable-next-line
 	article,
+	// eslint-disable-next-line
 	quiz,
 }
 
