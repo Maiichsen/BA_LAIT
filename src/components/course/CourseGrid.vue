@@ -60,16 +60,14 @@ const handleCreateNewCourseClick = () => {
 </script>
 
 <template>
-	<div v-if="loading"
-			 class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
+	<div v-if="loading" class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
 		<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
 	</div>
 
 	<template v-else>
 		<div v-if="isEditMode" class="bg-yellow-400 p-2 cursor-pointer" @click="handleCreateNewCourseClick">OPRET</div>
 
-		<div v-if="courses.length === 0"
-				 class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
+		<div v-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
 			<p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
 		</div>
 

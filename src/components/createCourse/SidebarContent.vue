@@ -20,18 +20,16 @@ const pageHasUnsavedChanges = (page: CoursePage): boolean => {
 
 <template>
 	<div class="flex-col border-2 border-yellow-500">
-		<RouterLink
-			:to="`/opret-kursus/${editorStore.currentEditedCourseId}`"
-			class="editor-nav-link"
-		><p>Forside</p></RouterLink>
+		<RouterLink :to="`/opret-kursus/${editorStore.currentEditedCourseId}`" class="editor-nav-link"
+			><p>Forside</p></RouterLink
+		>
 		<RouterLink
 			v-for="page in editorStore.listOfCoursePages"
 			:key="page.course_page_id"
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}/${page.course_page_id}`"
-			class="editor-nav-link"
-		>
+			class="editor-nav-link">
 			{{ contentTypeIcon(page) }}
-			<span :class="{unsaved: pageHasUnsavedChanges(page)}">
+			<span :class="{ unsaved: pageHasUnsavedChanges(page) }">
 				{{ page.course_page_title }}
 			</span>
 		</RouterLink>

@@ -25,10 +25,7 @@ export const createDefaultArticle = (coursePageId: string): Promise<Article> =>
 	});
 
 export const getArticleByPageId = async (pageId: string): Promise<Article> => {
-	const { data, error } = await supabase
-		.from('contents')
-		.select()
-		.eq('course_page_id', pageId);
+	const { data, error } = await supabase.from('contents').select().eq('course_page_id', pageId);
 
 	if (error) throw error;
 	if (!data || !data[0]) throw new Error('No match');

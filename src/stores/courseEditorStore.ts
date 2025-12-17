@@ -6,10 +6,7 @@ import {
 	getAllCoursePagesByCourseId,
 	getCourseContentByPageId,
 } from '@/services/courseService.ts';
-import {
-	CoursePageType,
-	pageOrderIndexDefaultGab,
-} from '@/constants/courseConstants.ts';
+import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
 import type { RichCoursePage } from '@/types/courseTypes.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
@@ -24,9 +21,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	});
 
 	const courseHasAnyUnsavedChanges = computed(() => {
-		return Object.values(coursePageContent.value).some(
-			page => page.hasUnsavedData === true,
-		);
+		return Object.values(coursePageContent.value).some(page => page.hasUnsavedData === true);
 	});
 
 	const loadCourse = (courseId: string) => {
@@ -70,17 +65,19 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		// This page's content is already fetched and stored locally. Don't fetch again
 		if (coursePageContent.value[pageId].content) return;
 
-		await getCourseContentByPageId(pageId).then(pageContent => {
-			if (!coursePageContent.value[pageId]) return;
+		await getCourseContentByPageId(pageId)
+			.then(pageContent => {
+				if (!coursePageContent.value[pageId]) return;
 
-			coursePageContent.value[pageId].contentType = pageContent.contentType;
-			coursePageContent.value[pageId].content = pageContent.content;
-		}).catch(error => console.log(error));
+				coursePageContent.value[pageId].contentType = pageContent.contentType;
+				coursePageContent.value[pageId].content = pageContent.content;
+			})
+			.catch(error => console.log(error));
 	};
 
 	const _getNewOrderIndexAfterPageId = (pageId: string | null): number => {
 		const currentPageListIndex = pageId
-			? listOfCoursePages.value.findIndex((page) => page.course_page_id === pageId)
+			? listOfCoursePages.value.findIndex(page => page.course_page_id === pageId)
 			: -1;
 
 		if (currentPageListIndex === listOfCoursePages.value.length - 1) {
@@ -108,25 +105,26 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		return newPageOrderIndex;
 	};
 
-	const _addNewCoursePage = (contentType: CoursePageType.quiz | CoursePageType.article): Promise<CoursePage> => new Promise((resolve, reject) => {
-		const newOrderIndex = _getNewOrderIndexAfterPageId(currentEditedCoursePageId.value);
+	const _addNewCoursePage = (contentType: CoursePageType.quiz | CoursePageType.article): Promise<CoursePage> =>
+		new Promise((resolve, reject) => {
+			const newOrderIndex = _getNewOrderIndexAfterPageId(currentEditedCoursePageId.value);
 
-		createCoursePageWithDefaultContent(contentType, currentEditedCourseId.value, newOrderIndex)
-			.then(coursePage => {
-				_unsortedListOfCoursePages.value.push(coursePage);
+			createCoursePageWithDefaultContent(contentType, currentEditedCourseId.value, newOrderIndex)
+				.then(coursePage => {
+					_unsortedListOfCoursePages.value.push(coursePage);
 
-				coursePageContent.value[coursePage.course_page_id] = {
-					...coursePage,
-					contentType: contentType,
-					content: coursePage.content,
-				};
+					coursePageContent.value[coursePage.course_page_id] = {
+						...coursePage,
+						contentType: contentType,
+						content: coursePage.content,
+					};
 
-				resolve(coursePage);
-			})
-			.catch(err => {
-				reject(err);
-			});
-	});
+					resolve(coursePage);
+				})
+				.catch(err => {
+					reject(err);
+				});
+		});
 
 	const setCurrentEditedCoursePage = (pageId?: string) => {
 		currentEditedCoursePageId.value = pageId ?? null;

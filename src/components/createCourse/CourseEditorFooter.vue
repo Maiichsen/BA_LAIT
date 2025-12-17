@@ -12,7 +12,7 @@ const canSave = computed(() => {
 <template>
 	<div class="flex gap-8 border-2 border-blue-500">
 		<p class="disabled">Forhåndsvisning</p>
-		<p :class="{disabled: !canSave}">Gem</p>
+		<p :class="{ disabled: !canSave }">Gem</p>
 		<p>Gem og udgiv</p>
 	</div>
 </template>

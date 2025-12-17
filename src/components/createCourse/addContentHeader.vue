@@ -1,20 +1,26 @@
 <script setup lang="ts">
-import {useRouter} from 'vue-router';
+import { useRouter } from 'vue-router';
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 const router = useRouter();
 const courseStore = useCourseEditorStore();
 
 const handleCreateNewTextPage = () => {
-	courseStore.addNewPageTypeArticle().then(coursePage => {
-		router.push({name: 'courseEditorPage', params: {page_id: coursePage.course_page_id}});
-	}).catch(err => console.log(err));
+	courseStore
+		.addNewPageTypeArticle()
+		.then(coursePage => {
+			router.push({ name: 'courseEditorPage', params: { page_id: coursePage.course_page_id } });
+		})
+		.catch(err => console.log(err));
 };
 
 const handleCreateNewQuizPage = () => {
-	courseStore.addNewPageTypeQuiz().then(coursePage => {
-		router.push({name: 'courseEditorPage', params: {page_id: coursePage.course_page_id}});
-	}).catch(err => console.log(err));
+	courseStore
+		.addNewPageTypeQuiz()
+		.then(coursePage => {
+			router.push({ name: 'courseEditorPage', params: { page_id: coursePage.course_page_id } });
+		})
+		.catch(err => console.log(err));
 };
 </script>
 

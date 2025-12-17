@@ -2,8 +2,8 @@
 import AddContentHeader from '@/components/createCourse/addContentHeader.vue';
 import SidebarContent from '@/components/createCourse/SidebarContent.vue';
 import CourseEditorFooter from '@/components/createCourse/CourseEditorFooter.vue';
-import {onMounted, watch} from 'vue';
-import {useCourseEditorStore} from '@/stores/courseEditorStore.ts';
+import { onMounted, watch } from 'vue';
+import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 interface Props {
 	course_id: string;
@@ -29,13 +29,13 @@ watch(
 <template>
 	<div class="flex">
 		<div v-if="editorStore.courseGlobalLoading">LOADING...</div>
-		<SidebarContent/>
+		<SidebarContent />
 		<div>
-			<AddContentHeader/>
+			<AddContentHeader />
 			<div>
-				<router-view/>
+				<router-view />
 			</div>
-			<CourseEditorFooter/>
+			<CourseEditorFooter />
 		</div>
 	</div>
 </template>

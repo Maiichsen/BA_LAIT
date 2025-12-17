@@ -17,21 +17,18 @@ export const createDefaultQuiz = async (coursePageId: string): Promise<Quiz> => 
 	return quiz;
 };
 
-export const getQuizByPageId = (pageId: string): Promise<Quiz> => new Promise(async (resolve, reject) => {
-	try {
-		const { data, error } = await supabase
-			.from('quizzes')
-			.select()
-			.eq('course_page_id', pageId)
-			.single();
+export const getQuizByPageId = (pageId: string): Promise<Quiz> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const { data, error } = await supabase.from('quizzes').select().eq('course_page_id', pageId).single();
 
-		if (error) return reject(error);
+			if (error) return reject(error);
 
-		resolve(data);
-	} catch (err) {
-		reject(err);
-	}
-});
+			resolve(data);
+		} catch (err) {
+			reject(err);
+		}
+	});
 
 export const createQuiz = async (newQuizParams: newQuizParams): Promise<Quiz> => {
 	try {

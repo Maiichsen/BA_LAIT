@@ -33,7 +33,7 @@ type SupabaseMock = {
 	__chain: SupabaseChainMock;
 };
 
-const sb = (supabase as unknown as SupabaseMock);
+const sb = supabase as unknown as SupabaseMock;
 
 describe('getCourseById', () => {
 	beforeEach(() => {

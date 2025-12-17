@@ -1,20 +1,9 @@
 import { supabase } from '../db/connection.ts';
-import type {
-	NewCourseParams,
-	CourseParams,
-	RichCoursePage,
-	CoursePageContent,
-} from '../types/courseTypes.ts';
+import type { NewCourseParams, CourseParams, RichCoursePage, CoursePageContent } from '../types/courseTypes.ts';
 import type { Course, CoursePage } from '../types/db.ts';
-import {
-	CoursePageType,
-	DefaultCoursePageName,
-	pageOrderIndexDefaultGab,
-} from '../constants/courseConstants.ts';
+import { CoursePageType, DefaultCoursePageName, pageOrderIndexDefaultGab } from '../constants/courseConstants.ts';
 import { downloadImageFromSupabaseBucket } from './imageService.ts';
-import {
-	createDefaultArticle, getArticleByPageId,
-} from '@/services/courseArticleService.ts';
+import { createDefaultArticle, getArticleByPageId } from '@/services/courseArticleService.ts';
 import { createDefaultQuiz, getQuizByPageId } from '@/services/quizService.ts';
 
 export const createTemplateCourse = async (): Promise<Course> => {
@@ -44,7 +33,6 @@ export const createTemplateCourse = async (): Promise<Course> => {
 		})
 		.catch(() => reject('error creating new course'));
 });*/
-
 
 export const createCourse = (newCourseParams: NewCourseParams): Promise<Course> =>
 	new Promise(async (resolve, reject) => {
@@ -98,10 +86,7 @@ export const getCourseById = (courseId: string): Promise<Course> =>
 		if (!courseId) return reject('CourseId is required');
 
 		try {
-			const {
-				data,
-				error,
-			} = await supabase.from('courses').select().eq('course_id', courseId).single();
+			const { data, error } = await supabase.from('courses').select().eq('course_id', courseId).single();
 
 			if (error) return reject(error);
 			resolve(data);
@@ -225,7 +210,11 @@ export const createCoursePage = (pageTitle: string, courseId: string, orderIndex
 		}
 	});
 
-export const createCoursePageWithDefaultContent = async (pageType: CoursePageType, courseId: string, orderIndex: number): Promise<RichCoursePage> => {
+export const createCoursePageWithDefaultContent = async (
+	pageType: CoursePageType,
+	courseId: string,
+	orderIndex: number,
+): Promise<RichCoursePage> => {
 	const page = await createCoursePage(DefaultCoursePageName[pageType], courseId, orderIndex);
 
 	if (pageType === CoursePageType.article) {
@@ -284,9 +273,11 @@ export const getAllCoursePagesByCourseId = (courseId: string): Promise<CoursePag
 		}
 	});
 
-export const getCourseContentByPageId = async (pageId: string): Promise<{
-	content: CoursePageContent,
-	contentType: CoursePageType
+export const getCourseContentByPageId = async (
+	pageId: string,
+): Promise<{
+	content: CoursePageContent;
+	contentType: CoursePageType;
 }> => {
 	try {
 		const article = await getArticleByPageId(pageId);
