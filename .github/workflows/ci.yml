@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main, develop]
+    branches: [ main, develop ]
 
 jobs:
   lint-and-typecheck:
@@ -32,3 +32,6 @@ jobs:
 
       - name: Run TypeScript type check
         run: npm run type-check
+
+      - name: Run unit tests
+        run: npm run test:unit

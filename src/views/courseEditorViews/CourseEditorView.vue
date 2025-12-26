@@ -7,7 +7,7 @@ import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 
 interface Props {
 	course_id: string;
-	page_id: string;
+	page_id?: string;
 }
 
 const props = defineProps<Props>();
@@ -15,13 +15,13 @@ const editorStore = useCourseEditorStore();
 
 onMounted(async () => {
 	editorStore.loadCourse(props.course_id);
+	editorStore.setCurrentEditedCoursePage(props.page_id);
 });
 
 watch(
 	() => props.page_id,
-	newVal => {
-		console.log('ARGH');
-		console.log(newVal);
+	newPageId => {
+		editorStore.setCurrentEditedCoursePage(newPageId);
 	},
 );
 </script>

@@ -63,3 +63,8 @@ body {
 		column-gap: 0.75rem;
 	}
 }
+
+/* Temporary(!) styling. Should be in createCourse/SidebarContent.vue */
+.editor-nav-link.router-link-exact-active {
+	@apply text-purple-600;
+}

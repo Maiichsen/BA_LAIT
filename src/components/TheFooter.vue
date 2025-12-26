@@ -10,7 +10,7 @@ const navigationLinks: FooterLink[] = [
 	{ name: 'Alle kurser', url: '/alle-kurser' },
 	{ name: 'Tilgængelige kurser', url: '/mine-kurser' },
 	{ name: 'Virksomheder', url: '/virksomheder' },
-	{ name: 'Kursister', url: '/kursister' },
+	{ name: 'Kursister', url: '/Kursister' },
 	{ name: 'Kontakt', url: '/kontakt' },
 ];
 
@@ -24,7 +24,7 @@ const contactInfo = {
 </script>
 
 <template>
-	<footer class="bg-tutara-900 text-tutara-50 py-12 lg:py-16">
+	<footer class="bg-tutara-900 text-tutara-50 py-6 lg:py-14">
 		<div class="container">
 			<div class="container-row">
 				<!-- Logo -->
