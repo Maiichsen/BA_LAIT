@@ -5,6 +5,7 @@ import {getAuthUser, getUserRoleById, signInUser} from '@/services/userService.t
 export const useUserStore = defineStore('user', () => {
 	const isUserAdmin = ref(false);
 	const isUserCompany = ref(false);
+	const isInitialized = ref(false);
 	const userId = ref<null | string>(null);
 
 	const verifyUserRole = async () => new Promise<void>(async (resolve, reject) => {
@@ -21,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
 				if (role.is_company_user) {
 					isUserCompany.value = true;
 				}
+				isInitialized.value = true;
 				resolve();
 			}).catch((error) => {
 				reject(error);
@@ -42,6 +44,7 @@ export const useUserStore = defineStore('user', () => {
 	return {
 		isUserAdmin,
 		isUserCompany,
+		isInitialized,
 		userId,
 		verifyUserRole,
 		login,

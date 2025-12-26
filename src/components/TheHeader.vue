@@ -2,9 +2,11 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import LaitLogo from '@/assets/icons/LaitLogo.vue';
+import {useUserStore} from '@/stores/userStore.ts';
 
 const isProfileOpen = ref(false);
 const isMobileMenuOpen = ref(false);
+const userStore = useUserStore();
 
 const handleClickOutside = (event: MouseEvent) => {
 	const target = event.target as HTMLElement;
@@ -39,9 +41,9 @@ onUnmounted(() => {
 				<nav class="hidden lg:block col-span-9">
 					<ul class="flex gap-[100px]">
 						<li><router-link to="/alle-kurser" class="text-nav">Alle kurser</router-link></li>
-						<li><router-link to="/mine-kurser" class="text-nav">Mine kurser</router-link></li>
-						<li><router-link to="/virksomheder" class="text-nav">Virksomheder</router-link></li>
-						<li><router-link to="/Kursister" class="text-nav">Kursister</router-link></li>
+						<li v-if="userStore.isInitialized && !userStore.isUserAdmin"><router-link to="/mine-kurser" class="text-nav">Mine kurser</router-link></li>
+						<li v-if="userStore.isInitialized && userStore.isUserAdmin"><router-link to="/virksomheder" class="text-nav">Virksomheder</router-link></li>
+						<li v-if="userStore.isInitialized && (userStore.isUserCompany || userStore.isUserAdmin)"><router-link to="/Kursister" class="text-nav">Kursister</router-link></li>
 					</ul>
 				</nav>
 
