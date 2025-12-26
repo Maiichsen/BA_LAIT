@@ -1,84 +1,32 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import {onMounted, ref} from 'vue';
-import {
-	createUser,
-	getAuthUser, getInvitedUserByEmail, updateAuthUserPassword,
-	updateFirstnameAndLastName,
-} from '@/services/userService.ts';
+import { onMounted, ref } from 'vue';
+import { createUser, getAuthUser, getInvitedUserByEmail, updateAuthUserPassword } from '@/services/userService.ts';
 
 import BaseButton from '@/components/atoms/BaseButton.vue';
-import type {InvitedUser} from '@/types/db.ts';
-import {useRouter} from 'vue-router';
-/*
-import type {User} from '@supabase/supabase-js';
-*/
+import type { InvitedUser } from '@/types/db.ts';
+import { useRouter } from 'vue-router';
 
-/*interface Props {
-	user: User;
-}
-
-const props = defineProps<Props>();*/
-/*const invitedUser = ref<InvitedUser | null>(null);
-
-watch(() => props.user?.email,
-	async (email) => {
-		if (!email) {
-			invitedUser.value = null;
-			return '';
-		}
-		invitedUser.value = await getInvitedUserByEmail(email);
-	},
-	{ immediate: true }
-);*/
 const router = useRouter();
 const userFirstname = ref('');
 const userLastname = ref('');
 const userPassword = ref('');
 const repeatUserPassword = ref('');
-const companyId = ref('');
 const errorMessage = ref('');
-
-/*admin email, inviting user*/
-/*const handleCreateStudent = async () => {
-	try {
-		const data = await createInvitedStudent(userEmail.value, companyId.value);
-		console.log(data);
-	} catch (e) {
-		console.error(e);
-	}
-};*/
-/*invited user, creates auth account*/
-/*
-const handleSignUp = async () => {
-	try {
-		const data = await createStudent(userEmail.value, userPassword.value);
-		console.log(data);
-	} catch (e) {
-		console.error(e);
-	}
-};
-const handleLogin = async () => {
-	try {
-		const data = await signInUser(userEmail.value, userPassword.value);
-		console.log(data);
-	} catch (e) {
-		console.error(e);
-	}
-};
-*/
 
 const authUserMail = ref('');
 const authUserId = ref('');
 const invitedUser = ref<InvitedUser | null>(null);
 
 const getUserParamsFromAuthUser = async () => {
-	await getAuthUser().then((user) => {
-		authUserMail.value = user.email!;
-		authUserId.value = user.id!;
-	}).catch((err) => {
-		console.log(err);
-	});
+	await getAuthUser()
+		.then(user => {
+			authUserMail.value = user.email!;
+			authUserId.value = user.id!;
+		})
+		.catch(err => {
+			console.log(err);
+		});
 };
 
 const handleCreateNewUser = async () => {
@@ -100,29 +48,33 @@ const handleCreateNewUser = async () => {
 		last_name: userLastname.value,
 		is_company_user: invitedUser.value.is_company_user,
 		user_id: authUserId.value,
-	}).then(() => {
-		router.replace({name: 'login'});
-	}).catch((error) => {
-		console.log(error);
-	});
+	})
+		.then(() => {
+			router.replace({ name: 'login' });
+		})
+		.catch(error => {
+			console.log(error);
+		});
 
 	errorMessage.value = '';
 };
 
 onMounted(async () => {
 	await getUserParamsFromAuthUser();
-	getInvitedUserByEmail(authUserMail.value).then((user) => {
-		if (!user) {
-			/*replace to ensure the user cant go back*/
-			router.replace({name: 'login'});
-			return;
-		}
-		invitedUser.value = user;
-		userFirstname.value = user.first_name ?? '';
-		userLastname.value = user.last_name ?? '';
-	}).catch((error) => {
-		console.log(error);
-	});
+	getInvitedUserByEmail(authUserMail.value)
+		.then(user => {
+			if (!user) {
+				/*replace to ensure the user cant go back*/
+				router.replace({ name: 'login' });
+				return;
+			}
+			invitedUser.value = user;
+			userFirstname.value = user.first_name ?? '';
+			userLastname.value = user.last_name ?? '';
+		})
+		.catch(error => {
+			console.log(error);
+		});
 });
 </script>
 
@@ -136,30 +88,26 @@ onMounted(async () => {
 					input-id="registerfirstname"
 					label-text="Fornavn"
 					layout="stacked"
-					v-model="userFirstname"
-				/>
+					v-model="userFirstname" />
 				<BaseInput
 					v-if="invitedUser && !invitedUser.is_company_user"
 					input-type="text"
 					input-id="registerlastname"
 					label-text="Efternavn"
 					layout="stacked"
-					v-model="userLastname"
-				/>
+					v-model="userLastname" />
 				<BaseInput
 					input-type="text"
 					input-id="registerpassword"
 					label-text="Adgangskode"
 					layout="stacked"
-					v-model="userPassword"
-				/>
+					v-model="userPassword" />
 				<BaseInput
 					input-type="text"
 					input-id="repeatregisterpassword"
 					label-text="Gentag adgangskode"
 					layout="stacked"
-					v-model="repeatUserPassword"
-				/>
+					v-model="repeatUserPassword" />
 				<p v-if="errorMessage" class="text-info-red">{{ errorMessage }}</p>
 			</div>
 			<BaseButton label="register" class="mt-[3rem]" type="submit">Opret bruger</BaseButton>

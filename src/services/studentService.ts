@@ -1,12 +1,5 @@
 import { supabase } from '@/db/connection.ts';
-import {
-	deleteInvitedUser,
-	getAuthUser,
-	getInvitedUserByEmail,
-	sendSignInOtpMail,
-	updateAuthUserPassword,
-	updateFirstnameAndLastName,
-} from '@/services/userService.ts';
+import { deleteInvitedUser, getInvitedUserByEmail, sendSignInOtpMail } from '@/services/userService.ts';
 import type { User } from '@/types/db.ts';
 
 export const createInvitedStudent = async (email: string, companyId: string) => {
@@ -88,19 +81,3 @@ export const createStudent = (userId: string, email: string): Promise<User> =>
 				reject(error);
 			});
 	});
-
-/*export const updateNewStudent = async (password: string, firstname: string, lastname: string) => {
-	try {
-		const authUser = await getAuthUser();
-		if (!authUser) throw new Error('no user data');
-		if (!authUser.user || !authUser.user.email) throw new Error('no user found');
-
-		await createStudent(authUser.user.id, authUser.user.email);
-
-		await Promise.all([updateAuthUserPassword(password), updateFirstnameAndLastName(firstname, lastname)]);
-
-		return true;
-	} catch (err) {
-		console.log(err);
-	}
-};*/

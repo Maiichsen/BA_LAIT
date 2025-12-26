@@ -1,4 +1,4 @@
-import type {User as SignInUser, Session as SignInSession} from '@supabase/supabase-js';
+import type { User as SignInUser, Session as SignInSession } from '@supabase/supabase-js';
 
 export interface newUserParams {
 	company_id: string | null;
@@ -9,7 +9,6 @@ export interface newUserParams {
 	user_id: string;
 }
 
-
 export interface inviteUserParams {
 	company_id: string;
 	email: string;
@@ -17,7 +16,6 @@ export interface inviteUserParams {
 	is_company_user: boolean;
 	last_name?: string;
 }
-
 
 export interface SignInResponse {
 	user: SignInUser;

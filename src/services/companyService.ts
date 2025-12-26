@@ -1,17 +1,17 @@
-import {supabase} from '../db/connection.ts';
+import { supabase } from '../db/connection.ts';
 import {
 	checkIfEmailIsAlreadyInvited,
 	checkIfEmailIsAlreadyVerifiedUser,
 	createInvitedUser,
 } from '@/services/userService.ts';
-import type {Company} from '@/types/db.ts';
+import type { Company } from '@/types/db.ts';
 
 const createCompany = (companyName: string): Promise<Company> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const {data, error} = await supabase
+			const { data, error } = await supabase
 				.from('companies')
-				.insert([{company_name: companyName}])
+				.insert([{ company_name: companyName }])
 				// To get the created company returned, if needed
 				.select();
 
@@ -106,10 +106,7 @@ export const createInvitedCompany = (companyName: string, companyEmail: string):
 export const getCompanyById = (companyId: string): Promise<Company> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const {
-				data,
-				error,
-			} = await supabase.from('companies').select().eq('company_id', companyId).single();
+			const { data, error } = await supabase.from('companies').select().eq('company_id', companyId).single();
 
 			if (error) return reject(error);
 
@@ -122,7 +119,7 @@ export const getCompanyById = (companyId: string): Promise<Company> =>
 export const getAllCompanies = (): Promise<Company[]> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const {data, error} = await supabase.from('companies').select('*');
+			const { data, error } = await supabase.from('companies').select('*');
 
 			if (error) return reject(error);
 
@@ -178,9 +175,9 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 export const updateCompanyNameById = (companyId: string, companyName: string): Promise<void> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const {error} = await supabase
+			const { error } = await supabase
 				.from('companies')
-				.update({company_name: companyName})
+				.update({ company_name: companyName })
 				.eq('company_id', companyId);
 
 			if (error) return reject(error);
@@ -194,7 +191,7 @@ export const updateCompanyNameById = (companyId: string, companyName: string): P
 export const deleteCompanyById = (companyId: string): Promise<void> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const {error} = await supabase.from('companies').delete().eq('company_id', companyId);
+			const { error } = await supabase.from('companies').delete().eq('company_id', companyId);
 
 			if (error) return reject(error);
 

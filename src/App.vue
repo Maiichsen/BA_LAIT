@@ -1,15 +1,15 @@
 <script setup lang="ts">
 /*import { RouterLink, RouterView } from 'vue-router';*/
 
-import {onMounted} from 'vue';
-import {useUserStore} from '@/stores/userStore.ts';
-import {useRouter} from 'vue-router';
+import { onMounted } from 'vue';
+import { useUserStore } from '@/stores/userStore.ts';
+import { useRouter } from 'vue-router';
 const userStore = useUserStore();
 const router = useRouter();
 
 onMounted(() => {
 	userStore.verifyUserRole().catch(() => {
-		router.replace({name: 'login'});
+		router.replace({ name: 'login' });
 	});
 });
 </script>
