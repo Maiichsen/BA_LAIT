@@ -23,6 +23,18 @@ const router = createRouter({
 				breadcrumb: 'Alle Kurser',
 			},
 			component: () => import('../views/AllCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/',
@@ -32,6 +44,18 @@ const router = createRouter({
 				breadcrumb: 'Forside',
 			},
 			component: () => import('../views/AllCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/Kursister',
@@ -41,6 +65,18 @@ const router = createRouter({
 				breadcrumb: 'Kursister',
 			},
 			component: () => import('../views/CourseStudents.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/opret-kursus/:course_id',
@@ -51,6 +87,18 @@ const router = createRouter({
 			},
 			props: true,
 			component: () => import('@/views/courseEditorViews/CourseEditorView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 			children: [
 				{
 					path: '',
@@ -60,6 +108,18 @@ const router = createRouter({
 						breadcrumb: 'Kursus Detaljer',
 					},
 					component: () => import('@/views/courseEditorViews/CourseEditorDetailsView.vue'),
+					beforeEnter: async (_to, _from, next) => {
+						try {
+							const user = await getAuthUser();
+							if (!user) {
+								return next({ name: 'login' });
+							}
+							return next();
+						} catch (err) {
+							console.error('route guard getAuthUser error:', err);
+							return next({ name: 'login' });
+						}
+					},
 				},
 				{
 					path: ':page_id',
@@ -69,6 +129,18 @@ const router = createRouter({
 						breadcrumb: 'Kursus Side',
 					},
 					component: () => import('@/views/courseEditorViews/CourseEditorPageView.vue'),
+					beforeEnter: async (_to, _from, next) => {
+						try {
+							const user = await getAuthUser();
+							if (!user) {
+								return next({ name: 'login' });
+							}
+							return next();
+						} catch (err) {
+							console.error('route guard getAuthUser error:', err);
+							return next({ name: 'login' });
+						}
+					},
 				},
 			],
 		},
@@ -80,6 +152,18 @@ const router = createRouter({
 				breadcrumb: 'Mine Kurser',
 			},
 			component: () => import('../views/MyCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/virksomheder',
@@ -89,6 +173,18 @@ const router = createRouter({
 				breadcrumb: 'Virksomheder',
 			},
 			component: () => import('../views/CompaniesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/kontakt',
@@ -98,21 +194,46 @@ const router = createRouter({
 				breadcrumb: 'Kontakt',
 			},
 			component: () => import('../views/ContactView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
+		},
+		{
+			path: '/tester',
+			name: 'tester',
+			meta: {
+				layout: DefaultLayout,
+			},
+			component: () => import('../views/UpdateUserView.vue'),
 		},
 		{
 			path: '/opret',
 			name: 'updateUser',
 			meta: {
-				layout: DefaultLayout,
+				layout: LoginLayout,
 				breadcrumb: 'Opret Bruger',
 			},
-			component: () => import('../views/UpdateUserView.vue'),
+			component: () => import('../views/SignupView.vue'),
 			beforeEnter: async (_to, _from, next) => {
-				const user = await getAuthUser();
-				if (!user) {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
 					return next({ name: 'login' });
 				}
-				return next();
 			},
 		},
 	],

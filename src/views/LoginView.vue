@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import RegisterForm from '@/components/login/RegisterForm.vue';
+import LoginForm from '@/components/login/LoginForm.vue';
 </script>
 
 <template>
 	<!--	TODO: styling til små skærme..-->
-	<div class="container bg-blue-100">
+	<div class="container">
 		<div class="container-row">
 			<div class="col-start-2 col-span-6">
-				<img src="/images/loginBanner.png" alt="LAIT" />
+				<img src="/images/loginBanner.png" alt="LAIT" class="w-full h-full object-cover" />
 			</div>
-			<div class="bg-amber-400 col-start-9 col-span-7">
-				<RegisterForm />
+			<div class="col-start-9 col-span-7 flex flex-col justify-center">
+				<h1 class="text-h1 text-tutara-900">Velkommen</h1>
+				<h2 class="text-t1 text-tutara-900">Log ind</h2>
+				<LoginForm />
 			</div>
 		</div>
 	</div>

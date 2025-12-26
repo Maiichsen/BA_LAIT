@@ -1,4 +1,4 @@
-create table if not exists company
+create table if not exists "company"
 (
     company_id   uuid primary key     default gen_random_uuid(),
     company_name text        not null unique,

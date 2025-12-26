@@ -43,7 +43,11 @@ export const createInvitedCompany = (companyName: string, companyEmail: string):
 
 		createCompany(companyName)
 			.then(company => {
-				createInvitedUser(companyEmail, company.company_id, true)
+				createInvitedUser({
+					email: companyEmail,
+					company_id: company.company_id,
+					is_company_user: true,
+				})
 					.then(() => {
 						resolve(company);
 					})
