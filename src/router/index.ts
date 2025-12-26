@@ -21,6 +21,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/AllCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/',
@@ -29,6 +41,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/AllCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/Kursister',
@@ -37,6 +61,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/CourseParticipants.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/opret-kursus/:course_id',
@@ -46,18 +82,54 @@ const router = createRouter({
 			},
 			props: true,
 			component: () => import('@/views/courseEditorViews/CourseEditorView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 			children: [
 				{
 					path: '',
 					name: 'courseEditorFrontpage',
 					props: true,
 					component: () => import('@/views/courseEditorViews/CourseEditorDetailsView.vue'),
+					beforeEnter: async (_to, _from, next) => {
+						try {
+							const user = await getAuthUser();
+							if (!user) {
+								return next({ name: 'login' });
+							}
+							return next();
+						} catch (err) {
+							console.error('route guard getAuthUser error:', err);
+							return next({ name: 'login' });
+						}
+					},
 				},
 				{
 					path: ':page_id',
 					name: 'courseEditorPage',
 					props: true,
 					component: () => import('@/views/courseEditorViews/CourseEditorPageView.vue'),
+					beforeEnter: async (_to, _from, next) => {
+						try {
+							const user = await getAuthUser();
+							if (!user) {
+								return next({ name: 'login' });
+							}
+							return next();
+						} catch (err) {
+							console.error('route guard getAuthUser error:', err);
+							return next({ name: 'login' });
+						}
+					},
 				},
 			],
 		},
@@ -68,6 +140,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/MyCoursesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/virksomheder',
@@ -76,6 +160,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/CompaniesView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/kontakt',
@@ -84,6 +180,18 @@ const router = createRouter({
 				layout: DefaultLayout,
 			},
 			component: () => import('../views/ContactView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/tester',
