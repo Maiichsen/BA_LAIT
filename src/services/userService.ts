@@ -125,7 +125,7 @@ export const getAuthUser = (): Promise<AuthUser> =>
 		try {
 			const { data, error } = await supabase.auth.getUser();
 			if (error) return reject(error);
-			if (!data || !data.user) return reject('User doesn\'t exist');
+			if (!data || !data.user) return reject('User no exist');
 			resolve(data.user);
 		} catch (error) {
 			reject(error);
@@ -142,7 +142,7 @@ export const getUserRoleById = (userId: string): Promise<{ is_admin: boolean; is
 				.single();
 
 			if (error) return reject(error);
-			if (!data) return reject('User doesn\'t exist');
+			if (!data) return reject('User no exist');
 			resolve(data);
 		} catch (error) {
 			reject(error);
