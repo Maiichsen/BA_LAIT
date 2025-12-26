@@ -1,16 +1,11 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import {onMounted, ref} from 'vue';
-import {
-	createUser,
-	getAuthUser,
-	getInvitedUserByEmail,
-	updateAuthUserPassword,
-} from '@/services/userService.ts';
+import { onMounted, ref } from 'vue';
+import { createUser, getAuthUser, getInvitedUserByEmail, updateAuthUserPassword } from '@/services/userService.ts';
 
 import BaseButton from '@/components/atoms/BaseButton.vue';
-import type {InvitedUser} from '@/types/db.ts';
-import {useRouter} from 'vue-router';
+import type { InvitedUser } from '@/types/db.ts';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const userFirstname = ref('');
@@ -36,7 +31,6 @@ const getUserParamsFromAuthUser = async () => {
 
 const handleCreateNewUser = async () => {
 	if (!invitedUser.value) return;
-
 	if (userPassword.value.trim() !== repeatUserPassword.value.trim()) {
 		errorMessage.value = 'Adgangskode matcher ikke';
 		return;
@@ -56,7 +50,7 @@ const handleCreateNewUser = async () => {
 		user_id: authUserId.value,
 	})
 		.then(() => {
-			router.replace({name: 'login'});
+			router.replace({ name: 'login' });
 		})
 		.catch(error => {
 			console.log(error);
@@ -71,7 +65,7 @@ onMounted(async () => {
 		.then(user => {
 			if (!user) {
 				/*replace to ensure the user cant go back*/
-				router.replace({name: 'login'});
+				router.replace({ name: 'login' });
 				return;
 			}
 			invitedUser.value = user;
@@ -94,26 +88,26 @@ onMounted(async () => {
 					input-id="registerfirstname"
 					label-text="Fornavn"
 					layout="stacked"
-					v-model="userFirstname"/>
+					v-model="userFirstname" />
 				<BaseInput
 					v-if="invitedUser && !invitedUser.is_company_user"
 					input-type="text"
 					input-id="registerlastname"
 					label-text="Efternavn"
 					layout="stacked"
-					v-model="userLastname"/>
+					v-model="userLastname" />
 				<BaseInput
 					input-type="text"
 					input-id="registerpassword"
 					label-text="Adgangskode"
 					layout="stacked"
-					v-model="userPassword"/>
+					v-model="userPassword" />
 				<BaseInput
 					input-type="text"
 					input-id="repeatregisterpassword"
 					label-text="Gentag adgangskode"
 					layout="stacked"
-					v-model="repeatUserPassword"/>
+					v-model="repeatUserPassword" />
 				<p v-if="errorMessage" class="text-info-red">{{ errorMessage }}</p>
 			</div>
 			<BaseButton label="register" class="mt-[3rem]" type="submit">Opret bruger</BaseButton>
