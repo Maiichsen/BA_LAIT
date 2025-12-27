@@ -4,6 +4,7 @@ import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseModal from '@/components/BaseModal.vue';
+import CompanyCourseInformationModal from '@/components/company/CompanyCourseInformationModal.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
 import { EditIcon, PencilIcon, TrashIcon } from '@/assets/icons';
 
@@ -151,15 +152,7 @@ function handleAddCompanyConfirm() {
 		</BaseModal>
 
 		<!-- Se tildelte kurser modal -->
-		<BaseModal
-			v-model="showViewCoursesModal"
-			title="Tildelte kurser"
-			:show-footer="false">
-			<div class="space-y-4">
-				<p>Her vises de kurser virksomheden har tildelt.</p>
-				<!-- Tilføj kursus liste her -->
-			</div>
-		</BaseModal>
+		<CompanyCourseInformationModal v-model="showViewCoursesModal" :company-id="selectedCompanyId" />
 
 		<!-- Administrer kurser modal -->
 		<BaseModal

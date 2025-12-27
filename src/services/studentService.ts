@@ -122,8 +122,6 @@ export const getAllStudentsWithStats = async (): Promise<StudentWithStats[]> => 
 		const studentSeats = seats?.filter(seat => seat.user_id === student.user_id) || [];
 		const uniqueCourses = new Set(studentSeats.map(seat => seat.course_id)).size;
 
-
-
 		return {
 			user_id: student.user_id,
 			email: student.email,

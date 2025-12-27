@@ -200,3 +200,55 @@ export const deleteCompanyById = (companyId: string): Promise<void> =>
 			reject(err);
 		}
 	});
+
+export interface CompanyCourseWithStats {
+	course_id: string;
+	title: string;
+	short_course_description: string | null;
+	totalSeats: number;
+	usedSeats: number;
+	availableSeats: number;
+}
+
+export const getCoursesByCompanyId = async (companyId: string): Promise<CompanyCourseWithStats[]> => {
+	// Get all course_seats for this company with course details
+	const { data: seats, error: seatsError } = await supabase
+		.from('course_seats')
+		.select('course_id, user_id, courses(course_id, title, short_course_description)')
+		.eq('company_id', companyId);
+
+	if (seatsError) throw seatsError;
+
+	// Group by course and calculate stats
+	const courseMap = new Map<string, CompanyCourseWithStats>();
+
+	seats?.forEach(seat => {
+		const course = seat.courses;
+		if (!course || typeof course !== 'object' || !('course_id' in course)) return;
+
+		if (!courseMap.has(course.course_id)) {
+			courseMap.set(course.course_id, {
+				course_id: course.course_id,
+				title: course.title,
+				short_course_description: course.short_course_description,
+				totalSeats: 0,
+				usedSeats: 0,
+				availableSeats: 0,
+			});
+		}
+
+		const courseStats = courseMap.get(course.course_id)!;
+		courseStats.totalSeats++;
+		if (seat.user_id) {
+			courseStats.usedSeats++;
+		}
+	});
+
+	// Calculate available seats
+	const coursesWithStats = Array.from(courseMap.values()).map(course => ({
+		...course,
+		availableSeats: course.totalSeats - course.usedSeats,
+	}));
+
+	return coursesWithStats;
+};
