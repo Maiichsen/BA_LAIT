@@ -4,9 +4,11 @@ import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseModal from '@/components/BaseModal.vue';
+import BaseInput from '@/components/atoms/BaseInput.vue';
 import CompanyCourseInformationModal from '@/components/company/CompanyCourseInformationModal.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
 import { EditIcon, PencilIcon, TrashIcon } from '@/assets/icons';
+import CheckCircleIcon from '@/assets/icons/CheckCircleIcon.vue';
 
 
 const companiesStore = useCompaniesStore();
@@ -18,6 +20,10 @@ const showDeleteModal = ref(false);
 const selectedCompanyId = ref<string | null>(null);
 const selectedCompanyName = ref<string>('');
 const openCoursesInEditMode = ref(false);
+
+// Add company form
+const newCompanyName = ref('');
+const showSuccessMessage = ref(false);
 
 onMounted(() => {
 	companiesStore.loadCompanies();
@@ -81,12 +87,29 @@ function handleDeleteConfirm() {
 }
 
 function addCompany() {
+	showSuccessMessage.value = false;
 	showAddCompanyModal.value = true;
 }
 
 function handleAddCompanyConfirm() {
-	// Handle add company logic
-	console.log('Add company confirmed');
+	if (!newCompanyName.value.trim()) {
+		return;
+	}
+
+	companiesStore
+		.addCompany(newCompanyName.value.trim())
+		.then(() => {
+			showSuccessMessage.value = true;
+			newCompanyName.value = '';
+			companiesStore.loadCompanies();
+		})
+		.catch(err => {
+			console.error('Fejl ved oprettelse af virksomhed:', err);
+		});
+}
+
+function closeSuccessModal() {
+	showSuccessMessage.value = false;
 	showAddCompanyModal.value = false;
 }
 </script>
@@ -153,11 +176,27 @@ function handleAddCompanyConfirm() {
 		<!-- Tilføj virksomhed modal -->
 		<BaseModal
 			v-model="showAddCompanyModal"
-			title="Opret ny virksomhed"
+			:title="showSuccessMessage ? 'Fuldført!' : 'Opret ny virksomhed'"
+			:show-footer="!showSuccessMessage"
 			@confirm="handleAddCompanyConfirm">
-			<div class="space-y-4">
-				<p>Her kan du tilføje indhold for at oprette en ny virksomhed.</p>
-				<!-- Tilføj din form her -->
+			<!-- Success state -->
+			<div v-if="showSuccessMessage" class="flex flex-col items-center justify-center py-8 space-y-6">
+				<CheckCircleIcon :width="152" :height="152" fill-class="fill-purple-500" />
+				<p class="text-p1 text-tutara-900">Virksomheden blev oprettet.</p>
+				<BaseButton variant="primary" @click="closeSuccessModal">
+					Luk
+				</BaseButton>
+			</div>
+
+			<!-- Form -->
+			<div v-else class="space-y-4">
+				<BaseInput
+					v-model="newCompanyName"
+					input-type="text"
+					input-id="company-name"
+					label-text="Virksomhedsnavn"
+					placeholder="Indtast virksomhedsnavn"
+					layout="stacked" />
 			</div>
 		</BaseModal>
 

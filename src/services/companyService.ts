@@ -6,7 +6,7 @@ import {
 } from '@/services/userService.ts';
 import type { Company } from '@/types/db.ts';
 
-const createCompany = (companyName: string): Promise<Company> =>
+export const createCompany = (companyName: string): Promise<Company> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase

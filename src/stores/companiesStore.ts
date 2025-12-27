@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import {
+	createCompany,
 	createInvitedCompany,
 	deleteCompanyById,
 	getAllCompaniesWithStats,
@@ -33,6 +34,18 @@ export const useCompaniesStore = defineStore('companies', () => {
 			.finally(() => (isLoading.value = false));
 	};
 
+	const addCompany = async (companyName: string) => {
+		const company = await createCompany(companyName);
+		// Add stats to the new company (starts with 0 courses and students)
+		const companyWithStats: CompanyWithStats = {
+			...company,
+			courseCount: 0,
+			studentCount: 0,
+		};
+		listOfCompanies.value.push(companyWithStats);
+		return company;
+	};
+
 	const inviteNewCompany = (companyName: string, companyEmail: string) =>
 		new Promise(async (resolve, reject) => {
 			createInvitedCompany(companyName, companyEmail)
@@ -54,6 +67,7 @@ export const useCompaniesStore = defineStore('companies', () => {
 		listOfCompanies,
 		loadCompanies,
 		deleteCompany,
+		addCompany,
 		inviteNewCompany,
 	};
 });
