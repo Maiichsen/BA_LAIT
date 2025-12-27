@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, computed, ref, watch } from 'vue';
 import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseTable from '@/components/BaseTable.vue';
@@ -21,6 +21,13 @@ const selectedCompanyName = ref<string>('');
 
 onMounted(() => {
 	companiesStore.loadCompanies();
+});
+
+// Refetch companies data when course information modal closes
+watch(showViewCoursesModal, (isOpen, wasOpen) => {
+	if (wasOpen && !isOpen) {
+		companiesStore.loadCompanies();
+	}
 });
 
 // Define table columns

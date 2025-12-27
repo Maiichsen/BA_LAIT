@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useStudentsStore } from '@/stores/studentsStore.ts';
 import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseTable from '@/components/BaseTable.vue';
@@ -7,6 +7,8 @@ import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import BaseSelect from '@/components/atoms/BaseSelect.vue';
+import UserCourseInformationModal from '@/components/user/UserCourseInformationModal.vue';
+import AssignUserCourseModal from '@/components/user/AssignUserCourseModal.vue';
 import { PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
@@ -22,6 +24,7 @@ const showDeleteModal = ref(false);
 const selectedStudentId = ref<string | null>(null);
 const selectedStudentName = ref<string>('');
 const selectedStudentCompany = ref<string>('');
+const selectedStudentCompanyId = ref<string | null>(null);
 
 // Add student form
 const newStudentEmail = ref('');
@@ -33,6 +36,19 @@ const formError = ref('');
 onMounted(() => {
 	studentsStore.loadStudents();
 	companiesStore.loadCompanies();
+});
+
+// Refetch students data when modals close
+watch(showViewCoursesModal, (isOpen, wasOpen) => {
+	if (wasOpen && !isOpen) {
+		studentsStore.loadStudents();
+	}
+});
+
+watch(showAssignCourseModal, (isOpen, wasOpen) => {
+	if (wasOpen && !isOpen) {
+		studentsStore.loadStudents();
+	}
 });
 
 const tableData = computed(() => {
@@ -67,7 +83,11 @@ function viewStudentCourses(id: string) {
 
 function assignCourse(id: string) {
 	selectedStudentId.value = id;
-	showAssignCourseModal.value = true;
+	const student = studentsStore.listOfStudents.find(s => s.user_id === id);
+	if (student) {
+		selectedStudentCompanyId.value = student.company_id;
+		showAssignCourseModal.value = true;
+	}
 }
 
 function editStudent(id: string) {
@@ -268,31 +288,20 @@ console.log('HUh', tableData);
 		</BaseModal>
 
 		<!-- Se tildelte kurser modal -->
-		<BaseModal
-			v-model="showViewCoursesModal"
-			:title="`Tildelte kurser`"
-			:show-footer="false">
-			<div class="space-y-4">
-				<div class="mb-4">
-					<p class="text-c2 text-tutara-600">KURSIST:</p>
-					<h3 class="text-h5">{{ selectedStudentName }}</h3>
-					<h4 class="text-t2">{{ selectedStudentCompany }}</h4>
-				</div>
-				<p>Her vises de kurser kursisten har tildelt.</p>
-				<!-- Tilføj kursus liste her -->
-			</div>
-		</BaseModal>
+		<UserCourseInformationModal
+			:is-open="showViewCoursesModal"
+			:user-id="selectedStudentId"
+			@update:is-open="showViewCoursesModal = $event"
+		/>
 
 		<!-- Tildel kursus modal -->
-		<BaseModal
-			v-model="showAssignCourseModal"
-			title="Administrer kurser"
-			confirm-text="Gem ændringer">
-			<div class="space-y-4">
-				<p class="font-semibold">Vælg kurser og antal pladser (3 valgt)</p>
-				<!-- Tilføj form til at vælge kurser og antal pladser -->
-			</div>
-		</BaseModal>
+		<AssignUserCourseModal
+			:is-open="showAssignCourseModal"
+			:user-id="selectedStudentId"
+			:company-id="selectedStudentCompanyId"
+			@update:is-open="showAssignCourseModal = $event"
+			@course-assigned="studentsStore.loadStudents()"
+		/>
 
 		<!-- Slet kursist modal -->
 		<BaseModal
