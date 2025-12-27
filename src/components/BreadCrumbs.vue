@@ -54,7 +54,7 @@ const showBreadcrumbs = computed(
 								{{ item.name }}
 							</router-link>
 						</li>
-						<li v-else class="text-c2 text-tutara-900 relative top-0.5 font-medium" aria-current="page">
+						<li v-else class="text-c2 text-tutara-900 relative top-0.5" aria-current="page">
 							{{ item.name }}
 						</li>
 

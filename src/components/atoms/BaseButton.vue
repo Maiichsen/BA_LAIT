@@ -3,17 +3,19 @@ import { computed } from 'vue';
 import * as Icons from '@/assets/icons';
 
 const variantClasses = {
-	primary: 'py-4 px-6 text-tutara-50 bg-tutara-900 hover:bg-tutara-700 focus:outline-purple-100',
-	'primary-small': 'py-3 px-6 text-tutara-50 bg-tutara-900 hover:bg-tutara-700',
+	primary:
+		'py-4 px-6 text-tutara-50 bg-tutara-900 hover:bg-tutara-700 focus:outline-purple-100 [&_span]:relative [&_span]:top-[1px]',
+	'primary-small': 'py-3 px-6 text-tutara-50 bg-tutara-900 hover:bg-tutara-700 [&_span]:relative [&_span]:top-[1px]',
 	'primary-tiny': 'py-3 px-4 text-tutara-50 bg-tutara-900 hover:bg-tutara-700',
-	danger: 'py-4 px-6 text-tutara-50 bg-info-red hover:bg-info-red-hover focus:outline-purple-100',
-	'danger-small': 'py-2 px-3 text-tutara-50 bg-info-red hover:bg-info-red-hover',
-	'cta-white': 'py-4 px-6 bg-tutara-50 text-tutara-900 hover:bg-tutara-200 focus:outline-purple-100',
+	cta: 'text-p1-button py-4 px-6 text-tutara-50 bg-tutara-900 max-lg:mt-3 hover:bg-tutara-700 transition-colors duration-300 ease-in-out focus:outline-purple-100 [&_span]:relative [&_span]:top-[1.5px] h-fit',
+	'cta-white':
+		'text-p1-button py-4 px-6 bg-tutara-50 max-lg:mt-3 hover:bg-tutara-200 transition-colors duration-300 ease-in-out focus:outline-purple-100 [&_span]:relative [&_span]:top-[1.5px]',
 	'light-small': 'py-2 px-3 bg-tutara-50 hover:bg-tutara-200 [&_*]:fill-tutara-900',
 	'dark-small': 'py-2 px-3 bg-tutara-900 hover:bg-tutara-700 [&_*]:fill-tutara-50',
-	stroke: 'py-4 px-6 border border-tutara-900 hover:outline-1',
+	stroke: 'py-4 px-6 border hover:outline-1',
 	'stroke-small': 'py-2 px-3 border border-tutara-900 hover:outline-1',
-	'badge-hover': 'px-4 py-1 text-p2 border-2 bg-tutara-100 border-tutara-200 text-tutara-900 hover:bg-purple-100 hover:border-purple-100',
+	'stroke-dark':
+		'py-3 px-4 border border-tutara-900 hover:border-2 group hover:lg:bg-tutara-900 hover:text-tutara-50 hover:[&_svg]:text-white focus:lg:bg-tutara-900',
 } as const;
 
 interface Props {
@@ -42,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const baseClasses =
-	'rounded-full leading-none transition-colors ease-lait duration-100 relative inline-flex items-center justify-center w-fit cursor-pointer';
+	'rounded-full leading-none transition-colors ease-lait duration-100 relative inline-flex items-center justify-center cursor-pointer';
 
 const buttonClasses = computed(() => `${baseClasses} ${variantClasses[props.variant]}`);
 

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
+import BaseButton from './atoms/BaseButton.vue';
 
 type CellValue = string | number | boolean | null | undefined;
 type Row = CellValue[];
@@ -204,19 +205,21 @@ function previousPage() {
 
 		<!-- Pagination -->
 		<div v-if="totalPages > 1 && !isLoading" class="flex items-center justify-center gap-4">
-			<button
+			<BaseButton
 				@click="previousPage"
 				:disabled="currentPage === 1"
-				class="py-2 px-4 border border-tutara-200 rounded-lg bg-tutara-50 text-tutara-900 text-p1font-medium cursor-pointer transition-all hover:bg-tutara-100 hover:border-tutara-300 disabled:opacity-50 disabled:cursor-not-allowed">
+				variant="stroke-dark"
+				class="disabled:opacity-50 disabled:cursor-not-allowed">
 				Forrige
-			</button>
-			<span class="text-p1text-tutara-600"> Side {{ currentPage }} af {{ totalPages }} </span>
-			<button
+			</BaseButton>
+			<span class="text-p1 text-tutara-600"> Side {{ currentPage }} af {{ totalPages }} </span>
+			<BaseButton
 				@click="nextPage"
 				:disabled="currentPage === totalPages"
-				class="py-2 px-4 border border-tutara-200 rounded-lg bg-tutara-50 text-tutara-900 text-p1font-medium cursor-pointer transition-all hover:bg-tutara-100 hover:border-tutara-300 disabled:opacity-50 disabled:cursor-not-allowed">
+				variant="stroke-dark"
+				class="disabled:opacity-50 disabled:cursor-not-allowed">
 				Næste
-			</button>
+			</BaseButton>
 		</div>
 	</div>
 </template>
