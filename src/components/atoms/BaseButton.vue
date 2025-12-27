@@ -16,6 +16,8 @@ const variantClasses = {
 	'stroke-small': 'py-2 px-3 border border-tutara-900 hover:outline-1',
 	'stroke-dark':
 		'py-3 px-4 border border-tutara-900 hover:border-2 group hover:lg:bg-tutara-900 hover:text-tutara-50 hover:[&_svg]:text-white focus:lg:bg-tutara-900',
+	warning: 'py-4 px-6 text-tutara-50 bg-info-red hover:bg-info-red-hover focus:outline-purple-100 [&_span]:relative [&_span]:top-[1px]',
+	'badge-hover': 'px-4 py-1 text-p2 border-2 bg-tutara-100 border-tutara-200 text-tutara-900 hover:bg-purple-100 hover:border-purple-100',
 } as const;
 
 interface Props {

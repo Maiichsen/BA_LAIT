@@ -183,7 +183,7 @@ function handleAddCompanyConfirm() {
 					<BaseButton variant="primary" @click="showDeleteModal = false">
 						Annuller
 					</BaseButton>
-					<BaseButton variant="danger" @click="handleDeleteConfirm">
+					<BaseButton variant="warning" @click="handleDeleteConfirm">
 						Slet adgang
 					</BaseButton>
 				</div>
