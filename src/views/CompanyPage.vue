@@ -14,10 +14,10 @@ const companiesStore = useCompaniesStore();
 // Modal states
 const showAddCompanyModal = ref(false);
 const showViewCoursesModal = ref(false);
-const showManageCoursesModal = ref(false);
 const showDeleteModal = ref(false);
 const selectedCompanyId = ref<string | null>(null);
 const selectedCompanyName = ref<string>('');
+const openCoursesInEditMode = ref(false);
 
 onMounted(() => {
 	companiesStore.loadCompanies();
@@ -27,6 +27,7 @@ onMounted(() => {
 watch(showViewCoursesModal, (isOpen, wasOpen) => {
 	if (wasOpen && !isOpen) {
 		companiesStore.loadCompanies();
+		openCoursesInEditMode.value = false;
 	}
 });
 
@@ -46,12 +47,14 @@ const tableRows = computed(() => {
 
 function viewCompany(id: string) {
 	selectedCompanyId.value = id;
+	openCoursesInEditMode.value = false;
 	showViewCoursesModal.value = true;
 }
 
 function manageCompanyCourses(id: string) {
 	selectedCompanyId.value = id;
-	showManageCoursesModal.value = true;
+	openCoursesInEditMode.value = true;
+	showViewCoursesModal.value = true;
 }
 
 function editCompany(id: string) {
@@ -159,18 +162,10 @@ function handleAddCompanyConfirm() {
 		</BaseModal>
 
 		<!-- Se tildelte kurser modal -->
-		<CompanyCourseInformationModal v-model:is-open="showViewCoursesModal" :company-id="selectedCompanyId" />
-
-		<!-- Administrer kurser modal -->
-		<BaseModal
-			v-model="showManageCoursesModal"
-			title="Administrer kurser"
-			confirm-text="Gem ændringer">
-			<div class="space-y-4">
-				<p>Her kan du administrere kurser for virksomheden.</p>
-				<!-- Tilføj form til at vælge kurser og antal pladser -->
-			</div>
-		</BaseModal>
+		<CompanyCourseInformationModal
+			v-model:is-open="showViewCoursesModal"
+			:company-id="selectedCompanyId"
+			:start-in-edit-mode="openCoursesInEditMode" />
 
 		<!-- Slet virksomhed modal -->
 		<BaseModal

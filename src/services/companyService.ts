@@ -149,6 +149,13 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 
 			if (seatsError) return reject(seatsError);
 
+			// Get all users
+			const { data: users, error: usersError } = await supabase
+				.from('users')
+				.select('company_id');
+
+			if (usersError) return reject(usersError);
+
 			// Aggregate stats for each company
 			const companiesWithStats: CompanyWithStats[] = companies.map(company => {
 				const companySeats = seats?.filter(seat => seat.company_id === company.company_id) || [];
@@ -156,13 +163,13 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 				// Count unique courses
 				const uniqueCourses = new Set(companySeats.map(seat => seat.course_id)).size;
 
-				// Count unique users (students) - only count non-null user_ids
-				const uniqueUsers = new Set(companySeats.filter(seat => seat.user_id).map(seat => seat.user_id)).size;
+				// Count users from the users table
+				const studentCount = users?.filter(user => user.company_id === company.company_id).length || 0;
 
 				return {
 					...company,
 					courseCount: uniqueCourses,
-					studentCount: uniqueUsers,
+					studentCount,
 				};
 			});
 

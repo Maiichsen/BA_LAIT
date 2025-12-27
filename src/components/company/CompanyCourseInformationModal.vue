@@ -6,10 +6,13 @@ import { createCourseSeat, deleteCourseSeat } from '@/services/seatService.ts';
 import type { Course } from '@/types/db.ts';
 import BaseModal from '@/components/BaseModal.vue';
 import BaseTable from '@/components/BaseTable.vue';
+import BaseButton from '@/components/atoms/BaseButton.vue';
+import CheckCircleIcon from '@/assets/icons/CheckCircleIcon.vue';
 
 interface Props {
 	isOpen: boolean;
 	companyId: string | null;
+	startInEditMode?: boolean;
 }
 
 const props = defineProps<Props>();
@@ -21,6 +24,7 @@ const emit = defineEmits<{
 // Edit mode state
 const isEditMode = ref(false);
 const isSaving = ref(false);
+const showSuccessState = ref(false);
 
 // Courses data for the selected company
 const companyCourses = ref<CompanyCourseWithStats[]>([]);
@@ -52,14 +56,31 @@ const courseTableRows = computed(() => {
 
 // Load courses when modal opens or company changes
 watch(
-	() => [props.isOpen, props.companyId] as const,
-	async ([isOpen, companyId]) => {
+	() => [props.isOpen, props.companyId, props.startInEditMode] as const,
+	async ([isOpen, companyId, startInEditMode]) => {
 		if (isOpen && companyId) {
+			// Reset success state when opening modal
+			showSuccessState.value = false;
 			isLoadingCourses.value = true;
 			try {
 				companyCourses.value = await getCoursesByCompanyId(companyId);
-				// Reset edit mode when reopening
-				isEditMode.value = false;
+				// Set edit mode based on prop or reset to false
+				if (startInEditMode) {
+					isEditMode.value = true;
+					// Initialize editable data
+					editableCoursesData.value = companyCourses.value.map(course => ({
+						...course,
+						newTotalSeats: course.totalSeats,
+					}));
+					// Load all courses for the dropdown
+					try {
+						allCourses.value = await getAllCourses();
+					} catch (error) {
+						console.error('Error loading all courses:', error);
+					}
+				} else {
+					isEditMode.value = false;
+				}
 			} catch (error) {
 				console.error('Error loading courses:', error);
 				companyCourses.value = [];
@@ -181,8 +202,9 @@ const saveChanges = async () => {
 		// Reload courses
 		companyCourses.value = await getCoursesByCompanyId(props.companyId);
 
-		// Exit edit mode
+		// Show success state
 		isEditMode.value = false;
+		showSuccessState.value = true;
 		editableCoursesData.value = [];
 		selectedNewCourseId.value = '';
 		newCourseSeats.value = 1;
@@ -199,21 +221,36 @@ const availableCoursesForAssignment = computed(() => {
 	const assignedCourseIds = new Set(companyCourses.value.map(c => c.course_id));
 	return allCourses.value.filter(c => !assignedCourseIds.has(c.course_id));
 });
+
+// Close modal from success state
+const closeFromSuccess = () => {
+	showSuccessState.value = false;
+	emit('update:isOpen', false);
+};
 </script>
 
 <template>
 	<BaseModal
 		:model-value="isOpen"
 		@update:model-value="emit('update:isOpen', $event)"
-		title="Tildelte kurser"
-		:show-footer="true"
+		:title="showSuccessState ? 'Fuldført!' : 'Tildelte kurser'"
+		:show-footer="!showSuccessState"
 		:confirm-text="isEditMode ? 'Gem ændringer' : 'Administrer'"
 		:cancel-text="isEditMode ? 'Annuller' : 'Luk'"
 		@confirm="handleConfirm"
 		@cancel="handleCancel">
 		<div class="space-y-4">
+			<!-- Success state: Show success message -->
+			<div v-if="showSuccessState" class="flex flex-col items-center justify-center py-8 space-y-6">
+				<CheckCircleIcon :width="152" :height="152" fill-class="fill-purple-500" />
+				<p class="text-p1 text-tutara-900">Handlingen blev gennemført.</p>
+				<BaseButton variant="primary" @click="closeFromSuccess">
+					Luk
+				</BaseButton>
+			</div>
+
 			<!-- View mode: Show table -->
-			<div v-if="!isEditMode">
+			<div v-else-if="!isEditMode">
 				<BaseTable
 					:cols="courseTableColumns"
 					:rows="courseTableRows"
