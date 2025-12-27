@@ -252,3 +252,17 @@ export const getCoursesByCompanyId = async (companyId: string): Promise<CompanyC
 
 	return coursesWithStats;
 };
+
+export const getUnusedSeatIds = async (companyId: string, courseId: string, limit: number): Promise<string[]> => {
+	const { data, error } = await supabase
+		.from('course_seats')
+		.select('course_seat_id')
+		.eq('company_id', companyId)
+		.eq('course_id', courseId)
+		.is('user_id', null)
+		.limit(limit);
+
+	if (error) throw error;
+
+	return data?.map(seat => seat.course_seat_id) || [];
+};

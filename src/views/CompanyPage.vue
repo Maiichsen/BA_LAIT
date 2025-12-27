@@ -152,7 +152,7 @@ function handleAddCompanyConfirm() {
 		</BaseModal>
 
 		<!-- Se tildelte kurser modal -->
-		<CompanyCourseInformationModal v-model="showViewCoursesModal" :company-id="selectedCompanyId" />
+		<CompanyCourseInformationModal v-model:is-open="showViewCoursesModal" :company-id="selectedCompanyId" />
 
 		<!-- Administrer kurser modal -->
 		<BaseModal
