@@ -110,6 +110,10 @@
 	--color-info-red: #be1010;
 	--color-info-green: #aff8c8;
 	--color-info-red-hover: #880000;
+
+	/* Transition Timing Functions */
+	--ease-lait: cubic-bezier(0.785, 0.135, 0.15, 0.86);
+	--slow-lait: cubic-bezier(0.664, 1.141, 0.912, 0.987);
 }
 
 @layer components {
