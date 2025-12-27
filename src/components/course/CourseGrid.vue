@@ -83,7 +83,10 @@ const handleCreateNewCourseClick = () => {
 						:width="60"
 						:height="60"
 						stroke-class="stroke-tutara-600 group-hover:stroke-tutara-900 transition-transform duration-400 transform group-hover:scale-110" />
-					<p class="text-h6 text-tutara-600 group-hover:text-tutara-900 underline decoration-transparent group-hover:decoration-tutara-900 transition-all">Opret kursus</p>
+					<p
+						class="text-h6 text-tutara-600 group-hover:text-tutara-900 underline decoration-transparent group-hover:decoration-tutara-900 transition-all">
+						Opret kursus
+					</p>
 				</div>
 			</div>
 
