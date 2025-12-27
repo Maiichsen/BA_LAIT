@@ -64,7 +64,7 @@ const router = createRouter({
 				layout: DefaultLayout,
 				breadcrumb: 'Kursister',
 			},
-			component: () => import('../views/CourseStudents.vue'),
+			component: () => import('../views/StudentPage.vue'),
 			beforeEnter: async (_to, _from, next) => {
 				try {
 					const user = await getAuthUser();
@@ -172,7 +172,7 @@ const router = createRouter({
 				layout: DefaultLayout,
 				breadcrumb: 'Virksomheder',
 			},
-			component: () => import('../views/CompaniesView.vue'),
+			component: () => import('../views/CompanyPage.vue'),
 			beforeEnter: async (_to, _from, next) => {
 				try {
 					const user = await getAuthUser();
