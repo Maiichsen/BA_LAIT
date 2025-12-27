@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import { onMounted, computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseTable from '@/components/BaseTable.vue';
+import BaseModal from '@/components/BaseModal.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
-import { EyeIcon, PencilIcon, TrashIcon } from '@/assets/icons';
+import { EditIcon, PencilIcon, TrashIcon } from '@/assets/icons';
+
 
 const companiesStore = useCompaniesStore();
+
+// Modal states
+const showAddCompanyModal = ref(false);
+const showViewCoursesModal = ref(false);
+const showManageCoursesModal = ref(false);
+const showDeleteModal = ref(false);
+const selectedCompanyId = ref<string | null>(null);
+const selectedCompanyName = ref<string>('');
 
 onMounted(() => {
 	companiesStore.loadCompanies();
@@ -27,8 +37,13 @@ const tableRows = computed(() => {
 });
 
 function viewCompany(id: string) {
-	console.log('View company:', id);
-	// Navigate to company details or open modal
+	selectedCompanyId.value = id;
+	showViewCoursesModal.value = true;
+}
+
+function manageCompanyCourses(id: string) {
+	selectedCompanyId.value = id;
+	showManageCoursesModal.value = true;
 }
 
 function editCompany(id: string) {
@@ -38,14 +53,30 @@ function editCompany(id: string) {
 
 function deleteCompany(id: string) {
 	const company = companiesStore.listOfCompanies.find(c => c.company_id === id);
-	if (company && confirm(`Er du sikker på, at du vil slette virksomheden: ${company.company_name}?`)) {
-		companiesStore.deleteCompany(id);
+	if (company) {
+		selectedCompanyId.value = id;
+		selectedCompanyName.value = company.company_name;
+		showDeleteModal.value = true;
+	}
+}
+
+function handleDeleteConfirm() {
+	if (selectedCompanyId.value) {
+		companiesStore.deleteCompany(selectedCompanyId.value);
+		showDeleteModal.value = false;
+		selectedCompanyId.value = null;
+		selectedCompanyName.value = '';
 	}
 }
 
 function addCompany() {
-	console.log('Add new company');
-	// Navigate to create page or open create modal
+	showAddCompanyModal.value = true;
+}
+
+function handleAddCompanyConfirm() {
+	// Handle add company logic
+	console.log('Add company confirmed');
+	showAddCompanyModal.value = false;
 }
 </script>
 
@@ -60,6 +91,7 @@ function addCompany() {
 					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
 					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addCompany"> Tilføj Virksomhed </BaseButton>
 				</div>
+
 				<BaseTable
 					:cols="tableColumns"
 					:rows="tableRows"
@@ -67,13 +99,23 @@ function addCompany() {
 					:has-search="true"
 					search-placeholder="Søg virksomheder..."
 					:page-size="10">
+
+						<template #cell-Kurser="{ value, row }">
+						<BaseButton
+							variant="badge-hover"
+							icon-name="EyeIcon"
+							@click="viewCompany(row[4] as string)">
+							{{ value }}
+						</BaseButton>
+					</template>
+
 					<template #cell-Handlinger="{ value }">
 						<div class="flex gap-2 items-center">
-							<ToolTip text="Se detaljer">
+							<ToolTip text="Administrer kurser">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="viewCompany(value as string)">
-									<EyeIcon :width="20" :height="17" fill-class="fill-tutara-900" />
+									@click="manageCompanyCourses(value as string)">
+									<EditIcon :width="25" :height="20" stroke-class="stroke-purple-500" />
 								</button>
 							</ToolTip>
 							<ToolTip text="Rediger">
@@ -95,6 +137,58 @@ function addCompany() {
 				</BaseTable>
 			</div>
 		</div>
+
+		<!-- Modals -->
+		<!-- Tilføj virksomhed modal -->
+		<BaseModal
+			v-model="showAddCompanyModal"
+			title="Opret ny virksomhed"
+			@confirm="handleAddCompanyConfirm">
+			<div class="space-y-4">
+				<p>Her kan du tilføje indhold for at oprette en ny virksomhed.</p>
+				<!-- Tilføj din form her -->
+			</div>
+		</BaseModal>
+
+		<!-- Se tildelte kurser modal -->
+		<BaseModal
+			v-model="showViewCoursesModal"
+			title="Tildelte kurser"
+			:show-footer="false">
+			<div class="space-y-4">
+				<p>Her vises de kurser virksomheden har tildelt.</p>
+				<!-- Tilføj kursus liste her -->
+			</div>
+		</BaseModal>
+
+		<!-- Administrer kurser modal -->
+		<BaseModal
+			v-model="showManageCoursesModal"
+			title="Administrer kurser"
+			confirm-text="Gem ændringer">
+			<div class="space-y-4">
+				<p>Her kan du administrere kurser for virksomheden.</p>
+				<!-- Tilføj form til at vælge kurser og antal pladser -->
+			</div>
+		</BaseModal>
+
+		<!-- Slet virksomhed modal -->
+		<BaseModal
+			v-model="showDeleteModal"
+			:title="`Slet ${selectedCompanyName} permanent?`"
+			:show-footer="false">
+			<div class="space-y-6">
+				<p class="text-tutara-900">Er du sikker på du vil slette?</p>
+				<div class="flex justify-center gap-4">
+					<BaseButton variant="primary" @click="showDeleteModal = false">
+						Annuller
+					</BaseButton>
+					<BaseButton variant="danger" @click="handleDeleteConfirm">
+						Slet adgang
+					</BaseButton>
+				</div>
+			</div>
+		</BaseModal>
 	</div>
 </template>
 

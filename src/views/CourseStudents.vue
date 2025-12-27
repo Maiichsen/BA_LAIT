@@ -2,9 +2,19 @@
 import { ref, computed } from 'vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
-import { EyeIcon, PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
+import BaseModal from '@/components/BaseModal.vue';
+import { PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
+
+// Modal states
+const showAddStudentModal = ref(false);
+const showViewCoursesModal = ref(false);
+const showAssignCourseModal = ref(false);
+const showDeleteModal = ref(false);
+const selectedStudentId = ref<number | null>(null);
+const selectedStudentName = ref<string>('');
+const selectedStudentCompany = ref<string>('');
 
 interface Student {
 	id: number;
@@ -106,9 +116,19 @@ const tableData = computed(() => {
 	]);
 });
 
-function viewStudent(id: number) {
-	console.log('View student:', id);
-	// Navigate to student details or open modal
+function viewStudentCourses(id: number) {
+	selectedStudentId.value = id;
+	const student = students.value.find(s => s.id === id);
+	if (student) {
+		selectedStudentName.value = `${student.firstName} ${student.lastName}`;
+		selectedStudentCompany.value = student.company;
+		showViewCoursesModal.value = true;
+	}
+}
+
+function assignCourse(id: number) {
+	selectedStudentId.value = id;
+	showAssignCourseModal.value = true;
 }
 
 function editStudent(id: number) {
@@ -117,13 +137,31 @@ function editStudent(id: number) {
 }
 
 function deleteStudent(id: number) {
-	console.log('Delete student:', id);
-	// Show confirmation dialog and delete
+	const student = students.value.find(s => s.id === id);
+	if (student) {
+		selectedStudentId.value = id;
+		selectedStudentName.value = `${student.firstName} ${student.lastName}`;
+		showDeleteModal.value = true;
+	}
+}
+
+function handleDeleteConfirm() {
+	if (selectedStudentId.value) {
+		students.value = students.value.filter(s => s.id !== selectedStudentId.value);
+		showDeleteModal.value = false;
+		selectedStudentId.value = null;
+		selectedStudentName.value = '';
+	}
 }
 
 function addStudent() {
-	console.log('Add new student');
-	// Navigate to create page or open create modal
+	showAddStudentModal.value = true;
+}
+
+function handleAddStudentConfirm() {
+	// Handle add student logic
+	console.log('Add student confirmed');
+	showAddStudentModal.value = false;
 }
 </script>
 
@@ -148,16 +186,18 @@ function addStudent() {
 					:cols="['Fornavn', 'Efternavn', 'Status', 'Email', 'Virksomhed', 'Kurser', 'Handlinger']"
 					:rows="tableData">
 					<template #cell-Status="{ value }">
-						<InfoBadge :variant="value === 'Aktiv' ? 'green' : 'gray'">
+						<InfoBadge :variant="value === 'Aktiv' ? 'green' : 'tutara'">
 							{{ value }}
 						</InfoBadge>
 					</template>
 
-					<template #cell-Kurser="{ value }">
-						<div class="flex items-center gap-2 text-tutara-900">
-							<span>{{ value }}</span>
-							<EyeIcon :width="24" :height="17" fill-class="fill-tutara-900" />
-						</div>
+					<template #cell-Kurser="{ value, row }">
+						<BaseButton
+							variant="badge-hover"
+							icon-name="EyeIcon"
+							@click="viewStudentCourses(row[6] as number)">
+							{{ value }}
+						</BaseButton>
 					</template>
 
 					<template #cell-Handlinger="{ value }">
@@ -165,7 +205,7 @@ function addStudent() {
 							<ToolTip text="Tildel kursus">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="viewStudent(value as number)">
+									@click="assignCourse(value as number)">
 									<UserPlusIcon
 										:width="20"
 										:height="25"
@@ -192,5 +232,63 @@ function addStudent() {
 				</BaseTable>
 			</div>
 		</div>
+
+		<!-- Modals -->
+		<!-- Inviter ny kursist modal -->
+		<BaseModal
+			v-model="showAddStudentModal"
+			title="Inviter ny kursist"
+			confirm-text="Send invitation"
+			@confirm="handleAddStudentConfirm">
+			<div class="space-y-4">
+				<p>Her kan du tilføje formularen til at invitere en ny kursist.</p>
+				<!-- Tilføj form her (fornavn, efternavn, email, virksomhed) -->
+			</div>
+		</BaseModal>
+
+		<!-- Se tildelte kurser modal -->
+		<BaseModal
+			v-model="showViewCoursesModal"
+			:title="`Tildelte kurser`"
+			:show-footer="false">
+			<div class="space-y-4">
+				<div class="mb-4">
+					<p class="text-c2 text-tutara-600">KURSIST:</p>
+					<h3 class="text-h5">{{ selectedStudentName }}</h3>
+					<h4 class="text-t2">{{ selectedStudentCompany }}</h4>
+				</div>
+				<p>Her vises de kurser kursisten har tildelt.</p>
+				<!-- Tilføj kursus liste her -->
+			</div>
+		</BaseModal>
+
+		<!-- Tildel kursus modal -->
+		<BaseModal
+			v-model="showAssignCourseModal"
+			title="Administrer kurser"
+			confirm-text="Gem ændringer">
+			<div class="space-y-4">
+				<p class="font-semibold">Vælg kurser og antal pladser (3 valgt)</p>
+				<!-- Tilføj form til at vælge kurser og antal pladser -->
+			</div>
+		</BaseModal>
+
+		<!-- Slet kursist modal -->
+		<BaseModal
+			v-model="showDeleteModal"
+			:title="`Slet ${selectedStudentName} permanent?`"
+			:show-footer="false">
+			<div class="space-y-6">
+				<p class="text-tutara-900">Er du sikker på du vil slette?</p>
+				<div class="flex justify-center gap-4">
+					<BaseButton variant="primary" @click="showDeleteModal = false">
+						Annuller
+					</BaseButton>
+					<BaseButton variant="danger" @click="handleDeleteConfirm">
+						Slet adgang
+					</BaseButton>
+				</div>
+			</div>
+		</BaseModal>
 	</div>
 </template>
