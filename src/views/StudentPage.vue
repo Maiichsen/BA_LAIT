@@ -1,153 +1,92 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useStudentsStore } from '@/stores/studentsStore.ts';
+import { useCompaniesStore } from '@/stores/companiesStore.ts';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
+import BaseInput from '@/components/atoms/BaseInput.vue';
+import BaseSelect from '@/components/atoms/BaseSelect.vue';
 import { PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
+
+const studentsStore = useStudentsStore();
+const companiesStore = useCompaniesStore();
 
 // Modal states
 const showAddStudentModal = ref(false);
 const showViewCoursesModal = ref(false);
 const showAssignCourseModal = ref(false);
 const showDeleteModal = ref(false);
-const selectedStudentId = ref<number | null>(null);
+const selectedStudentId = ref<string | null>(null);
 const selectedStudentName = ref<string>('');
 const selectedStudentCompany = ref<string>('');
 
-interface Student {
-	id: number;
-	firstName: string;
-	lastName: string;
-	status: 'Aktiv' | 'Afventer';
-	email: string;
-	company: string;
-	courses: number;
-}
+// Add student form
+const newStudentEmail = ref('');
+const newStudentFirstName = ref('');
+const newStudentLastName = ref('');
+const newStudentCompanyId = ref('');
+const formError = ref('');
 
-const isLoading = ref(false);
-
-// dummy data - erstarttet med API call når den er klar
-const students = ref<Student[]>([
-	{
-		id: 1,
-		firstName: 'Mai',
-		lastName: 'Jockwich',
-		status: 'Aktiv',
-		email: 'Mai.Jockwich@example.dk',
-		company: 'ScanPipe',
-		courses: 5,
-	},
-	{
-		id: 2,
-		firstName: 'Anders',
-		lastName: 'Nielsen',
-		status: 'Aktiv',
-		email: 'anders.nielsen@example.dk',
-		company: 'ScanPipe',
-		courses: 4,
-	},
-	{
-		id: 3,
-		firstName: 'Emma',
-		lastName: 'Christensen',
-		status: 'Aktiv',
-		email: 'emma.christensen@example.dk',
-		company: 'ALFABO',
-		courses: 2,
-	},
-	{
-		id: 4,
-		firstName: 'Lars',
-		lastName: 'Jensen',
-		status: 'Afventer',
-		email: 'lars.jensen@example.dk',
-		company: 'Aller Aqua',
-		courses: 1,
-	},
-	{
-		id: 5,
-		firstName: 'Maria',
-		lastName: 'Petersen',
-		status: 'Aktiv',
-		email: 'maria.petersen@example.dk',
-		company: 'UCL',
-		courses: 4,
-	},
-	{
-		id: 6,
-		firstName: 'Michael',
-		lastName: 'Rasmussen',
-		status: 'Aktiv',
-		email: 'michael.rasmussen@example.dk',
-		company: 'Mette Munk',
-		courses: 2,
-	},
-	{
-		id: 7,
-		firstName: 'Sofie',
-		lastName: 'Hansen',
-		status: 'Aktiv',
-		email: 'sofie.hansen@example.dk',
-		company: 'Interreg-NPA',
-		courses: 5,
-	},
-	{
-		id: 8,
-		firstName: 'Peter',
-		lastName: 'Andersen',
-		status: 'Afventer',
-		email: 'peter.andersen@example.dk',
-		company: 'Rockwool',
-		courses: 3,
-	},
-]);
-
-const tableData = computed(() => {
-	return students.value.map(student => [
-		student.firstName,
-		student.lastName,
-		student.status,
-		student.email,
-		student.company,
-		student.courses,
-		student.id,
-	]);
+onMounted(() => {
+	studentsStore.loadStudents();
+	companiesStore.loadCompanies();
 });
 
-function viewStudentCourses(id: number) {
+const tableData = computed(() => {
+	return studentsStore.listOfStudents.map(student => [
+		student.first_name || '',
+		student.last_name || '',
+		student.status,
+		student.email,
+		student.company_name,
+		student.courseCount,
+		student.user_id,
+	]);
+});
+console.log(tableData.value);
+
+const companyOptions = computed(() => {
+	return companiesStore.listOfCompanies.map(company => ({
+		value: company.company_id,
+		label: company.company_name,
+	}));
+});
+
+function viewStudentCourses(id: string) {
 	selectedStudentId.value = id;
-	const student = students.value.find(s => s.id === id);
+	const student = studentsStore.listOfStudents.find(s => s.user_id === id);
 	if (student) {
-		selectedStudentName.value = `${student.firstName} ${student.lastName}`;
-		selectedStudentCompany.value = student.company;
+		selectedStudentName.value = `${student.first_name || ''} ${student.last_name || ''}`;
+		selectedStudentCompany.value = student.company_name;
 		showViewCoursesModal.value = true;
 	}
 }
 
-function assignCourse(id: number) {
+function assignCourse(id: string) {
 	selectedStudentId.value = id;
 	showAssignCourseModal.value = true;
 }
 
-function editStudent(id: number) {
+function editStudent(id: string) {
 	console.log('Edit student:', id);
 	// Navigate to edit page or open edit modal
 }
 
-function deleteStudent(id: number) {
-	const student = students.value.find(s => s.id === id);
+function deleteStudent(id: string) {
+	const student = studentsStore.listOfStudents.find(s => s.user_id === id);
 	if (student) {
 		selectedStudentId.value = id;
-		selectedStudentName.value = `${student.firstName} ${student.lastName}`;
+		selectedStudentName.value = `${student.first_name || ''} ${student.last_name || ''}`;
 		showDeleteModal.value = true;
 	}
 }
 
 function handleDeleteConfirm() {
 	if (selectedStudentId.value) {
-		students.value = students.value.filter(s => s.id !== selectedStudentId.value);
+		studentsStore.deleteStudent(selectedStudentId.value);
 		showDeleteModal.value = false;
 		selectedStudentId.value = null;
 		selectedStudentName.value = '';
@@ -155,14 +94,48 @@ function handleDeleteConfirm() {
 }
 
 function addStudent() {
+	// Reset form
+	newStudentEmail.value = '';
+	newStudentFirstName.value = '';
+	newStudentLastName.value = '';
+	newStudentCompanyId.value = '';
+	formError.value = '';
 	showAddStudentModal.value = true;
 }
 
 function handleAddStudentConfirm() {
-	// Handle add student logic
-	console.log('Add student confirmed');
-	showAddStudentModal.value = false;
+	// Validate form
+	if (!newStudentEmail.value || !newStudentCompanyId.value) {
+		formError.value = 'Email og virksomhed er påkrævet';
+		return;
+	}
+
+	// Email validation
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	if (!emailRegex.test(newStudentEmail.value)) {
+		formError.value = 'Indtast en gyldig email adresse';
+		return;
+	}
+
+	// Invite student
+	studentsStore
+		.inviteStudent({
+			email: newStudentEmail.value,
+			companyId: newStudentCompanyId.value,
+			firstName: newStudentFirstName.value || undefined,
+			lastName: newStudentLastName.value || undefined,
+		})
+		.then(() => {
+			showAddStudentModal.value = false;
+			formError.value = '';
+		})
+		.catch(err => {
+			console.error(err);
+			formError.value = 'Der opstod en fejl. Prøv venligst igen.';
+		});
 }
+
+console.log('HUh', tableData);
 </script>
 
 <template>
@@ -178,7 +151,7 @@ function handleAddStudentConfirm() {
 				</div>
 
 				<BaseTable
-					:is-loading="isLoading"
+					:is-loading="studentsStore.isLoading"
 					:page-size="10"
 					has-search
 					search-placeholder="Søg efter fornavn, efternavn, email..."
@@ -195,7 +168,7 @@ function handleAddStudentConfirm() {
 						<BaseButton
 							variant="badge-hover"
 							icon-name="EyeIcon"
-							@click="viewStudentCourses(row[6] as number)">
+							@click="viewStudentCourses(row[6] as string)">
 							{{ value }}
 						</BaseButton>
 					</template>
@@ -205,7 +178,7 @@ function handleAddStudentConfirm() {
 							<ToolTip text="Tildel kursus">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="assignCourse(value as number)">
+									@click="assignCourse(value as string)">
 									<UserPlusIcon
 										:width="20"
 										:height="25"
@@ -216,14 +189,14 @@ function handleAddStudentConfirm() {
 							<ToolTip text="Rediger">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="editStudent(value as number)">
+									@click="editStudent(value as string)">
 									<PencilIcon :width="20" :height="20" fill-class="fill-cornflower-blue-500" />
 								</button>
 							</ToolTip>
 							<ToolTip text="Slet">
 								<button
 									class="flex items-center justify-center w-8 h-8 cursor-pointer"
-									@click="deleteStudent(value as number)">
+									@click="deleteStudent(value as string)">
 									<TrashIcon :width="20" :height="20" fill-class="fill-info-red" />
 								</button>
 							</ToolTip>
@@ -241,8 +214,56 @@ function handleAddStudentConfirm() {
 			confirm-text="Send invitation"
 			@confirm="handleAddStudentConfirm">
 			<div class="space-y-4">
-				<p>Her kan du tilføje formularen til at invitere en ny kursist.</p>
-				<!-- Tilføj form her (fornavn, efternavn, email, virksomhed) -->
+				<p class="text-t2 text-tutara-700 mb-4">
+					Udfyld formularen for at invitere en ny kursist. Kursisten vil modtage en email med et login link.
+				</p>
+
+				<!-- Error message -->
+				<div v-if="formError" class="p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+					{{ formError }}
+				</div>
+
+				<div class="flex gap-6">
+				<!-- First Name (required) -->
+				<BaseInput
+					v-model="newStudentFirstName"
+					input-type="text"
+					input-id="student-firstname"
+					label-text="Fornavn *"
+					placeholder="Fornavn"
+					layout="stacked" />
+
+				<!-- Last Name (required) -->
+				<BaseInput
+					v-model="newStudentLastName"
+					input-type="text"
+					input-id="student-lastname"
+					label-text="Efternavn *"
+					placeholder="Efternavn"
+					layout="stacked" />
+				</div>
+
+
+
+				<!-- Email (required) -->
+				<BaseInput
+					v-model="newStudentEmail"
+					input-type="email"
+					input-id="student-email"
+					label-text="Email *"
+					placeholder="kursist@example.dk"
+					layout="stacked" />
+
+				<!-- Company Select (required) -->
+				<BaseSelect
+					v-model="newStudentCompanyId"
+					input-id="student-company"
+					label-text="Virksomhed *"
+					placeholder="Vælg virksomhed"
+					:options="companyOptions"
+					layout="stacked" />
+
+				<p class="text-sm text-tutara-500 mt-2">* Påkrævet felt</p>
 			</div>
 		</BaseModal>
 

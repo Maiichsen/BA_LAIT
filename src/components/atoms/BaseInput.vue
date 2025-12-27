@@ -20,7 +20,7 @@ const onInput = (event: Event) => {
 
 <template>
 	<div :class="props.layout === 'stacked' ? 'flex flex-col gap-1' : 'flex justify-between'">
-		<label :for="props.inputId">
+		<label :for="props.inputId" class="text-t3">
 			{{ props.labelText }}
 		</label>
 		<input
@@ -31,6 +31,6 @@ const onInput = (event: Event) => {
 			:value="modelValue"
 			@input="onInput"
 			:accept="accept"
-			@change="emit('change', $event)" />
+			@change="emit('change', $event)" class="bg-white border border-tutara-200 text-p1 text-tutara-600 p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-tutara-900" />
 	</div>
 </template>
