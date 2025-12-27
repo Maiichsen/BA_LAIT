@@ -12,6 +12,7 @@ export { default as EyeOffIcon } from './EyeOffIcon.vue';
 export { default as GlobeIcon } from './GlobeIcon.vue';
 export { default as LaitLogo } from './LaitLogo.vue';
 export { default as PencilIcon } from './PencilIcon.vue';
+export { default as PlusIcon } from './PlusIcon.vue';
 export { default as QuizIcon } from './QuizIcon.vue';
 export { default as RadioCheckedIcon } from './RadioCheckedIcon.vue';
 export { default as RadioIcon } from './RadioIcon.vue';

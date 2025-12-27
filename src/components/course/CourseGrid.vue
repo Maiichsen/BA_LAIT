@@ -4,6 +4,7 @@ import { createTemplateCourse, getAllPublicCourses } from '@/services/courseServ
 import type { Course } from '@/types/db';
 import CourseCard from './CourseCard.vue';
 import { useRouter } from 'vue-router';
+import { PlusIcon } from '@/assets/icons';
 
 const router = useRouter();
 
@@ -65,8 +66,6 @@ const handleCreateNewCourseClick = () => {
 	</div>
 
 	<template v-else>
-		<div v-if="isEditMode" class="bg-yellow-400 p-2 cursor-pointer" @click="handleCreateNewCourseClick">OPRET</div>
-
 		<div v-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
 			<p class="text-tutara-600">Ingen kurser tilgængelige endnu</p>
 		</div>
@@ -74,6 +73,20 @@ const handleCreateNewCourseClick = () => {
 		<div
 			v-else
 			class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
+			<!-- Create new course card -->
+			<div
+				v-if="isEditMode"
+				@click="handleCreateNewCourseClick"
+				class="group flex flex-col h-full border border-tutara-200 bg-white rounded-md cursor-pointer hover:bg-tutara-100 transition-colors duration-300 min-h-[300px]">
+				<div class="flex flex-col items-center justify-center flex-1 gap-4">
+					<PlusIcon
+						:width="60"
+						:height="60"
+						stroke-class="stroke-tutara-600 group-hover:stroke-tutara-900 transition-transform duration-400 transform group-hover:scale-110" />
+					<p class="text-h6 text-tutara-600 group-hover:text-tutara-900 underline decoration-transparent group-hover:decoration-tutara-900 transition-all">Opret kursus</p>
+				</div>
+			</div>
+
 			<CourseCard
 				v-for="course in courses"
 				:key="course.course_id"
