@@ -10,7 +10,6 @@ import ToolTip from '@/components/atoms/ToolTip.vue';
 import { EditIcon, PencilIcon, TrashIcon } from '@/assets/icons';
 import CheckCircleIcon from '@/assets/icons/CheckCircleIcon.vue';
 
-
 const companiesStore = useCompaniesStore();
 
 // Modal states
@@ -158,12 +157,8 @@ function closeSuccessModal() {
 					:has-search="true"
 					search-placeholder="Søg virksomheder..."
 					:page-size="10">
-
-						<template #cell-Kurser="{ value, row }">
-						<BaseButton
-							variant="badge-hover"
-							icon-name="EyeIcon"
-							@click="viewCompany(row[4] as string)">
+					<template #cell-Kurser="{ value, row }">
+						<BaseButton variant="badge-hover" icon-name="EyeIcon" @click="viewCompany(row[4] as string)">
 							{{ value }}
 						</BaseButton>
 					</template>
@@ -208,9 +203,7 @@ function closeSuccessModal() {
 			<div v-if="showSuccessMessage" class="flex flex-col items-center justify-center py-8 space-y-6">
 				<CheckCircleIcon :width="152" :height="152" fill-class="fill-purple-500" />
 				<p class="text-p1 text-tutara-900">Virksomheden blev oprettet.</p>
-				<BaseButton variant="primary" @click="closeSuccessModal">
-					Luk
-				</BaseButton>
+				<BaseButton variant="primary" @click="closeSuccessModal"> Luk </BaseButton>
 			</div>
 
 			<!-- Form -->
@@ -232,19 +225,12 @@ function closeSuccessModal() {
 			:start-in-edit-mode="openCoursesInEditMode" />
 
 		<!-- Slet virksomhed modal -->
-		<BaseModal
-			v-model="showDeleteModal"
-			:title="`Slet ${selectedCompanyName} permanent?`"
-			:show-footer="false">
+		<BaseModal v-model="showDeleteModal" :title="`Slet ${selectedCompanyName} permanent?`" :show-footer="false">
 			<div class="space-y-6">
 				<p class="text-tutara-900">Er du sikker på du vil slette?</p>
 				<div class="flex justify-center gap-4">
-					<BaseButton variant="primary" @click="showDeleteModal = false">
-						Annuller
-					</BaseButton>
-					<BaseButton variant="warning" @click="handleDeleteConfirm">
-						Slet adgang
-					</BaseButton>
+					<BaseButton variant="primary" @click="showDeleteModal = false"> Annuller </BaseButton>
+					<BaseButton variant="warning" @click="handleDeleteConfirm"> Slet adgang </BaseButton>
 				</div>
 			</div>
 		</BaseModal>

@@ -150,9 +150,7 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 			if (seatsError) return reject(seatsError);
 
 			// Get all users
-			const { data: users, error: usersError } = await supabase
-				.from('users')
-				.select('company_id');
+			const { data: users, error: usersError } = await supabase.from('users').select('company_id');
 
 			if (usersError) return reject(usersError);
 

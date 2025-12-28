@@ -44,7 +44,7 @@ function handleConfirm() {
 // Prevent body scroll when modal is open
 watch(
 	() => props.modelValue,
-	(isOpen) => {
+	isOpen => {
 		if (isOpen) {
 			document.body.style.overflow = 'hidden';
 		} else {
@@ -62,7 +62,7 @@ function handleKeydown(event: KeyboardEvent) {
 
 watch(
 	() => props.modelValue,
-	(isOpen) => {
+	isOpen => {
 		if (isOpen) {
 			document.addEventListener('keydown', handleKeydown);
 		} else {

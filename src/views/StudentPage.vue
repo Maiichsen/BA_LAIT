@@ -213,10 +213,7 @@ console.log('HUh', tableData);
 					</template>
 
 					<template #cell-Kurser="{ value, row }">
-						<BaseButton
-							variant="badge-hover"
-							icon-name="EyeIcon"
-							@click="viewStudentCourses(row[6] as string)">
+						<BaseButton variant="badge-hover" icon-name="EyeIcon" @click="viewStudentCourses(row[6] as string)">
 							{{ value }}
 						</BaseButton>
 					</template>
@@ -272,26 +269,24 @@ console.log('HUh', tableData);
 				</div>
 
 				<div class="flex gap-6">
-				<!-- First Name (required) -->
-				<BaseInput
-					v-model="newStudentFirstName"
-					input-type="text"
-					input-id="student-firstname"
-					label-text="Fornavn *"
-					placeholder="Fornavn"
-					layout="stacked" />
+					<!-- First Name (required) -->
+					<BaseInput
+						v-model="newStudentFirstName"
+						input-type="text"
+						input-id="student-firstname"
+						label-text="Fornavn *"
+						placeholder="Fornavn"
+						layout="stacked" />
 
-				<!-- Last Name (required) -->
-				<BaseInput
-					v-model="newStudentLastName"
-					input-type="text"
-					input-id="student-lastname"
-					label-text="Efternavn *"
-					placeholder="Efternavn"
-					layout="stacked" />
+					<!-- Last Name (required) -->
+					<BaseInput
+						v-model="newStudentLastName"
+						input-type="text"
+						input-id="student-lastname"
+						label-text="Efternavn *"
+						placeholder="Efternavn"
+						layout="stacked" />
 				</div>
-
-
 
 				<!-- Email (required) -->
 				<BaseInput
@@ -319,8 +314,7 @@ console.log('HUh', tableData);
 		<UserCourseInformationModal
 			:is-open="showViewCoursesModal"
 			:user-id="selectedStudentId"
-			@update:is-open="showViewCoursesModal = $event"
-		/>
+			@update:is-open="showViewCoursesModal = $event" />
 
 		<!-- Tildel kursus modal -->
 		<AssignUserCourseModal
@@ -328,23 +322,15 @@ console.log('HUh', tableData);
 			:user-id="selectedStudentId"
 			:company-id="selectedStudentCompanyId"
 			@update:is-open="showAssignCourseModal = $event"
-			@course-assigned="studentsStore.loadStudents()"
-		/>
+			@course-assigned="studentsStore.loadStudents()" />
 
 		<!-- Slet kursist modal -->
-		<BaseModal
-			v-model="showDeleteModal"
-			:title="`Slet ${selectedStudentName} permanent?`"
-			:show-footer="false">
+		<BaseModal v-model="showDeleteModal" :title="`Slet ${selectedStudentName} permanent?`" :show-footer="false">
 			<div class="space-y-6">
 				<p class="text-tutara-900">Er du sikker på du vil slette?</p>
 				<div class="flex justify-center gap-4">
-					<BaseButton variant="primary" @click="showDeleteModal = false">
-						Annuller
-					</BaseButton>
-					<BaseButton variant="warning" @click="handleDeleteConfirm">
-						Slet adgang
-					</BaseButton>
+					<BaseButton variant="primary" @click="showDeleteModal = false"> Annuller </BaseButton>
+					<BaseButton variant="warning" @click="handleDeleteConfirm"> Slet adgang </BaseButton>
 				</div>
 			</div>
 		</BaseModal>

@@ -14,7 +14,7 @@ const props = defineProps<Props>();
 
 const emit = defineEmits<{
 	'update:isOpen': [value: boolean];
-	'courseAssigned': [];
+	courseAssigned: [];
 }>();
 
 // Available courses data
@@ -104,9 +104,7 @@ const selectedCourse = computed(() => {
 		@cancel="handleCancel"
 		:is-loading="isSaving">
 		<div class="space-y-4">
-			<div v-if="isLoadingCourses" class="text-center py-8 text-tutara-600">
-				Indlæser kurser...
-			</div>
+			<div v-if="isLoadingCourses" class="text-center py-8 text-tutara-600">Indlæser kurser...</div>
 
 			<div v-else-if="availableCourses.length === 0" class="text-center py-8 text-tutara-600">
 				Der er ingen kurser med ledige pladser tilgængelige.
@@ -114,18 +112,12 @@ const selectedCourse = computed(() => {
 
 			<div v-else class="space-y-4">
 				<div>
-					<label class="block text-sm font-medium text-tutara-700 mb-2">
-						Vælg et kursus
-					</label>
+					<label class="block text-sm font-medium text-tutara-700 mb-2"> Vælg et kursus </label>
 					<select
 						v-model="selectedCourseId"
-						class="w-full px-4 py-2.5 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500 bg-white"
-					>
+						class="w-full px-4 py-2.5 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500 bg-white">
 						<option value="">-- Vælg et kursus --</option>
-						<option
-							v-for="course in availableCourses"
-							:key="course.course_id"
-							:value="course.course_id">
+						<option v-for="course in availableCourses" :key="course.course_id" :value="course.course_id">
 							{{ course.title }} ({{ course.availableSeats }} ledige pladser)
 						</option>
 					</select>

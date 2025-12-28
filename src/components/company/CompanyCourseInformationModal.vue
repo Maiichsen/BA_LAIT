@@ -42,16 +42,11 @@ const selectedNewCourseId = ref<string>('');
 const newCourseSeats = ref<number>(1);
 
 // Define courses table columns
-const courseTableColumns = ['Kursus',  'Antal pladser', 'Brugte pladser', 'Ledige pladser'] as const;
+const courseTableColumns = ['Kursus', 'Antal pladser', 'Brugte pladser', 'Ledige pladser'] as const;
 
 // Transform courses data to table format
 const courseTableRows = computed(() => {
-	return companyCourses.value.map(course => [
-		course.title,
-		course.totalSeats,
-		course.usedSeats,
-		course.availableSeats,
-	]);
+	return companyCourses.value.map(course => [course.title, course.totalSeats, course.usedSeats, course.availableSeats]);
 });
 
 // Load courses when modal opens or company changes
@@ -244,9 +239,7 @@ const closeFromSuccess = () => {
 			<div v-if="showSuccessState" class="flex flex-col items-center justify-center py-8 space-y-6">
 				<CheckCircleIcon :width="152" :height="152" fill-class="fill-purple-500" />
 				<p class="text-p1 text-tutara-900">Handlingen blev gennemført.</p>
-				<BaseButton variant="primary" @click="closeFromSuccess">
-					Luk
-				</BaseButton>
+				<BaseButton variant="primary" @click="closeFromSuccess"> Luk </BaseButton>
 			</div>
 
 			<!-- View mode: Show table -->
@@ -282,7 +275,7 @@ const closeFromSuccess = () => {
 									:key="course.course_id"
 									class="border-b border-tutara-200 last:border-b-0 transition-colors hover:bg-purple-10">
 									<td class="py-4 px-6 text-p1 text-tutara-900">
-									{{ course.title }}
+										{{ course.title }}
 									</td>
 									<td class="py-4 px-6 text-p1 text-tutara-900">
 										<div>
@@ -312,31 +305,28 @@ const closeFromSuccess = () => {
 
 					<div class="grid grid-cols-2 gap-4">
 						<div>
-							<label class="block text-sm font-medium text-tutara-700 mb-1">
-								Vælg kursus
-							</label>
+							<label class="block text-sm font-medium text-tutara-700 mb-1"> Vælg kursus </label>
 							<select
 								v-model="selectedNewCourseId"
-								class="w-full px-3 py-2 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500"
-							>
+								class="w-full px-3 py-2 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500">
 								<option value="">-- Vælg et kursus --</option>
-								<option v-for="course in availableCoursesForAssignment" :key="course.course_id" :value="course.course_id">
+								<option
+									v-for="course in availableCoursesForAssignment"
+									:key="course.course_id"
+									:value="course.course_id">
 									{{ course.title }}
 								</option>
 							</select>
 						</div>
 
 						<div>
-							<label class="block text-sm font-medium text-tutara-700 mb-1">
-								Antal pladser
-							</label>
+							<label class="block text-sm font-medium text-tutara-700 mb-1"> Antal pladser </label>
 							<input
 								v-model.number="newCourseSeats"
 								type="number"
 								:min="1"
 								:disabled="!selectedNewCourseId"
-								class="w-full px-3 py-2 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500 disabled:bg-tutara-50 disabled:text-tutara-400"
-							/>
+								class="w-full px-3 py-2 border border-tutara-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tutara-500 disabled:bg-tutara-50 disabled:text-tutara-400" />
 						</div>
 					</div>
 				</div>

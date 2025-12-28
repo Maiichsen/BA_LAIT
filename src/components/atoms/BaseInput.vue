@@ -31,6 +31,7 @@ const onInput = (event: Event) => {
 			:value="modelValue"
 			@input="onInput"
 			:accept="accept"
-			@change="emit('change', $event)" class="bg-white border border-tutara-200 text-p1 text-tutara-600 p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-tutara-900" />
+			@change="emit('change', $event)"
+			class="bg-white border border-tutara-200 text-p1 text-tutara-600 p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-tutara-900" />
 	</div>
 </template>

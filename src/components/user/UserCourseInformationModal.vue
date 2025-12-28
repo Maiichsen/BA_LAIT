@@ -26,10 +26,7 @@ const courseTableColumns = ['Kursus', 'Handling'] as const;
 
 // Transform courses data to table format
 const courseTableRows = computed(() => {
-	return userCourses.value.map(course => [
-		course.title,
-		course.seat_id,
-	]);
+	return userCourses.value.map(course => [course.title, course.seat_id]);
 });
 
 // Load courses when modal opens or user changes

@@ -115,8 +115,6 @@ export const getAllStudentsWithStats = async (): Promise<StudentWithStats[]> => 
 
 	if (seatsError) throw seatsError;
 
-
-
 	// Map active students
 	const activeStudentsWithStats: StudentWithStats[] = activeStudents.map(student => {
 		const studentSeats = seats?.filter(seat => seat.user_id === student.user_id) || [];
@@ -130,7 +128,7 @@ export const getAllStudentsWithStats = async (): Promise<StudentWithStats[]> => 
 			company_id: student.company_id,
 			company_name: student.companies?.company_name || '',
 			courseCount: uniqueCourses,
-			status:  'Aktiv',
+			status: 'Aktiv',
 			is_admin: student.is_admin,
 			is_company_user: student.is_company_user,
 			created_at: student.created_at,
