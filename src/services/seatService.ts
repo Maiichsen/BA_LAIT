@@ -86,6 +86,42 @@ export const deleteCourseSeat = async (courseSeatId: string) => {
 	}
 };
 
+export const assignUserToCourseSeat = async (companyId: string, courseId: string, userId: string) => {
+	try {
+		// Find first available seat for this course and company
+		const { data: availableSeats, error: selectError } = await supabase
+			.from('course_seats')
+			.select('course_seat_id')
+			.eq('company_id', companyId)
+			.eq('course_id', courseId)
+			.is('user_id', null)
+			.limit(1);
+
+		if (selectError) throw selectError;
+		if (!availableSeats || availableSeats.length === 0) {
+			throw new Error('No available seats for this course');
+		}
+
+		const seatId = availableSeats[0]?.course_seat_id;
+		if (!seatId) {
+			throw new Error('No available seats for this course');
+		}
+
+		// Update the seat with the user_id
+		const { data, error: updateError } = await supabase
+			.from('course_seats')
+			.update({ user_id: userId })
+			.eq('course_seat_id', seatId)
+			.select();
+
+		if (updateError) throw updateError;
+		return data;
+	} catch (err) {
+		console.log(err);
+		throw err;
+	}
+};
+
 /*export const getAllUnusedCourseKeysByCompany = async (courseId: string, companyId: string) => {
   try {
     const {data, error} = await supabase

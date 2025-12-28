@@ -6,7 +6,7 @@ import {
 } from '@/services/userService.ts';
 import type { Company } from '@/types/db.ts';
 
-const createCompany = (companyName: string): Promise<Company> =>
+export const createCompany = (companyName: string): Promise<Company> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
@@ -149,6 +149,11 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 
 			if (seatsError) return reject(seatsError);
 
+			// Get all users
+			const { data: users, error: usersError } = await supabase.from('users').select('company_id');
+
+			if (usersError) return reject(usersError);
+
 			// Aggregate stats for each company
 			const companiesWithStats: CompanyWithStats[] = companies.map(company => {
 				const companySeats = seats?.filter(seat => seat.company_id === company.company_id) || [];
@@ -156,13 +161,13 @@ export const getAllCompaniesWithStats = (): Promise<CompanyWithStats[]> =>
 				// Count unique courses
 				const uniqueCourses = new Set(companySeats.map(seat => seat.course_id)).size;
 
-				// Count unique users (students) - only count non-null user_ids
-				const uniqueUsers = new Set(companySeats.filter(seat => seat.user_id).map(seat => seat.user_id)).size;
+				// Count users from the users table
+				const studentCount = users?.filter(user => user.company_id === company.company_id).length || 0;
 
 				return {
 					...company,
 					courseCount: uniqueCourses,
-					studentCount: uniqueUsers,
+					studentCount,
 				};
 			});
 
@@ -200,3 +205,69 @@ export const deleteCompanyById = (companyId: string): Promise<void> =>
 			reject(err);
 		}
 	});
+
+export interface CompanyCourseWithStats {
+	course_id: string;
+	title: string;
+	short_course_description: string | null;
+	totalSeats: number;
+	usedSeats: number;
+	availableSeats: number;
+}
+
+export const getCoursesByCompanyId = async (companyId: string): Promise<CompanyCourseWithStats[]> => {
+	// Get all course_seats for this company with course details
+	const { data: seats, error: seatsError } = await supabase
+		.from('course_seats')
+		.select('course_id, user_id, courses(course_id, title, short_course_description)')
+		.eq('company_id', companyId);
+
+	if (seatsError) throw seatsError;
+
+	// Group by course and calculate stats
+	const courseMap = new Map<string, CompanyCourseWithStats>();
+
+	seats?.forEach(seat => {
+		const course = seat.courses;
+		if (!course || typeof course !== 'object' || !('course_id' in course)) return;
+
+		if (!courseMap.has(course.course_id)) {
+			courseMap.set(course.course_id, {
+				course_id: course.course_id,
+				title: course.title,
+				short_course_description: course.short_course_description,
+				totalSeats: 0,
+				usedSeats: 0,
+				availableSeats: 0,
+			});
+		}
+
+		const courseStats = courseMap.get(course.course_id)!;
+		courseStats.totalSeats++;
+		if (seat.user_id) {
+			courseStats.usedSeats++;
+		}
+	});
+
+	// Calculate available seats
+	const coursesWithStats = Array.from(courseMap.values()).map(course => ({
+		...course,
+		availableSeats: course.totalSeats - course.usedSeats,
+	}));
+
+	return coursesWithStats;
+};
+
+export const getUnusedSeatIds = async (companyId: string, courseId: string, limit: number): Promise<string[]> => {
+	const { data, error } = await supabase
+		.from('course_seats')
+		.select('course_seat_id')
+		.eq('company_id', companyId)
+		.eq('course_id', courseId)
+		.is('user_id', null)
+		.limit(limit);
+
+	if (error) throw error;
+
+	return data?.map(seat => seat.course_seat_id) || [];
+};

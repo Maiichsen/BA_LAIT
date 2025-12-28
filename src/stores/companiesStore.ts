@@ -1,9 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import {
+	createCompany,
 	createInvitedCompany,
 	deleteCompanyById,
 	getAllCompaniesWithStats,
+	updateCompanyNameById,
 	type CompanyWithStats,
 } from '@/services/companyService.ts';
 
@@ -33,6 +35,18 @@ export const useCompaniesStore = defineStore('companies', () => {
 			.finally(() => (isLoading.value = false));
 	};
 
+	const addCompany = async (companyName: string) => {
+		const company = await createCompany(companyName);
+		// Add stats to the new company (starts with 0 courses and students)
+		const companyWithStats: CompanyWithStats = {
+			...company,
+			courseCount: 0,
+			studentCount: 0,
+		};
+		listOfCompanies.value.push(companyWithStats);
+		return company;
+	};
+
 	const inviteNewCompany = (companyName: string, companyEmail: string) =>
 		new Promise(async (resolve, reject) => {
 			createInvitedCompany(companyName, companyEmail)
@@ -49,11 +63,22 @@ export const useCompaniesStore = defineStore('companies', () => {
 				.catch(err => reject(err));
 		});
 
+	const updateCompanyName = async (companyId: string, newName: string) => {
+		await updateCompanyNameById(companyId, newName);
+		// Update the local state
+		const company = listOfCompanies.value.find(c => c.company_id === companyId);
+		if (company) {
+			company.company_name = newName;
+		}
+	};
+
 	return {
 		isLoading,
 		listOfCompanies,
 		loadCompanies,
 		deleteCompany,
+		addCompany,
 		inviteNewCompany,
+		updateCompanyName,
 	};
 });

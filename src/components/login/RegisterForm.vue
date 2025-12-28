@@ -79,9 +79,9 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div class="mt-[1.5rem]">
+	<div class="mt-6">
 		<form @submit.prevent="handleCreateNewUser">
-			<div class="flex flex-col gap-[1.5rem]">
+			<div class="flex flex-col gap-6">
 				<BaseInput
 					v-if="invitedUser && !invitedUser.is_company_user"
 					input-type="text"
@@ -110,7 +110,7 @@ onMounted(async () => {
 					v-model="repeatUserPassword" />
 				<p v-if="errorMessage" class="text-info-red">{{ errorMessage }}</p>
 			</div>
-			<BaseButton label="register" class="mt-[3rem]" type="submit">Opret bruger</BaseButton>
+			<BaseButton label="register" class="mt-12" type="submit">Opret bruger</BaseButton>
 		</form>
 	</div>
 	<!--	<h1>ADMIN OPRET STUDENT</h1>

@@ -256,3 +256,42 @@ export const checkIfEmailIsAlreadyVerifiedUser = (email: string): Promise<boolea
 			reject(err);
 		}
 	});
+
+export interface UserCourseWithInfo {
+	course_id: string;
+	title: string;
+	short_course_description: string | null;
+	seat_id: string;
+	company_name: string;
+}
+
+export const getCoursesByUserId = async (userId: string): Promise<UserCourseWithInfo[]> => {
+	// Get all course_seats for this user with course and company details
+	const { data: seats, error: seatsError } = await supabase
+		.from('course_seats')
+		.select('course_seat_id, course_id, courses(course_id, title, short_course_description), companies(company_name)')
+		.eq('user_id', userId);
+
+	if (seatsError) throw seatsError;
+
+	// Transform the data to the expected format
+	const userCourses: UserCourseWithInfo[] = [];
+
+	seats?.forEach(seat => {
+		const course = seat.courses;
+		const company = seat.companies;
+
+		if (!course || typeof course !== 'object' || !('course_id' in course)) return;
+		if (!company || typeof company !== 'object' || !('company_name' in company)) return;
+
+		userCourses.push({
+			course_id: course.course_id,
+			title: course.title,
+			short_course_description: course.short_course_description,
+			seat_id: seat.course_seat_id,
+			company_name: company.company_name,
+		});
+	});
+
+	return userCourses;
+};

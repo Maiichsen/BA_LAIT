@@ -68,7 +68,7 @@ const statusVariant = computed(() => {
 		case 'in_progress':
 			return 'purple';
 		case 'not_started':
-			return 'gray';
+			return 'tutara';
 		default:
 			return 'default';
 	}
