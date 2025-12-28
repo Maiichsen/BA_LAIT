@@ -17,6 +17,7 @@ const companiesStore = useCompaniesStore();
 const showAddCompanyModal = ref(false);
 const showViewCoursesModal = ref(false);
 const showDeleteModal = ref(false);
+const showEditModal = ref(false);
 const selectedCompanyId = ref<string | null>(null);
 const selectedCompanyName = ref<string>('');
 const openCoursesInEditMode = ref(false);
@@ -24,6 +25,9 @@ const openCoursesInEditMode = ref(false);
 // Add company form
 const newCompanyName = ref('');
 const showSuccessMessage = ref(false);
+
+// Edit company form
+const editCompanyName = ref('');
 
 onMounted(() => {
 	companiesStore.loadCompanies();
@@ -64,8 +68,29 @@ function manageCompanyCourses(id: string) {
 }
 
 function editCompany(id: string) {
-	console.log('Edit company:', id);
-	// Navigate to edit page or open edit modal
+	const company = companiesStore.listOfCompanies.find(c => c.company_id === id);
+	if (company) {
+		selectedCompanyId.value = id;
+		editCompanyName.value = company.company_name;
+		showEditModal.value = true;
+	}
+}
+
+function handleEditCompanyConfirm() {
+	if (!selectedCompanyId.value || !editCompanyName.value.trim()) {
+		return;
+	}
+
+	companiesStore
+		.updateCompanyName(selectedCompanyId.value, editCompanyName.value.trim())
+		.then(() => {
+			showEditModal.value = false;
+			selectedCompanyId.value = null;
+			editCompanyName.value = '';
+		})
+		.catch(err => {
+			console.error('Fejl ved opdatering af virksomhed:', err);
+		});
 }
 
 function deleteCompany(id: string) {
@@ -221,6 +246,23 @@ function closeSuccessModal() {
 						Slet adgang
 					</BaseButton>
 				</div>
+			</div>
+		</BaseModal>
+
+		<!-- Rediger virksomhed modal -->
+		<BaseModal
+			v-model="showEditModal"
+			title="Rediger virksomhed"
+			confirm-text="Gem ændringer"
+			@confirm="handleEditCompanyConfirm">
+			<div class="space-y-4">
+				<BaseInput
+					v-model="editCompanyName"
+					input-type="text"
+					input-id="edit-company-name"
+					label-text="Virksomhedsnavn"
+					placeholder="Indtast virksomhedsnavn"
+					layout="stacked" />
 			</div>
 		</BaseModal>
 	</div>

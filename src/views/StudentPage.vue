@@ -21,6 +21,7 @@ const showAddStudentModal = ref(false);
 const showViewCoursesModal = ref(false);
 const showAssignCourseModal = ref(false);
 const showDeleteModal = ref(false);
+const showEditModal = ref(false);
 const selectedStudentId = ref<string | null>(null);
 const selectedStudentName = ref<string>('');
 const selectedStudentCompany = ref<string>('');
@@ -32,6 +33,10 @@ const newStudentFirstName = ref('');
 const newStudentLastName = ref('');
 const newStudentCompanyId = ref('');
 const formError = ref('');
+
+// Edit student form
+const editStudentFirstName = ref('');
+const editStudentLastName = ref('');
 
 onMounted(() => {
 	studentsStore.loadStudents();
@@ -91,8 +96,31 @@ function assignCourse(id: string) {
 }
 
 function editStudent(id: string) {
-	console.log('Edit student:', id);
-	// Navigate to edit page or open edit modal
+	const student = studentsStore.listOfStudents.find(s => s.user_id === id);
+	if (student) {
+		selectedStudentId.value = id;
+		editStudentFirstName.value = student.first_name || '';
+		editStudentLastName.value = student.last_name || '';
+		showEditModal.value = true;
+	}
+}
+
+function handleEditStudentConfirm() {
+	if (!selectedStudentId.value || !editStudentFirstName.value.trim() || !editStudentLastName.value.trim()) {
+		return;
+	}
+
+	studentsStore
+		.updateStudentName(selectedStudentId.value, editStudentFirstName.value.trim(), editStudentLastName.value.trim())
+		.then(() => {
+			showEditModal.value = false;
+			selectedStudentId.value = null;
+			editStudentFirstName.value = '';
+			editStudentLastName.value = '';
+		})
+		.catch(err => {
+			console.error('Fejl ved opdatering af kursist:', err);
+		});
 }
 
 function deleteStudent(id: string) {
@@ -318,6 +346,30 @@ console.log('HUh', tableData);
 						Slet adgang
 					</BaseButton>
 				</div>
+			</div>
+		</BaseModal>
+
+		<!-- Rediger kursist modal -->
+		<BaseModal
+			v-model="showEditModal"
+			title="Rediger kursist"
+			confirm-text="Gem ændringer"
+			@confirm="handleEditStudentConfirm">
+			<div class="space-y-4">
+				<BaseInput
+					v-model="editStudentFirstName"
+					input-type="text"
+					input-id="edit-student-firstname"
+					label-text="Fornavn"
+					placeholder="Fornavn"
+					layout="stacked" />
+				<BaseInput
+					v-model="editStudentLastName"
+					input-type="text"
+					input-id="edit-student-lastname"
+					label-text="Efternavn"
+					placeholder="Efternavn"
+					layout="stacked" />
 			</div>
 		</BaseModal>
 	</div>

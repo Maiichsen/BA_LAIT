@@ -5,6 +5,7 @@ import {
 	createInvitedCompany,
 	deleteCompanyById,
 	getAllCompaniesWithStats,
+	updateCompanyNameById,
 	type CompanyWithStats,
 } from '@/services/companyService.ts';
 
@@ -62,6 +63,15 @@ export const useCompaniesStore = defineStore('companies', () => {
 				.catch(err => reject(err));
 		});
 
+	const updateCompanyName = async (companyId: string, newName: string) => {
+		await updateCompanyNameById(companyId, newName);
+		// Update the local state
+		const company = listOfCompanies.value.find(c => c.company_id === companyId);
+		if (company) {
+			company.company_name = newName;
+		}
+	};
+
 	return {
 		isLoading,
 		listOfCompanies,
@@ -69,5 +79,6 @@ export const useCompaniesStore = defineStore('companies', () => {
 		deleteCompany,
 		addCompany,
 		inviteNewCompany,
+		updateCompanyName,
 	};
 });

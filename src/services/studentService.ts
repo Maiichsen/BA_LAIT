@@ -165,3 +165,24 @@ export const deleteStudentById = async (userId: string): Promise<void> => {
 
 	if (error) throw error;
 };
+
+export const updateStudentNameById = async (userId: string, firstName: string, lastName: string): Promise<void> => {
+	// Try updating in users table first (active students)
+	const { data: userData, error: userError } = await supabase
+		.from('users')
+		.update({ first_name: firstName, last_name: lastName })
+		.eq('user_id', userId)
+		.select();
+
+	// If no rows were updated, try the invited_users table (pending students)
+	if (!userError && (!userData || userData.length === 0)) {
+		const { error: invitedError } = await supabase
+			.from('invited_users')
+			.update({ first_name: firstName, last_name: lastName })
+			.eq('invited_user_id', userId);
+
+		if (invitedError) throw invitedError;
+	} else if (userError) {
+		throw userError;
+	}
+};

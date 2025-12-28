@@ -4,6 +4,7 @@ import {
 	createInvitedStudent,
 	deleteStudentById,
 	getAllStudentsWithStats,
+	updateStudentNameById,
 	type InviteStudentParams,
 	type StudentWithStats,
 } from '@/services/studentService.ts';
@@ -45,11 +46,22 @@ export const useStudentsStore = defineStore('students', () => {
 				.catch(err => reject(err));
 		});
 
+	const updateStudentName = async (userId: string, firstName: string, lastName: string) => {
+		await updateStudentNameById(userId, firstName, lastName);
+		// Update the local state
+		const student = listOfStudents.value.find(s => s.user_id === userId);
+		if (student) {
+			student.first_name = firstName;
+			student.last_name = lastName;
+		}
+	};
+
 	return {
 		isLoading,
 		listOfStudents,
 		loadStudents,
 		deleteStudent,
 		inviteStudent,
+		updateStudentName,
 	};
 });
