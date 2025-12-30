@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import LoginLayout from '@/components/layouts/LoginLayout.vue';
 import DefaultLayout from '@/components/layouts/DefaultLayout.vue';
 import { getAuthUser } from '@/services/userService.ts';
+import CourseEditorLayout from '@/components/layouts/CourseEditorLayout.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,8 +83,7 @@ const router = createRouter({
 			path: '/opret-kursus/:course_id',
 			name: 'frontpageCreateCourse',
 			meta: {
-				layout: DefaultLayout,
-				breadcrumb: 'Opret Kursus',
+				layout: CourseEditorLayout,
 			},
 			props: true,
 			component: () => import('@/views/courseEditorViews/CourseEditorView.vue'),
