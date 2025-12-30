@@ -5,7 +5,7 @@ import TheHeader from '@/components/TheHeader.vue';
 <template>
 	<div>
 		<TheHeader />
-		<main class="flex-1 py-8 lg:py-24">
+		<main>
 			<slot />
 		</main>
 	</div>
