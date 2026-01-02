@@ -22,3 +22,4 @@ export { default as UserPlusIcon } from './UserPlusIcon.vue';
 export { default as UsersIcon } from './UsersIcon.vue';
 export { default as VideoIcon } from './VideoIcon.vue';
 export { default as XIcon } from './XIcon.vue';
+export { default as MenuIcon } from './MenuIcon.vue';
