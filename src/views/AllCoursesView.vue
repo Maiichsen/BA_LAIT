@@ -16,7 +16,7 @@ const toggleEditMode = () => {
 <template>
 	<div class="container">
 		<div class="container-row space-y-20">
-			<div class="lg:col-start-2 lg:col-span-14 col-span-full flex items-center justify-between">
+			<div class="lg:col-start-2 lg:col-span-14 items-start col-span-full flex flex-col md:flex-row md:items-center justify-between">
 				<h1 class="text-h1">Kursusoversigt</h1>
 				<BaseButton
 					:variant="isEditMode ? 'stroke' : 'primary'"

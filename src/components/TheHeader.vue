@@ -99,13 +99,13 @@ onUnmounted(() => {
 						</router-link>
 					</li>
 					<li>
-						<router-link to="/mine-kurser" class="text-nav block" @click="isMobileMenuOpen = false">
-							Mine kurser
+						<router-link to="/virksomheder" class="text-nav block" @click="isMobileMenuOpen = false">
+							Virksomheder
 						</router-link>
 					</li>
 					<li>
-						<router-link to="/virksomheder" class="text-nav block" @click="isMobileMenuOpen = false">
-							Virksomheder
+						<router-link to="/Kursister" class="text-nav block" @click="isMobileMenuOpen = false">
+							Kursister
 						</router-link>
 					</li>
 				</ul>
