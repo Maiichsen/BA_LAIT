@@ -3,11 +3,18 @@
 
 import { onMounted } from 'vue';
 import { useUserStore } from '@/stores/userStore.ts';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 const userStore = useUserStore();
 const router = useRouter();
+const route = useRoute();
 
 onMounted(() => {
+	const publicRoutes = ['login', 'updateUser'];
+
+	if (publicRoutes.includes(route.name as string)) {
+		return;
+	}
+
 	userStore.verifyUserRole().catch(() => {
 		router.replace({ name: 'login' });
 	});
