@@ -7,8 +7,8 @@ import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import BaseInput from '@/components/atoms/BaseInput.vue';
 import BaseSelect from '@/components/atoms/BaseSelect.vue';
-import UserCourseInformationModal from '@/components/user/UserCourseInformationModal.vue';
-import AssignUserCourseModal from '@/components/user/AssignUserCourseModal.vue';
+import UserCourseInformationModal from '@/components/Modals/UserCourseInformationModal.vue';
+import AssignUserCourseModal from '@/components/Modals/AssignUserCourseModal.vue';
 import { PencilIcon, TrashIcon, UserPlusIcon } from '@/assets/icons';
 import InfoBadge from '@/components/atoms/InfoBadge.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
@@ -193,7 +193,7 @@ console.log('HUh', tableData);
 				<h1 class="text-h1">Kursister</h1>
 			</div>
 			<div class="flex flex-col gap-6 lg:col-start-2 lg:col-span-14 col-span-full">
-				<div class="flex justify-between items-center">
+				<div class="flex flex-col items-start md:flex-row md:justify-between md:items-center">
 					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
 					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addStudent"> Tilføj kursist </BaseButton>
 				</div>
