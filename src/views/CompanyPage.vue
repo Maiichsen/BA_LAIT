@@ -5,10 +5,9 @@ import BaseButton from '@/components/atoms/BaseButton.vue';
 import BaseTable from '@/components/BaseTable.vue';
 import BaseModal from '@/components/BaseModal.vue';
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import CompanyCourseInformationModal from '@/components/company/CompanyCourseInformationModal.vue';
+import CompanyCourseInformationModal from '@/components/Modals/CompanyCourseInformationModal.vue';
 import ToolTip from '@/components/atoms/ToolTip.vue';
-import { EditIcon, PencilIcon, TrashIcon } from '@/assets/icons';
-import CheckCircleIcon from '@/assets/icons/CheckCircleIcon.vue';
+import { EditIcon, PencilIcon, TrashIcon, CheckCircleIcon } from '@/assets/icons';
 
 const companiesStore = useCompaniesStore();
 
@@ -145,7 +144,7 @@ function closeSuccessModal() {
 				<h1 class="text-h1">Virksomheder</h1>
 			</div>
 			<div class="flex flex-col gap-6 lg:col-start-2 lg:col-span-14 col-span-full">
-				<div class="flex justify-between items-center">
+				<div class="flex flex-col items-start md:flex-row md:justify-between md:items-center">
 					<h2 class="text-h6 text-tutara-900">Brugeroversigt</h2>
 					<BaseButton variant="primary" icon-name="UserPlusIcon" @click="addCompany"> Tilføj Virksomhed </BaseButton>
 				</div>
