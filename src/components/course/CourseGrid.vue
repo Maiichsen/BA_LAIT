@@ -30,7 +30,6 @@ const fetchCourses = async () => {
 		error.value = null;
 		const data = await getAllPublicCourses();
 
-		// DUMMY DATA, for at se design
 		// Tilføj tilfældig status til de første 3 kurser
 		courses.value = data.map((course, index) => {
 			if (index === 0) return { ...course, status: 'completed' as CourseStatus };
