@@ -64,8 +64,6 @@ onMounted(async () => {
 	getInvitedUserByEmail(authUserMail.value)
 		.then(user => {
 			if (!user) {
-				/*replace to ensure the user cant go back*/
-				router.replace({ name: 'login' });
 				return;
 			}
 			invitedUser.value = user;
