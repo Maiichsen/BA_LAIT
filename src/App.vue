@@ -8,10 +8,12 @@ const userStore = useUserStore();
 const router = useRouter();
 const route = useRoute();
 
-onMounted(() => {
-	const publicRoutes = ['login', 'updateUser'];
+onMounted(async () => {
+	await router.isReady();
 
-	if (publicRoutes.includes(route.name as string)) {
+	const publicPaths = ['/log-ind', '/opret'];
+
+	if (publicPaths.includes(route.path)) {
 		return;
 	}
 
