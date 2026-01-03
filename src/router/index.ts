@@ -223,18 +223,6 @@ const router = createRouter({
 				breadcrumb: 'Opret Bruger',
 			},
 			component: () => import('../views/SignupView.vue'),
-			beforeEnter: async (_to, _from, next) => {
-				try {
-					const user = await getAuthUser();
-					if (!user) {
-						return next({ name: 'login' });
-					}
-					return next();
-				} catch (err) {
-					console.error('route guard getAuthUser error:', err);
-					return next({ name: 'login' });
-				}
-			},
 		},
 	],
 });
