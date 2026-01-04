@@ -151,6 +151,12 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		);
 	};
 
+	const setPageHasUnsavedChange = (pageId: string, hasUnsavedChange: boolean) => {
+		if (!coursePageContent.value[pageId]) return;
+
+		coursePageContent.value[pageId].hasUnsavedData = hasUnsavedChange;
+	};
+
 	return {
 		listOfCoursePages,
 		courseGlobalLoading,
@@ -162,5 +168,6 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		addNewPageTypeArticle,
 		addNewPageTypeQuiz,
 		setPageVisibility,
+		setPageHasUnsavedChange,
 	};
 });

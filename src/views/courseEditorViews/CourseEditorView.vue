@@ -32,7 +32,7 @@ watch(
 		<SidebarContent class="min-w-50 max-w-80" />
 		<div class="flex-1 flex flex-col h-full">
 			<AddContentHeader />
-			<div class="flex-1 overflow-y-auto p-8">
+			<div class="flex-1 overflow-y-auto p-4">
 				<router-view />
 			</div>
 			<CourseEditorFooter />

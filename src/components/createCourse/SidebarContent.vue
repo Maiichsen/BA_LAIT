@@ -61,7 +61,7 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 				<EyeOffIcon v-if="pageIsVisible(page)" class="w-5" @click="setVisibility(page, true)" />
 				<QuizIcon v-if="pageTypeIsQuiz(page)" class="w-5" />
 				<ContentIcon v-if="pageTypeIsArticle(page)" class="w-5" />
-				<span class="text-h8" :class="{ 'italic opacity-70 before:content-[\'*\'] before:mr-1': pageHasUnsavedChanges(page) }">
+				<span class="text-h8" :class="{ 'italic opacity-70 hack-insert-star-in-before before:relative before:mr-1': pageHasUnsavedChanges(page) }">
 					{{ page.course_page_title }}
 				</span>
 			</span>
@@ -70,3 +70,10 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 		<span class="block h-5"></span>
 	</div>
 </template>
+
+<style scoped>
+/* before:content-[] doesnt seem to work in tailwind */
+.hack-insert-star-in-before::before {
+	content: '*';
+}
+</style>

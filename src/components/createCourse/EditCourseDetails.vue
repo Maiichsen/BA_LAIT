@@ -66,7 +66,7 @@ onMounted(() => {
 
 <template>
 	<form action="">
-		<div class="border-2 border-green-500">
+		<div class="flex flex-col gap-2">
 			<BaseInput
 				input-type="text"
 				:placeholder="title"
@@ -112,6 +112,7 @@ onMounted(() => {
 		</div>
 	</form>
 
+	<br>
 	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>
 
 	<div v-if="displayedCoverUrl">
