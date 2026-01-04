@@ -42,8 +42,10 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 		<h3 class="text-c1 p-4 pr-10">Kursusindhold</h3>
 		<RouterLink
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}`"
-			class="editor-nav-link flex gap-2 front-page"
+			class="flex gap-2 hover:bg-purple-10 p-4 pl-9"
+			exact-active-class="bg-purple-10"
 		>
+			<ContentIcon class="w-5" />
 			<p class="text-h8">Forside</p>
 		</RouterLink
 		>
@@ -51,56 +53,20 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 			v-for="page in editorStore.listOfCoursePages"
 			:key="page.course_page_id"
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}/${page.course_page_id}`"
-			class="text-h8 editor-nav-link flex justify-between"
-			:class="{pageIsVisible: pageIsVisible(page)}"
+			class="text-h8 flex justify-between hover:bg-purple-10 group p-4 pl-2"
+			exact-active-class="bg-purple-10"
 		>
 			<span class="flex gap-2">
-				<EyeIcon v-if="!pageIsVisible(page)" class="visible-on-hover w-5" @click="setVisibility(page, false)" />
+				<EyeIcon v-if="!pageIsVisible(page)" class="opacity-0 group-hover:opacity-100 w-5" @click="setVisibility(page, false)" />
 				<EyeOffIcon v-if="pageIsVisible(page)" class="w-5" @click="setVisibility(page, true)" />
 				<QuizIcon v-if="pageTypeIsQuiz(page)" class="w-5" />
 				<ContentIcon v-if="pageTypeIsArticle(page)" class="w-5" />
-				<span class="text-h8" :class="{ unsaved: pageHasUnsavedChanges(page) }">
+				<span class="text-h8" :class="{ 'italic opacity-70 before:content-[\'*\'] before:mr-1': pageHasUnsavedChanges(page) }">
 					{{ page.course_page_title }}
 				</span>
 			</span>
-			<PencilIcon class="visible-on-hover"/>
+			<PencilIcon class="opacity-0 group-hover:opacity-100"/>
 		</RouterLink>
 		<span class="block h-5"></span>
 	</div>
 </template>
-
-<style scoped>
-.editor-nav-link {
-	padding: 1rem 1rem 1rem 0.5rem;
-
-	&.front-page {
-		padding: 1rem 4rem;
-	}
-}
-
-.editor-nav-link.router-link-exact-active {
-	background-color: var(--color-purple-10);
-}
-
-.visible-on-hover {
-	opacity: 0;
-}
-
-.editor-nav-link:hover {
-	background-color: var(--color-purple-10);
-
-	.visible-on-hover {
-		opacity: 1;
-	}
-}
-
-.unsaved {
-	font-style: italic;
-	opacity: 0.7;
-}
-
-.unsaved::before {
-	content: '* ';
-	position: relative;
-}
-</style>

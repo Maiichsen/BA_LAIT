@@ -32,10 +32,7 @@ const canSave = computed(() => {
 </template>
 
 <style scoped>
-p {
-	cursor: pointer;
-}
-
+/* Temporary, visual only, until button component has disabled property */
 .disabled {
 	opacity: 0.7;
 	cursor: not-allowed;
