@@ -38,7 +38,7 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 </script>
 
 <template>
-	<div class="border border-tutara-200 bg-white overflow-y-auto h-full pb-24">
+	<div class="border border-tutara-200 bg-white overflow-y-auto h-full">
 		<h1>Kursusindhold</h1>
 		<RouterLink
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}`"
