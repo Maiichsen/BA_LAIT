@@ -24,14 +24,18 @@ onMounted(() => {
 const initEditor = () => {
 	articleData.value = page.content;
 
-	originalText.value = 'ARTICLE GOES HERE';
-	editableText.value = originalText.value;
+	originalText.value = page.content.content_json.temp_raw_text;
+	editableText.value = page.content.content_json.temp_raw_text_edited ?? originalText.value ?? '';
 };
 
 const hasUnsavedChanges = computed(() => editableText.value.trim() !== originalText.value);
 
 watch(hasUnsavedChanges, (hasChanges) => {
 	editorStore.setPageHasUnsavedChange(page.content!.course_page_id, hasChanges);
+});
+
+watch(editableText, (newText) => {
+	editorStore.setPageArticleContentJson(page.content!.course_page_id, newText);
 });
 
 // Re-init article editor when component is not re-mounted, e.g. when switching between two article pages
@@ -46,7 +50,7 @@ watch(() => page.content?.course_page_id, () => {
 			TOOLBAR
 		</div>
 		<textarea
-			class="w-full h-full m-0 outline-none p-2 cursor-text"
+			class="w-full h-full m-0 outline-none p-2 cursor-text pb-50 h-auto resize-none"
 			v-model="editableText"
 		/>
 	</div>

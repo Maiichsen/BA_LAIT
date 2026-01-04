@@ -13,6 +13,7 @@ export const defaultArticleData = {
 			},
 		},
 	],
+	temp_raw_text: 'Ny side',
 };
 
 export const pageOrderIndexDefaultGab = 64;

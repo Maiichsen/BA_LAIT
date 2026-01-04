@@ -19,6 +19,7 @@ const canSave = computed(() => {
 		<BaseButton
 			variant="stroke"
 			:class="{ disabled: !canSave }"
+			@click="() => editorStore.save()"
 		>
 			Gem
 		</BaseButton>

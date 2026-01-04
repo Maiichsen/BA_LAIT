@@ -1,6 +1,8 @@
-import type { Content as Article } from '@/types/db.ts';
+import type { Content as Article, Course } from '@/types/db.ts';
 import { supabase } from '@/db/connection.ts';
 import { defaultArticleData } from '@/constants/courseConstants.ts';
+import type { CourseParams } from '@/types/courseTypes.ts';
+import { Json } from '../../database.types.ts';
 
 export const createDefaultArticle = (coursePageId: string): Promise<Article> =>
 	new Promise(async (resolve, reject) => {
@@ -31,4 +33,21 @@ export const getArticleByPageId = async (pageId: string): Promise<Article> => {
 	if (!data || !data[0]) throw new Error('No match');
 
 	return data[0];
+};
+
+export const setArticleContent = async (pageId: string, newContentJson: Json) => {
+	try {
+		const { data, error } = await supabase
+			.from('contents')
+			.update({
+				content_json: newContentJson,
+			})
+			.eq('course_page_id', pageId);
+
+		if (error) throw error;
+
+		return data;
+	} catch (error) {
+		throw error;
+	}
 };
