@@ -142,6 +142,15 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		return _addNewCoursePage(CoursePageType.quiz);
 	};
 
+	const setPageVisibility = (pageId: string, setToVisible: boolean) => {
+		// TODO: Set value in db. Only set here when applied successfully
+		_unsortedListOfCoursePages.value = _unsortedListOfCoursePages.value.map(page =>
+			page.course_page_id === pageId
+				? { ...page, is_visible: setToVisible }
+				: page,
+		);
+	};
+
 	return {
 		listOfCoursePages,
 		courseGlobalLoading,
@@ -152,5 +161,6 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		setCurrentEditedCoursePage,
 		addNewPageTypeArticle,
 		addNewPageTypeQuiz,
+		setPageVisibility,
 	};
 });

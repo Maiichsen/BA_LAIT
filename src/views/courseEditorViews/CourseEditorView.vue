@@ -27,10 +27,10 @@ watch(
 </script>
 
 <template>
-	<div class="flex">
+	<div class="flex-1 flex h-full">
 		<div v-if="editorStore.courseGlobalLoading">LOADING...</div>
-		<SidebarContent />
-		<div>
+		<SidebarContent class="w-50" />
+		<div class="flex-1">
 			<AddContentHeader />
 			<div>
 				<router-view />
