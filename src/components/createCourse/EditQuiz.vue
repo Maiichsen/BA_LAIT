@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue';
 import type { RichCoursePage } from '@/types/courseTypes.ts';
-import type { Content, CoursePage, Quiz } from '@/types/db.ts';
 
 interface Props {
 	page: RichCoursePage;

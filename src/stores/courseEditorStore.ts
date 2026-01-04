@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
-import type { Content, CoursePage } from '@/types/db.ts';
+import type { CoursePage } from '@/types/db.ts';
 import {
 	createCoursePageWithDefaultContent,
 	getAllCoursePagesByCourseId,
