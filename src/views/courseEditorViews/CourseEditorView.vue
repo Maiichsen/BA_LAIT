@@ -29,10 +29,10 @@ watch(
 <template>
 	<div class="flex-1 flex h-full">
 		<div v-if="editorStore.courseGlobalLoading">LOADING...</div>
-		<SidebarContent class="w-50" />
-		<div class="flex-1 flex flex-col">
+		<SidebarContent class="min-w-50 max-w-80" />
+		<div class="flex-1 flex flex-col h-full">
 			<AddContentHeader />
-			<div class="flex-1">
+			<div class="flex-1 overflow-y-auto p-8">
 				<router-view />
 			</div>
 			<CourseEditorFooter />

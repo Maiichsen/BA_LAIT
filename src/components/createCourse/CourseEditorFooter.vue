@@ -24,6 +24,7 @@ const canSave = computed(() => {
 		</BaseButton>
 		<BaseButton
 			variant="primary-tiny"
+			:class="{ disabled: !canSave }"
 		>
 			Gem og udgiv
 		</BaseButton>

@@ -39,19 +39,19 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 
 <template>
 	<div class="border border-tutara-200 bg-white overflow-y-auto h-full">
-		<h1>Kursusindhold</h1>
+		<h3 class="text-c1 p-4 pr-10">Kursusindhold</h3>
 		<RouterLink
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}`"
-			class="editor-nav-link flex gap-2"
+			class="editor-nav-link flex gap-2 front-page"
 		>
-			Forside
+			<p class="text-h8">Forside</p>
 		</RouterLink
 		>
 		<RouterLink
 			v-for="page in editorStore.listOfCoursePages"
 			:key="page.course_page_id"
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}/${page.course_page_id}`"
-			class="editor-nav-link flex justify-between"
+			class="text-h8 editor-nav-link flex justify-between"
 			:class="{pageIsVisible: pageIsVisible(page)}"
 		>
 			<span class="flex gap-2">
@@ -59,18 +59,23 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 				<EyeOffIcon v-if="pageIsVisible(page)" class="w-5" @click="setVisibility(page, true)" />
 				<QuizIcon v-if="pageTypeIsQuiz(page)" class="w-5" />
 				<ContentIcon v-if="pageTypeIsArticle(page)" class="w-5" />
-				<span :class="{ unsaved: pageHasUnsavedChanges(page) }">
+				<span class="text-h8" :class="{ unsaved: pageHasUnsavedChanges(page) }">
 					{{ page.course_page_title }}
 				</span>
 			</span>
 			<PencilIcon class="visible-on-hover"/>
 		</RouterLink>
+		<span class="block h-5"></span>
 	</div>
 </template>
 
 <style scoped>
 .editor-nav-link {
 	padding: 1rem 1rem 1rem 0.5rem;
+
+	&.front-page {
+		padding: 1rem 4rem;
+	}
 }
 
 .editor-nav-link.router-link-exact-active {
