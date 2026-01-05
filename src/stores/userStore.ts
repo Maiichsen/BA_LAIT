@@ -1,11 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import {
-	getAuthUser,
-	getUserRoleById,
-	signInUser,
-	signOutAuthUser,
-} from '@/services/userService.ts';
+import { getAuthUser, getUserRoleById, signInUser, signOutAuthUser } from '@/services/userService.ts';
 
 export const useUserStore = defineStore('user', () => {
 	const isUserAdmin = ref(false);
@@ -54,19 +49,22 @@ export const useUserStore = defineStore('user', () => {
 				});
 		});
 
-	const logout = (): Promise<void> => new Promise((resolve, reject) => {
-		signOutAuthUser().then(() => {
-			// Reset information about user
-			isUserAdmin.value = false;
-			isUserCompany.value = false;
-			isInitialized.value = false;
-			userId.value = null;
+	const logout = (): Promise<void> =>
+		new Promise((resolve, reject) => {
+			signOutAuthUser()
+				.then(() => {
+					// Reset information about user
+					isUserAdmin.value = false;
+					isUserCompany.value = false;
+					isInitialized.value = false;
+					userId.value = null;
 
-			resolve();
-		}).catch(error => {
-			reject(error);
+					resolve();
+				})
+				.catch(error => {
+					reject(error);
+				});
 		});
-	});
 
 	return {
 		isUserAdmin,

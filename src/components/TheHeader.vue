@@ -26,11 +26,14 @@ onUnmounted(() => {
 });
 
 const logout = () => {
-	userStore.logout().then(() => {
-		router.replace({ name: 'login' });
-	}).catch(error => {
-		console.log(error);
-	});
+	userStore
+		.logout()
+		.then(() => {
+			router.replace({ name: 'login' });
+		})
+		.catch(error => {
+			console.log(error);
+		});
 };
 </script>
 
@@ -86,8 +89,7 @@ const logout = () => {
 								<li class="border-t border-tutara-100 mt-2 pt-2">
 									<button
 										class="w-full px-4 py-2 text-left text-p1 text-info-red hover:bg-purple-50 cursor-pointer"
-										@click="logout"
-									>
+										@click="logout">
 										Log ud
 									</button>
 								</li>
