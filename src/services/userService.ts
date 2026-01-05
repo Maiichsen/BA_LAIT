@@ -132,7 +132,22 @@ export const getAuthUser = (): Promise<AuthUser> =>
 		}
 	});
 
-export const getUserRoleById = (userId: string): Promise<{ is_admin: boolean; is_company_user: boolean }> =>
+export const signOutAuthUser = (): Promise<void> =>
+	new Promise(async (resolve, reject) => {
+		const { error } = await supabase.auth.signOut();
+		if (error) {
+			reject(error);
+		}
+
+		resolve();
+	});
+
+export const getUserRoleById = (
+	userId: string,
+): Promise<{
+	is_admin: boolean;
+	is_company_user: boolean;
+}> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
