@@ -23,7 +23,7 @@ onMounted(() => {
 const initEditor = () => {
 	articleData.value = (page.content as ContentWithText);
 
-	originalText.value = articleData.value.content_json.temp_raw_text;
+	originalText.value = articleData.value.content_json.temp_raw_text ?? '';
 	editableText.value = articleData.value.content_json.temp_raw_text_edited ?? originalText.value ?? '';
 };
 
