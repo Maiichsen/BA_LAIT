@@ -7,7 +7,8 @@ import {
 	getCourseContentByPageId,
 } from '@/services/courseService.ts';
 import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
-import type { RichCoursePage } from '@/types/courseTypes.ts';
+import { ContentWithText, RichCoursePage } from '@/types/courseTypes.ts';
+import { setArticleContent } from '@/services/courseArticleService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
@@ -142,6 +143,53 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		return _addNewCoursePage(CoursePageType.quiz);
 	};
 
+	const setPageVisibility = (pageId: string, setToVisible: boolean) => {
+		// TODO: Set value in db. Only set here when applied successfully
+		_unsortedListOfCoursePages.value = _unsortedListOfCoursePages.value.map(page =>
+			page.course_page_id === pageId ? { ...page, is_visible: setToVisible } : page,
+		);
+	};
+
+	const setPageHasUnsavedChange = (pageId: string, hasUnsavedChange: boolean) => {
+		if (!coursePageContent.value[pageId]) return;
+
+		coursePageContent.value[pageId].hasUnsavedData = hasUnsavedChange;
+	};
+
+	const setPageArticleContentJson = (pageId: string, newContent: string) => {
+		const page = coursePageContent.value[pageId]?.content as ContentWithText;
+
+		if (!page) return;
+		if (!page.content_json) return;
+
+		page.content_json.temp_raw_text_edited = newContent;
+	};
+
+	const save = () => {
+		Object.values(coursePageContent.value).forEach(coursePage => {
+			if (!coursePage.hasUnsavedData) return;
+			if (!coursePage.course_page_id) return;
+
+			if (coursePage.contentType === CoursePageType.article) {
+				const content = coursePage.content as ContentWithText;
+				if (!content || !content.content_json) return;
+
+				setArticleContent(coursePage.course_page_id, {
+					temp_raw_text: content.content_json.temp_raw_text_edited,
+				}).then(() => {
+					if (!content.content_json) return;
+
+					content.content_json.temp_raw_text = content.content_json.temp_raw_text_edited;
+					coursePage.hasUnsavedData = false;
+				});
+			}
+
+			if (coursePage.contentType === CoursePageType.quiz) {
+				console.log('SAVE QUIZ');
+			}
+		});
+	};
+
 	return {
 		listOfCoursePages,
 		courseGlobalLoading,
@@ -152,5 +200,9 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		setCurrentEditedCoursePage,
 		addNewPageTypeArticle,
 		addNewPageTypeQuiz,
+		setPageVisibility,
+		setPageHasUnsavedChange,
+		setPageArticleContentJson,
+		save,
 	};
 });
