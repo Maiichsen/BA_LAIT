@@ -3,10 +3,12 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import BaseButton from '@/components/atoms/BaseButton.vue';
 import { XIcon, MenuIcon, LaitLogo } from '@/assets/icons';
 import { useUserStore } from '@/stores/userStore.ts';
+import { useRouter } from 'vue-router';
 
 const isProfileOpen = ref(false);
 const isMobileMenuOpen = ref(false);
 const userStore = useUserStore();
+const router = useRouter();
 
 const handleClickOutside = (event: MouseEvent) => {
 	const target = event.target as HTMLElement;
@@ -22,6 +24,17 @@ onMounted(() => {
 onUnmounted(() => {
 	document.removeEventListener('click', handleClickOutside);
 });
+
+const logout = () => {
+	userStore
+		.logout()
+		.then(() => {
+			router.replace({ name: 'login' });
+		})
+		.catch(error => {
+			console.log(error);
+		});
+};
 </script>
 
 <template>
@@ -74,7 +87,11 @@ onUnmounted(() => {
 									<button class="w-full px-4 py-2 text-left text-p1 hover:bg-purple-50">Skift kodeord</button>
 								</li>
 								<li class="border-t border-tutara-100 mt-2 pt-2">
-									<button class="w-full px-4 py-2 text-left text-p1 text-info-red hover:bg-purple-50">Log ud</button>
+									<button
+										class="w-full px-4 py-2 text-left text-p1 text-info-red hover:bg-purple-50 cursor-pointer"
+										@click="logout">
+										Log ud
+									</button>
 								</li>
 							</ul>
 						</div>
@@ -151,6 +168,7 @@ onUnmounted(() => {
 									<button
 										class="w-full px-4 py-2 text-left text-p1 text-info-red hover:bg-purple-50"
 										@click="
+											logout();
 											isMobileMenuOpen = false;
 											isProfileOpen = false;
 										">
