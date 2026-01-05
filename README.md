@@ -1,70 +1,84 @@
-# bachelor_LAIT
+# UCL Web Development (LAIT)
 
-This template should help get you started developing with Vue 3 in Vite.
+Bachelor project by Isabella & Mai.
 
-## Recommended IDE Setup
+This project is a **course management web application prototype (v1.0)** developed as part of the Web Development Bachelor programme at UCL.  
+The application focuses on managing courses and related data and serves as a **functional prototype**, not a production-ready system.
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Tech stack
 
-## Recommended Browser Setup
+- Frontend: Vue 3 + Vite
+- Language: TypeScript
+- Styling: SCSS
+- Backend / Database: Supabase
+- Linting & formatting: ESLint, Prettier
+- Testing: Vitest
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## Prerequisites
 
-## Type Support for `.vue` Imports in TS
+Node.js and npm must be installed on the system.
+While these specific versions may not be required exactly, the project has been developed and is stable with these versions:
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+- Node.js v22 or newer
+- npm v11 or newer
 
-## Customize configuration
+## Installation
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+Create a `.env` file in the root of the project.
 
-## Project Setup
+The required environment variables are shown below.  
+The actual Supabase URL and key are provided in a **separate document included with the project delivery**.
+
+```sh
+VITE_SUPABASE_URL=https://<insert_id>.supabase.co
+VITE_SUPABASE_KEY=abc...xyz
+VITE_HOST_URL=http://localhost:5173
+```
+
+Run this command to install all dependencies:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+## Run the project
+
+### Compile and hot-reload for development
 
 ```sh
 npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
+### Compile and minify for production
 
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+## Useful commands
+
+The following commands are available for development and quality assurance:
+
+### Run unit tests
 
 ```sh
 npm run test:unit
 ```
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+### Run prettier format check
 
 ```sh
-npm run test:e2e:dev
+npm run format:check
 ```
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
-
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
-
-```sh
-npm run build
-npm run test:e2e
-```
-
-### Lint with [ESLint](https://eslint.org/)
+### Run ESLint check
 
 ```sh
 npm run lint
+```
+
+### Run typescript type check
+
+```sh
+npm run type-check
 ```
