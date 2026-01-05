@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
+import { CertificateIcon, ContentIcon, QuizIcon } from '@/assets/icons';
 
 const router = useRouter();
 const courseStore = useCourseEditorStore();
@@ -25,9 +26,15 @@ const handleCreateNewQuizPage = () => {
 </script>
 
 <template>
-	<div class="flex gap-8 border-2 border-red-500">
-		<p @click="handleCreateNewTextPage" class="cursor-pointer">tilføj indhold</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer">tilføj quiz</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer">tilføj slut-test</p>
+	<div class="flex border border-tutara-200 bg-white">
+		<p @click="handleCreateNewTextPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+			<ContentIcon /> Tilføj indhold
+		</p>
+		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+			<QuizIcon /> Tilføj quiz
+		</p>
+		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+			<CertificateIcon /> Tilføj slut-test
+		</p>
 	</div>
 </template>

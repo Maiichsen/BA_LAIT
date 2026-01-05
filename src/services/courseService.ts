@@ -1,5 +1,11 @@
 import { supabase } from '../db/connection.ts';
-import type { NewCourseParams, CourseParams, RichCoursePage, CoursePageContent } from '../types/courseTypes.ts';
+import {
+	NewCourseParams,
+	CourseParams,
+	RichCoursePage,
+	CoursePageContent,
+	ContentWithText,
+} from '../types/courseTypes.ts';
 import type { Course, CoursePage } from '../types/db.ts';
 import { CoursePageType, DefaultCoursePageName, pageOrderIndexDefaultGab } from '../constants/courseConstants.ts';
 import { downloadImageFromSupabaseBucket } from './imageService.ts';
@@ -218,7 +224,7 @@ export const createCoursePageWithDefaultContent = async (
 	const page = await createCoursePage(DefaultCoursePageName[pageType], courseId, orderIndex);
 
 	if (pageType === CoursePageType.article) {
-		const article = await createDefaultArticle(page.course_page_id);
+		const article = (await createDefaultArticle(page.course_page_id)) as ContentWithText;
 		return {
 			...page,
 			contentType: pageType,
@@ -280,7 +286,7 @@ export const getCourseContentByPageId = async (
 	contentType: CoursePageType;
 }> => {
 	try {
-		const article = await getArticleByPageId(pageId);
+		const article = (await getArticleByPageId(pageId)) as ContentWithText;
 		return { content: article, contentType: CoursePageType.article };
 	} catch {
 		// ignore "not found" and try quiz

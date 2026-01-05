@@ -19,8 +19,8 @@ const onInput = (event: Event) => {
 </script>
 
 <template>
-	<div :class="props.layout === 'stacked' ? 'flex flex-col gap-1' : 'flex justify-between'">
-		<label :for="props.inputId" class="text-t3">
+	<div class="flex" :class="props.layout === 'stacked' ? 'flex-col gap-1' : 'justify-between'">
+		<label :for="props.inputId" class="text-t3" :class="{ 'w-1/3 max-w-50': props.layout === 'inline' }">
 			{{ props.labelText }}
 		</label>
 		<input
@@ -32,6 +32,7 @@ const onInput = (event: Event) => {
 			@input="onInput"
 			:accept="accept"
 			@change="emit('change', $event)"
-			class="bg-white border border-tutara-200 text-p1 text-tutara-600 p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-tutara-900" />
+			class="bg-white border border-tutara-200 text-p1 text-tutara-600 p-3 rounded-2xl focus:outline-none focus:ring-2 focus:ring-tutara-900"
+			:class="{ 'flex-1': props.layout === 'inline' }" />
 	</div>
 </template>
