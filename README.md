@@ -9,7 +9,7 @@ The application focuses on managing courses and related data and serves as a **f
 
 - Frontend: Vue 3 + Vite
 - Language: TypeScript
-- Styling: SCSS
+- Styling: Tailwind CSS
 - Backend / Database: Supabase
 - Linting & formatting: ESLint, Prettier
 - Testing: Vitest
