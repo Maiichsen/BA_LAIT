@@ -71,6 +71,12 @@ npm run test:unit
 npm run format:check
 ```
 
+Auto-fix prettier format complaints
+
+```sh
+npm run format
+```
+
 ### Run ESLint check
 
 ```sh

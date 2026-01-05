@@ -112,7 +112,7 @@ onMounted(() => {
 		</div>
 	</form>
 
-	<br>
+	<br />
 	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>
 
 	<div v-if="displayedCoverUrl">

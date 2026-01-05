@@ -146,9 +146,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const setPageVisibility = (pageId: string, setToVisible: boolean) => {
 		// TODO: Set value in db. Only set here when applied successfully
 		_unsortedListOfCoursePages.value = _unsortedListOfCoursePages.value.map(page =>
-			page.course_page_id === pageId
-				? { ...page, is_visible: setToVisible }
-				: page,
+			page.course_page_id === pageId ? { ...page, is_visible: setToVisible } : page,
 		);
 	};
 
@@ -168,7 +166,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	};
 
 	const save = () => {
-		Object.values(coursePageContent.value).forEach((coursePage) => {
+		Object.values(coursePageContent.value).forEach(coursePage => {
 			if (!coursePage.hasUnsavedData) return;
 			if (!coursePage.course_page_id) return;
 

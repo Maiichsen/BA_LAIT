@@ -19,20 +19,9 @@ const pageData = computed(() => {
 </script>
 
 <template>
-	<div
-		v-if="!pageData || !pageData.content"
-		class="text-center"
-	>
-		LOADING...
-	</div>
-	<EditArticle
-		v-else-if="pageData.contentType === CoursePageType.article"
-		:page="pageData"
-	/>
-	<EditQuiz
-		v-else-if="pageData.contentType === CoursePageType.quiz"
-		:page="pageData"
-	/>
+	<div v-if="!pageData || !pageData.content" class="text-center">LOADING...</div>
+	<EditArticle v-else-if="pageData.contentType === CoursePageType.article" :page="pageData" />
+	<EditQuiz v-else-if="pageData.contentType === CoursePageType.quiz" :page="pageData" />
 	<div v-else>
 		<h1>Something went wrong. Unknown page type...</h1>
 		<h1>{{ pageData.course_page_title }} ({{ pageData.contentType }})</h1>

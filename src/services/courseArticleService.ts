@@ -1,7 +1,6 @@
-import type { Content as Article, Course } from '@/types/db.ts';
+import type { Content as Article } from '@/types/db.ts';
 import { supabase } from '@/db/connection.ts';
 import { defaultArticleData } from '@/constants/courseConstants.ts';
-import type { CourseParams } from '@/types/courseTypes.ts';
 import { Json } from '../../database.types.ts';
 
 export const createDefaultArticle = (coursePageId: string): Promise<Article> =>

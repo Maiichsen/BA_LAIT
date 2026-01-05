@@ -224,7 +224,7 @@ export const createCoursePageWithDefaultContent = async (
 	const page = await createCoursePage(DefaultCoursePageName[pageType], courseId, orderIndex);
 
 	if (pageType === CoursePageType.article) {
-		const article = await createDefaultArticle(page.course_page_id) as ContentWithText;
+		const article = (await createDefaultArticle(page.course_page_id)) as ContentWithText;
 		return {
 			...page,
 			contentType: pageType,
@@ -286,7 +286,7 @@ export const getCourseContentByPageId = async (
 	contentType: CoursePageType;
 }> => {
 	try {
-		const article = await getArticleByPageId(pageId) as ContentWithText;
+		const article = (await getArticleByPageId(pageId)) as ContentWithText;
 		return { content: article, contentType: CoursePageType.article };
 	} catch {
 		// ignore "not found" and try quiz

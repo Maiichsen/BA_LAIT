@@ -28,7 +28,7 @@ export interface ContentWithText extends Content {
 	content_json: {
 		temp_raw_text_edited?: string;
 		temp_raw_text?: string;
-	}
+	};
 }
 
 export type CoursePageContent = ContentWithText | JoinedQuiz;

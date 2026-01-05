@@ -2,13 +2,7 @@
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 import { CoursePageType } from '@/constants/courseConstants.ts';
 import type { CoursePage } from '@/types/db.ts';
-import {
-	ContentIcon,
-	EyeIcon,
-	EyeOffIcon,
-	PencilIcon,
-	QuizIcon,
-} from '@/assets/icons';
+import { ContentIcon, EyeIcon, EyeOffIcon, PencilIcon, QuizIcon } from '@/assets/icons';
 
 const editorStore = useCourseEditorStore();
 
@@ -43,29 +37,33 @@ const setVisibility = (page: CoursePage, pageToVisible: boolean) => {
 		<RouterLink
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}`"
 			class="flex gap-2 hover:bg-purple-10 p-4 pl-9"
-			exact-active-class="bg-purple-10"
-		>
+			exact-active-class="bg-purple-10">
 			<ContentIcon class="w-5" />
 			<p class="text-h8">Forside</p>
-		</RouterLink
-		>
+		</RouterLink>
 		<RouterLink
 			v-for="page in editorStore.listOfCoursePages"
 			:key="page.course_page_id"
 			:to="`/opret-kursus/${editorStore.currentEditedCourseId}/${page.course_page_id}`"
 			class="text-h8 flex justify-between hover:bg-purple-10 group p-4 pl-2"
-			exact-active-class="bg-purple-10"
-		>
+			exact-active-class="bg-purple-10">
 			<span class="flex gap-2">
-				<EyeIcon v-if="!pageIsVisible(page)" class="opacity-0 group-hover:opacity-100 w-5" @click="setVisibility(page, false)" />
+				<EyeIcon
+					v-if="!pageIsVisible(page)"
+					class="opacity-0 group-hover:opacity-100 w-5"
+					@click="setVisibility(page, false)" />
 				<EyeOffIcon v-if="pageIsVisible(page)" class="w-5" @click="setVisibility(page, true)" />
 				<QuizIcon v-if="pageTypeIsQuiz(page)" class="w-5" />
 				<ContentIcon v-if="pageTypeIsArticle(page)" class="w-5" />
-				<span class="text-h8" :class="{ 'italic opacity-70 hack-insert-star-in-before before:relative before:mr-1': pageHasUnsavedChanges(page) }">
+				<span
+					class="text-h8"
+					:class="{
+						'italic opacity-70 hack-insert-star-in-before before:relative before:mr-1': pageHasUnsavedChanges(page),
+					}">
 					{{ page.course_page_title }}
 				</span>
 			</span>
-			<PencilIcon class="opacity-0 group-hover:opacity-100"/>
+			<PencilIcon class="opacity-0 group-hover:opacity-100" />
 		</RouterLink>
 		<span class="block h-5"></span>
 	</div>

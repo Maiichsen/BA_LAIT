@@ -14,5 +14,5 @@ onMounted(() => {
 </script>
 
 <template>
-	<div class="bg-white rounded border border-tutara-200">This is quiz {{page}}</div>
+	<div class="bg-white rounded border border-tutara-200">This is quiz {{ page }}</div>
 </template>

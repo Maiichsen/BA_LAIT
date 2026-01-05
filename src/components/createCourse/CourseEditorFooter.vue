@@ -13,22 +13,9 @@ const canSave = computed(() => {
 
 <template>
 	<div class="flex justify-end gap-4 py-2 pr-10 bg-cornflower-blue-10">
-		<span class="flex gap-2 p-4" :class="{ disabled: true }">
-			<EyeIcon /> Forhåndsvisning
-		</span>
-		<BaseButton
-			variant="stroke"
-			:class="{ disabled: !canSave }"
-			@click="() => editorStore.save()"
-		>
-			Gem
-		</BaseButton>
-		<BaseButton
-			variant="primary-tiny"
-			:class="{ disabled: !canSave }"
-		>
-			Gem og udgiv
-		</BaseButton>
+		<span class="flex gap-2 p-4" :class="{ disabled: true }"> <EyeIcon /> Forhåndsvisning </span>
+		<BaseButton variant="stroke" :class="{ disabled: !canSave }" @click="() => editorStore.save()"> Gem </BaseButton>
+		<BaseButton variant="primary-tiny" :class="{ disabled: !canSave }"> Gem og udgiv </BaseButton>
 	</div>
 </template>
 
