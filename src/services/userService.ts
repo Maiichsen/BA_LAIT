@@ -34,7 +34,10 @@ export const createUser = (newUserParams: newUserParams): Promise<User> =>
 export const getUserById = (userId: string): Promise<User> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('users').select('*').eq('user_id', userId).single();
+			const {
+				data,
+				error,
+			} = await supabase.from('users').select('*').eq('user_id', userId).single();
 
 			if (error) return reject(error);
 			return resolve(data);
@@ -90,7 +93,10 @@ export const sendSignInOtpMail = (email: string): Promise<void> =>
 
 export const deleteInvitedUser = async (email: string) => {
 	try {
-		const { data, error } = await supabase.from('invited_users').delete().eq('user_email', email.toLowerCase());
+		const {
+			data,
+			error,
+		} = await supabase.from('invited_users').delete().eq('user_email', email.toLowerCase());
 
 		if (error) throw error;
 		return data;
@@ -132,7 +138,19 @@ export const getAuthUser = (): Promise<AuthUser> =>
 		}
 	});
 
-export const getUserRoleById = (userId: string): Promise<{ is_admin: boolean; is_company_user: boolean }> =>
+export const signOutAuthUser = (): Promise<void> => new Promise(async (resolve, reject) => {
+	const { error } = await supabase.auth.signOut();
+	if (error) {
+		reject(error);
+	}
+
+	resolve();
+});
+
+export const getUserRoleById = (userId: string): Promise<{
+	is_admin: boolean;
+	is_company_user: boolean
+}> =>
 	new Promise(async (resolve, reject) => {
 		try {
 			const { data, error } = await supabase
@@ -216,7 +234,10 @@ export const createInvitedUser = (inviteUserParams: inviteUserParams): Promise<I
 export const getInvitedUserByEmail = (email: string): Promise<InvitedUser | null> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('invited_users').select().eq('user_email', email.toLowerCase());
+			const {
+				data,
+				error,
+			} = await supabase.from('invited_users').select().eq('user_email', email.toLowerCase());
 
 			if (error) return reject(error);
 			if (!data) return reject('No data object found, lost in space');
@@ -247,7 +268,10 @@ export const checkIfEmailIsAlreadyInvited = (email: string): Promise<boolean> =>
 export const checkIfEmailIsAlreadyVerifiedUser = (email: string): Promise<boolean> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('users').select('user_id').eq('email', email.toLowerCase());
+			const {
+				data,
+				error,
+			} = await supabase.from('users').select('user_id').eq('email', email.toLowerCase());
 
 			if (error) return reject(error);
 
