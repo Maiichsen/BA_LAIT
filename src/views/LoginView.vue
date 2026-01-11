@@ -3,7 +3,6 @@ import LoginForm from '@/components/login/LoginForm.vue';
 </script>
 
 <template>
-	<!--	TODO: styling til små skærme..-->
 	<div class="container">
 		<div class="container-row">
 			<div class="col-span-full lg:col-start-2 lg:col-span-4">
