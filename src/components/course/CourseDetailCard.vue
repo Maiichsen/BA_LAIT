@@ -79,12 +79,7 @@ const videoContentFormatted = computed(() => {
 			</div>
 
 			<!-- Billede -->
-			<img
-				v-else-if="imageUrl"
-				:src="imageUrl"
-				:alt="title"
-				class="w-full h-full object-cover"
-				loading="lazy" />
+			<img v-else-if="imageUrl" :src="imageUrl" :alt="title" class="w-full h-full object-cover" loading="lazy" />
 
 			<!-- Placeholder -->
 			<div v-else class="w-full h-full flex items-center justify-center bg-tutara-100">
@@ -108,7 +103,6 @@ const videoContentFormatted = computed(() => {
 				</div>
 			</div>
 
-
 			<div class="space-y-2 sm:space-y-3">
 				<h3 class="text-t3">Indeholder</h3>
 				<div v-if="videoContentFormatted" class="flex items-center gap-2 text-p1 text-tutara-700">
@@ -131,9 +125,7 @@ const videoContentFormatted = computed(() => {
 				<p class="text-p1 text-tutara-700">{{ courseType }}</p>
 			</div>
 
-			 <BaseButton class="self-center w-full sm:w-auto"
-				variant="primary"
-				@click="emit('contact')">
+			<BaseButton class="self-center w-full sm:w-auto" variant="primary" @click="emit('contact')">
 				Bliv kontaktet
 			</BaseButton>
 		</div>

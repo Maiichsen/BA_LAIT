@@ -48,7 +48,6 @@ const gridCols = computed(() => {
 		</div>
 	</div>
 
-
 	<section class="bg-cornflower-blue-10 py-10 lg:py-20 mt-10 lg:mt-20">
 		<div class="container">
 			<div class="container-row">
@@ -58,59 +57,45 @@ const gridCols = computed(() => {
 					</div>
 					<div class="grid md:grid-cols-2 lg:gap-8 gap-6" :class="gridCols">
 						<div v-for="person in persons" :key="person.email" class="col-span-1">
-							<img
-								:src="person.image"
-								:alt="person.name"
-								class="object-cover mb-6 w-full h-auto"
-							/>
+							<img :src="person.image" :alt="person.name" class="object-cover mb-6 w-full h-auto" />
 							<div class="flex flex-col gap-y-5">
 								<p class="text-c2 text-tutara-700">{{ person.role }}</p>
 								<h3 class="text-h6">{{ person.name }}</h3>
 								<div class="flex gap-x-6">
-									<a
-										:href="`mailto:${person.email}`"
-										class="flex items-center gap-x-3 text-p1-button text-tutara-700"
-									>
+									<a :href="`mailto:${person.email}`" class="flex items-center gap-x-3 text-p1-button text-tutara-700">
 										<svg
 											class="relative -top-px"
 											xmlns="http://www.w3.org/2000/svg"
 											width="12"
 											height="12"
 											viewBox="0 0 12 12"
-											fill="none"
-										>
+											fill="none">
 											<rect
 												x="5.65686"
 												y="1.05086"
 												width="7"
 												height="7"
 												transform="rotate(45 5.65686 1.05086)"
-												fill="#252323"
-											/>
+												fill="#252323" />
 										</svg>
 										<span class="sr-only">Send e-mail til</span>
 										{{ person.email }}
 									</a>
-									<a
-										:href="`tel:${person.phone}`"
-										class="flex items-center gap-x-3 text-p1-button text-tutara-700"
-									>
+									<a :href="`tel:${person.phone}`" class="flex items-center gap-x-3 text-p1-button text-tutara-700">
 										<svg
 											class="relative -top-px"
 											xmlns="http://www.w3.org/2000/svg"
 											width="12"
 											height="12"
 											viewBox="0 0 12 12"
-											fill="none"
-										>
+											fill="none">
 											<rect
 												x="5.65686"
 												y="1.05086"
 												width="7"
 												height="7"
 												transform="rotate(45 5.65686 1.05086)"
-												fill="#252323"
-											/>
+												fill="#252323" />
 										</svg>
 										<span class="sr-only">Ring til</span>
 										{{ person.phone }}

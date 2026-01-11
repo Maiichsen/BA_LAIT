@@ -56,7 +56,7 @@ const handleContact = () => {
 			<div v-else-if="error || !course" class="col-span-full flex items-center justify-center min-h-[400px]">
 				<div class="text-center">
 					<h2 class="text-h4 text-tutara-900 mb-2">Fejl</h2>
-					<p class="text-p1 ">{{ error || 'Kurset blev ikke fundet' }}</p>
+					<p class="text-p1">{{ error || 'Kurset blev ikke fundet' }}</p>
 				</div>
 			</div>
 
@@ -68,7 +68,7 @@ const handleContact = () => {
 
 				<div class="lg:col-start-2 lg:col-span-8 col-span-full space-y-8 bg order-2 lg:order-0">
 					<div class="space-y-4">
-						<h2 v-if="course.short_course_description" class="text-h5 ">
+						<h2 v-if="course.short_course_description" class="text-h5">
 							{{ course.short_course_description }}
 						</h2>
 						<p v-if="course.long_course_description" class="text-p1">
@@ -80,8 +80,8 @@ const handleContact = () => {
 					</div>
 
 					<div v-if="coursePages.length > 0" class="space-y-3">
-						<h3 class="text-t2 ">Kursus indhold:</h3>
-						<ul class="list-disc list-inside space-y-2 text-p1 ">
+						<h3 class="text-t2">Kursus indhold:</h3>
+						<ul class="list-disc list-inside space-y-2 text-p1">
 							<li v-for="page in coursePages" :key="page.course_page_id">
 								{{ page.course_page_title }}
 							</li>
@@ -90,15 +90,17 @@ const handleContact = () => {
 
 					<!-- Dummy kursus indhold-->
 					<div class="space-y-3">
-						<h3 class="text-t2 ">Hvem er kurset til?</h3>
-						<p class="text-p1 ">
-						Kurset er målrettet virksomheder, der ønsker at styrke deres medarbejdere i at arbejde professionelt med webtilgængelighed. Det henvender sig til udviklere, designere, redaktører og andre, der arbejder med digitale produkter.
+						<h3 class="text-t2">Hvem er kurset til?</h3>
+						<p class="text-p1">
+							Kurset er målrettet virksomheder, der ønsker at styrke deres medarbejdere i at arbejde professionelt med
+							webtilgængelighed. Det henvender sig til udviklere, designere, redaktører og andre, der arbejder med
+							digitale produkter.
 						</p>
 					</div>
 
 					<div class="space-y-3">
-						<h3 class="text-t2 ">Det lærer i på kurset</h3>
-						<ul class="list-disc list-inside space-y-2 text-p1 ">
+						<h3 class="text-t2">Det lærer i på kurset</h3>
+						<ul class="list-disc list-inside space-y-2 text-p1">
 							<li>Hvad webtilgængelighed er, og hvorfor det er vigtigt</li>
 							<li>Introduktion til WCAG 2.2 og lovgivning (EU's tilgængelighedsdirektiv)</li>
 							<li>Bedste praksis for tilgængelig design, struktur og UI</li>
@@ -110,9 +112,9 @@ const handleContact = () => {
 					</div>
 
 					<div class="space-y-3">
-						<h3 class="text-t2 ">Udbytte</h3>
-						<p class="text-p1 ">Efter kurset vil lærer medarbejderen kunne:</p>
-						<ul class="list-disc list-inside space-y-2 text-p1 ">
+						<h3 class="text-t2">Udbytte</h3>
+						<p class="text-p1">Efter kurset vil lærer medarbejderen kunne:</p>
+						<ul class="list-disc list-inside space-y-2 text-p1">
 							<li>Identificere og løse tilgængelighedsproblemer</li>
 							<li>Forstå WCAG-principper</li>
 							<li>Udvikle mere inkluderende og lovmedholdige digitale løsninger.</li>
@@ -120,15 +122,14 @@ const handleContact = () => {
 					</div>
 
 					<div class="space-y-3">
-						<h3 class="text-t2 ">Praktisk info</h3>
-						<p class="text-p1 ">
-							Kurset leveres on-demand, så medarbejdere kan tage det i eget tempo – når det passer
-							ind i arbejdsdagen.
+						<h3 class="text-t2">Praktisk info</h3>
+						<p class="text-p1">
+							Kurset leveres on-demand, så medarbejdere kan tage det i eget tempo – når det passer ind i arbejdsdagen.
 						</p>
 					</div>
 				</div>
 
-			<!-- Kursus detalje card  -->
+				<!-- Kursus detalje card  -->
 				<div class="lg:col-start-11 lg:col-span-5 col-span-full order-1 lg:order-0 pb-5 lg:pb-0">
 					<div class="">
 						<CourseDetailCard
