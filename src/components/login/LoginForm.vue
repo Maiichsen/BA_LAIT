@@ -23,7 +23,7 @@ const handleLogin = () => {
 </script>
 
 <template>
-	<div class="mt-[6rem]">
+	<div class="mt-24">
 		<form @submit.prevent="handleLogin">
 			<BaseInput input-type="text" input-id="loginemail" label-text="E-mail" layout="stacked" v-model="userEmail" />
 			<BaseInput
@@ -33,7 +33,7 @@ const handleLogin = () => {
 				layout="stacked"
 				class="mt-[0.8rem]"
 				v-model="userPassword" />
-			<p class="text-p1 text-tutara-600 text-right mt-[1rem]">Glemt adgangskode?</p>
+			<p class="text-p1 text-tutara-600 text-right mt-4">Glemt adgangskode?</p>
 			<BaseButton type="submit" label="Login">Log ind</BaseButton>
 		</form>
 	</div>
