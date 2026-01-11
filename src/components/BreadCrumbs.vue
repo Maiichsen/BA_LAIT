@@ -26,6 +26,18 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
 
 	// Get the current route's breadcrumb
 	const currentMatch = route.matched[route.matched.length - 1];
+
+	// Check if there's a parent breadcrumb defined
+	if (currentMatch?.meta.parentBreadcrumb) {
+		const parent = currentMatch.meta.parentBreadcrumb as { name: string; path: string };
+		items.push({
+			name: parent.name,
+			path: parent.path,
+			isCurrentPage: false,
+		});
+	}
+
+	// Add the current page breadcrumb
 	if (currentMatch?.meta.breadcrumb) {
 		items.push({
 			name: currentMatch.meta.breadcrumb as string,

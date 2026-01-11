@@ -16,9 +16,12 @@ interface CourseCardProps {
 	authorName?: string | null;
 	status?: CourseStatus;
 	isEditMode?: boolean;
+	isClickable?: boolean;
 }
 
-const props = defineProps<CourseCardProps>();
+const props = withDefaults(defineProps<CourseCardProps>(), {
+	isClickable: true,
+});
 
 const imageUrl = ref<string | null>(null);
 const imageLoading = ref(true);
@@ -78,10 +81,19 @@ const statusVariant = computed(() => {
 const cardHref = computed(() => {
 	return props.isEditMode ? `/opret-kursus/${props.courseId}` : `/kurser/${props.courseId}`;
 });
+
+// Beregn component type baseret på isClickable
+const componentType = computed(() => (props.isClickable ? 'router-link' : 'div'));
 </script>
 
 <template>
-	<a :href="cardHref" class="group flex flex-col h-full border border-tutara-200 bg-white pb-20 rounded-md">
+	<component
+		:is="componentType"
+		:to="isClickable ? cardHref : undefined"
+		:class="[
+			'flex flex-col h-full border border-tutara-200 bg-white pb-20 rounded-md',
+			isClickable ? 'group cursor-pointer' : '',
+		]">
 		<div class="w-full h-[199px] overflow-hidden relative">
 			<!-- Loading state -->
 			<div v-if="imageLoading" class="absolute inset-0 flex items-center justify-center bg-tutara-100">
@@ -93,7 +105,10 @@ const cardHref = computed(() => {
 				v-else-if="imageUrl"
 				:src="imageUrl"
 				:alt="title"
-				class="w-full h-full z-1 relative object-cover transition-transform duration-400 transform group-hover:scale-110"
+				:class="[
+					'w-full h-full z-1 relative object-cover transition-transform duration-400 transform',
+					isClickable ? 'group-hover:scale-110' : '',
+				]"
 				loading="lazy" />
 
 			<!-- Placeholder -->
@@ -120,7 +135,7 @@ const cardHref = computed(() => {
 			</div>
 
 			<!-- Titel -->
-			<h2 class="text-h6 group-hover:underline line-clamp-2">
+			<h2 :class="['text-h6 line-clamp-2', isClickable ? 'group-hover:underline' : '']">
 				{{ title }}
 			</h2>
 
@@ -129,5 +144,5 @@ const cardHref = computed(() => {
 				{{ description }}
 			</p>
 		</div>
-	</a>
+	</component>
 </template>

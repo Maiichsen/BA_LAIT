@@ -1,3 +1,9 @@
+* {
+	scroll-behavior: smooth;
+	overflow-wrap: anywhere;
+	word-break: normal;
+}
+
 body {
 	font-family: 'SuisseIntl', sans-serif;
 	background-color: var(--color-tutara-50);

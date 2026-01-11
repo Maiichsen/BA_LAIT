@@ -145,6 +145,32 @@ const router = createRouter({
 			],
 		},
 		{
+			path: '/kurser/:course_id',
+			name: 'courseDetail',
+			meta: {
+				layout: DefaultLayout,
+				breadcrumb: 'Kursus Detaljer',
+				parentBreadcrumb: {
+					name: 'Alle Kurser',
+					path: '/alle-kurser',
+				},
+			},
+			props: true,
+			component: () => import('../views/CourseDetailView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
+		},
+		{
 			path: '/mine-kurser',
 			name: 'myCourses',
 			meta: {
