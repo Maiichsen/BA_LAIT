@@ -6,6 +6,14 @@ import CourseEditorLayout from '@/components/layouts/CourseEditorLayout.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
+	scrollBehavior(_to, _from, savedPosition) {
+		//browser back/forward, gå tilbage til den gemte position
+		if (savedPosition) {
+			return savedPosition;
+		}
+		// Ellers scroll til toppen af siden
+		return { top: 0, behavior: 'smooth' };
+	},
 	routes: [
 		{
 			path: '/log-ind',

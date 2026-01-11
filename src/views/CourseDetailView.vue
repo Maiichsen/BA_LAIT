@@ -62,7 +62,7 @@ const handleContact = () => {
 
 			<!-- Kursus detalje/info -->
 			<template v-else>
-				<div class="lg:col-start-2 lg:col-span-12 col-span-full mb-8">
+				<div class="lg:col-start-2 lg:col-span-10 col-span-full mb-8">
 					<h1 class="text-h2">{{ course.title }}</h1>
 				</div>
 
