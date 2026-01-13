@@ -17,10 +17,12 @@ interface CourseCardProps {
 	status?: CourseStatus;
 	isEditMode?: boolean;
 	isClickable?: boolean;
+	isPublished?: boolean;
 }
 
 const props = withDefaults(defineProps<CourseCardProps>(), {
 	isClickable: true,
+	isPublished: true,
 });
 
 const imageUrl = ref<string | null>(null);
@@ -115,12 +117,19 @@ const componentType = computed(() => (props.isClickable ? 'router-link' : 'div')
 			<div v-else class="w-full h-full flex items-center justify-center bg-tutara-100">
 				<ImageIcon :width="80" :height="80" stroke-class="text-tutara-400" />
 			</div>
+
+			<!-- Draft overlay -->
+			<div v-if="!isPublished" class="absolute inset-0 bg-tutara-900/50 flex items-center justify-center z-10">
+				<span class="text-h3 text-purple-300 uppercase drop-shadow-2xl">Kladde</span>
+			</div>
 		</div>
 
 		<!-- Content med padding -->
 		<div class="flex flex-col p-4 lg:p-3 flex-1 gap-3">
 			<!-- badge -->
 			<div class="flex gap-3 flex-wrap">
+				<InfoBadge v-if="!isPublished" :variant="'purple'">Ikke publiceret</InfoBadge>
+
 				<InfoBadge v-if="estimatedHours" :variant="'blue'">
 					{{ estimatedHours }} {{ estimatedHours === 1 ? 'time' : 'timer' }}
 				</InfoBadge>
