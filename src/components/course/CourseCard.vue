@@ -119,9 +119,7 @@ const componentType = computed(() => (props.isClickable ? 'router-link' : 'div')
 			</div>
 
 			<!-- Draft overlay -->
-			<div
-				v-if="!isPublished"
-				class="absolute inset-0 bg-tutara-900/50 flex items-center justify-center z-10">
+			<div v-if="!isPublished" class="absolute inset-0 bg-tutara-900/50 flex items-center justify-center z-10">
 				<span class="text-h3 text-purple-300 uppercase drop-shadow-2xl">Kladde</span>
 			</div>
 		</div>

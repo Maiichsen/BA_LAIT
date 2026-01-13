@@ -53,9 +53,12 @@ onMounted(() => {
 });
 
 // Re-fetch courses when edit mode changes
-watch(() => isEditMode, () => {
-	fetchCourses();
-});
+watch(
+	() => isEditMode,
+	() => {
+		fetchCourses();
+	},
+);
 
 const handleCreateNewCourseClick = () => {
 	createTemplateCourse()
