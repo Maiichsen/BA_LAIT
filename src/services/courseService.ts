@@ -163,6 +163,25 @@ export const getAllCourses = (): Promise<Course[]> =>
 		}
 	});
 
+export const getUserCourses = (userId: string): Promise<Course[]> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const { data, error } = await supabase
+				.from('course_seats')
+				.select('courses(*)')
+				.eq('user_id', userId);
+
+			if (error) return reject(error);
+
+			// Extract courses from the nested structure
+			const courses = data.map(seat => seat.courses).filter(course => course !== null) as Course[];
+
+			resolve(courses);
+		} catch (err) {
+			reject(err);
+		}
+	});
+
 export const deleteCourseById = (courseId: string): Promise<void> =>
 	new Promise(async (resolve, reject) => {
 		try {
