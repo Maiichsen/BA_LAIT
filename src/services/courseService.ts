@@ -166,10 +166,7 @@ export const getAllCourses = (): Promise<Course[]> =>
 export const getUserCourses = (userId: string): Promise<Course[]> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase
-				.from('course_seats')
-				.select('courses(*)')
-				.eq('user_id', userId);
+			const { data, error } = await supabase.from('course_seats').select('courses(*)').eq('user_id', userId);
 
 			if (error) return reject(error);
 

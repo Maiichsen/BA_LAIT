@@ -64,9 +64,7 @@ onMounted(() => {
 			</div>
 
 			<!-- Loading state -->
-			<div
-				v-if="loading"
-				class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
+			<div v-if="loading" class="lg:col-start-2 lg:col-span-11 col-span-full flex items-center justify-center py-12">
 				<div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500"></div>
 			</div>
 
@@ -77,9 +75,7 @@ onMounted(() => {
 
 			<!-- Empty state -->
 			<template v-else>
-				<div
-					v-if="courses.length === 0"
-					class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
+				<div v-if="courses.length === 0" class="lg:col-start-2 lg:col-span-11 col-span-full text-center py-12">
 					<p class="text-tutara-600">Du har ingen tildelte kurser endnu</p>
 				</div>
 
