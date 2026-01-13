@@ -27,7 +27,7 @@ const handleLogin = () => {
 		<form @submit.prevent="handleLogin">
 			<BaseInput input-type="text" input-id="loginemail" label-text="E-mail" layout="stacked" v-model="userEmail" />
 			<BaseInput
-				input-type="text"
+				input-type="password"
 				input-id="loginpassword"
 				label-text="Adgangskode"
 				layout="stacked"
