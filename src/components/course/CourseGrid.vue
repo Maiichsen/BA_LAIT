@@ -71,7 +71,7 @@ const handleCreateNewCourseClick = () => {
 
 		<div
 			v-else
-			class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(45%,1fr))] xl:grid-cols-[repeat(auto-fit,minmax(30%,1fr))] gap-10">
+			class="lg:col-start-2 lg:col-span-14 col-span-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10 auto-rows-fr">
 			<!-- Create new course card -->
 			<div
 				v-if="isEditMode"
