@@ -153,7 +153,7 @@ export const getAllPublicCourses = (): Promise<Course[]> =>
 export const getAllCourses = (): Promise<Course[]> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('courses').select('*');
+			const { data, error } = await supabase.from('courses').select('*').is('soft_deleted_at', null);
 
 			if (error) return reject(error);
 

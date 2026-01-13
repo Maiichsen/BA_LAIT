@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
 import { getCoursesByCompanyId, getUnusedSeatIds, type CompanyCourseWithStats } from '@/services/companyService.ts';
-import { getAllCourses } from '@/services/courseService.ts';
+import { getAllPublicCourses } from '@/services/courseService.ts';
 import { createCourseSeat, deleteCourseSeat } from '@/services/seatService.ts';
 import type { Course } from '@/types/db.ts';
 import BaseModal from '@/components/BaseModal.vue';
@@ -67,11 +67,11 @@ watch(
 						...course,
 						newTotalSeats: course.totalSeats,
 					}));
-					// Load all courses for the dropdown
+					// Load all published courses for the dropdown
 					try {
-						allCourses.value = await getAllCourses();
+						allCourses.value = await getAllPublicCourses();
 					} catch (error) {
-						console.error('Error loading all courses:', error);
+						console.error('Error loading published courses:', error);
 					}
 				} else {
 					isEditMode.value = false;
@@ -98,11 +98,11 @@ const handleConfirm = async () => {
 			newTotalSeats: course.totalSeats,
 		}));
 
-		// Load all courses for the dropdown
+		// Load all published courses for the dropdown
 		try {
-			allCourses.value = await getAllCourses();
+			allCourses.value = await getAllPublicCourses();
 		} catch (error) {
-			console.error('Error loading all courses:', error);
+			console.error('Error loading published courses:', error);
 		}
 	} else {
 		// Save changes

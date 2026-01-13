@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { createTemplateCourse, getAllPublicCourses } from '@/services/courseService';
+import { ref, onMounted, watch } from 'vue';
+import { createTemplateCourse, getAllPublicCourses, getAllCourses } from '@/services/courseService';
 import type { Course } from '@/types/db';
 import CourseCard from './CourseCard.vue';
 import { useRouter } from 'vue-router';
@@ -28,7 +28,9 @@ const fetchCourses = async () => {
 	try {
 		loading.value = true;
 		error.value = null;
-		const data = await getAllPublicCourses();
+
+		// Fetch all courses when in edit mode, otherwise only public courses
+		const data = isEditMode ? await getAllCourses() : await getAllPublicCourses();
 
 		// Tilføj tilfældig status til de første 3 kurser
 		courses.value = data.map((course, index) => {
@@ -47,6 +49,11 @@ const fetchCourses = async () => {
 };
 
 onMounted(() => {
+	fetchCourses();
+});
+
+// Re-fetch courses when edit mode changes
+watch(() => isEditMode, () => {
 	fetchCourses();
 });
 
@@ -99,7 +106,8 @@ const handleCreateNewCourseClick = () => {
 				:cover-image-url="course.cover_image_url"
 				:author-name="course.author_name"
 				:status="course.status"
-				:is-edit-mode="isEditMode" />
+				:is-edit-mode="isEditMode"
+				:is-published="course.is_published" />
 		</div>
 	</template>
 </template>

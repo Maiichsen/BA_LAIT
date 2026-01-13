@@ -216,11 +216,12 @@ export interface CompanyCourseWithStats {
 }
 
 export const getCoursesByCompanyId = async (companyId: string): Promise<CompanyCourseWithStats[]> => {
-	// Get all course_seats for this company with course details
+	// Get all course_seats for this company with course details (only published courses)
 	const { data: seats, error: seatsError } = await supabase
 		.from('course_seats')
-		.select('course_id, user_id, courses(course_id, title, short_course_description)')
-		.eq('company_id', companyId);
+		.select('course_id, user_id, courses!inner(course_id, title, short_course_description, is_published)')
+		.eq('company_id', companyId)
+		.eq('courses.is_published', true);
 
 	if (seatsError) throw seatsError;
 
