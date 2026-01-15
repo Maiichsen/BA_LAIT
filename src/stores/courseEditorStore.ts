@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import type { CoursePage } from '@/types/db.ts';
 import {
 	createCoursePageWithDefaultContent,
 	getAllCoursePagesByCourseId,
+	getCourseById,
 	getCourseContentByPageId,
+	getCoverImgUrlByCourseId,
+	updateCourse,
 } from '@/services/courseService.ts';
 import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
-import { ContentWithText, RichCoursePage } from '@/types/courseTypes.ts';
+import { ContentWithText, CourseParams, RichCoursePage } from '@/types/courseTypes.ts';
 import { setArticleContent } from '@/services/courseArticleService.ts';
+import { uploadImageToSupabaseBucket } from '@/services/imageService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
@@ -16,13 +20,43 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const currentEditedCoursePageId = ref<string | null>(null);
 	const _unsortedListOfCoursePages = ref<CoursePage[]>([]);
 	const coursePageContent = ref<Record<string, RichCoursePage>>({});
+	const newCoverImageFile = ref<File | null>(null);
+	const originalCoverImageUrl = ref<string | null>(null);
+
+	const courseFrontpageDetails: CourseParams = reactive({
+		title: '',
+		author_name: null,
+		estimated_time_minutes: null,
+		cover_image_url: null,
+		short_course_description: '',
+		long_course_description: '',
+	});
+
+	const _originalCourseFrontPageDetails: CourseParams = reactive({
+		title: '',
+		author_name: null,
+		estimated_time_minutes: null,
+		cover_image_url: null,
+		short_course_description: '',
+		long_course_description: '',
+	});
 
 	const listOfCoursePages = computed(() => {
 		return _unsortedListOfCoursePages.value.sort((a, b) => a.order_index - b.order_index);
 	});
 
+	const _frontPageDetailsPageHasAnyUnsavedChanges = computed(() => {
+		return (
+			JSON.stringify(courseFrontpageDetails) !== JSON.stringify(_originalCourseFrontPageDetails) ||
+			newCoverImageFile.value
+		);
+	});
+
 	const courseHasAnyUnsavedChanges = computed(() => {
-		return Object.values(coursePageContent.value).some(page => page.hasUnsavedData === true);
+		return (
+			_frontPageDetailsPageHasAnyUnsavedChanges.value ||
+			Object.values(coursePageContent.value).some(page => page.hasUnsavedData === true)
+		);
 	});
 
 	const loadCourse = (courseId: string) => {
@@ -31,6 +65,21 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		currentEditedCourseId.value = courseId;
 		currentEditedCoursePageId.value = '';
 		coursePageContent.value = {};
+
+		getCourseById(courseId)
+			.then(course => {
+				Object.assign(courseFrontpageDetails, course);
+				Object.assign(_originalCourseFrontPageDetails, course);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+
+		getCoverImgUrlByCourseId(courseId)
+			.then(imgUrl => {
+				originalCoverImageUrl.value = imgUrl;
+			})
+			.catch(err => console.log(err));
 
 		getAllCoursePagesByCourseId(courseId)
 			.then(coursePages => {
@@ -165,7 +214,27 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		page.content_json.temp_raw_text_edited = newContent;
 	};
 
-	const save = () => {
+	const save = async () => {
+		if (newCoverImageFile.value) {
+			const newCoverImageUrl = Date.now().toString();
+			await uploadImageToSupabaseBucket(newCoverImageUrl, newCoverImageFile.value);
+
+			originalCoverImageUrl.value = URL.createObjectURL(newCoverImageFile.value);
+
+			courseFrontpageDetails.cover_image_url = newCoverImageUrl;
+			newCoverImageFile.value = null;
+		}
+
+		if (_frontPageDetailsPageHasAnyUnsavedChanges.value) {
+			updateCourse(currentEditedCourseId.value, courseFrontpageDetails)
+				.then(() => {
+					Object.assign(_originalCourseFrontPageDetails, courseFrontpageDetails);
+				})
+				.catch(error => {
+					console.error(error);
+				});
+		}
+
 		Object.values(coursePageContent.value).forEach(coursePage => {
 			if (!coursePage.hasUnsavedData) return;
 			if (!coursePage.course_page_id) return;
@@ -196,6 +265,9 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		currentEditedCourseId,
 		coursePageContent,
 		courseHasAnyUnsavedChanges,
+		courseFrontpageDetails,
+		newCoverImageFile,
+		originalCoverImageUrl,
 		loadCourse,
 		setCurrentEditedCoursePage,
 		addNewPageTypeArticle,
