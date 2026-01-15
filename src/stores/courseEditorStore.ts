@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { computed, Reactive, reactive, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import type { CoursePage } from '@/types/db.ts';
 import {
 	createCoursePageWithDefaultContent,
@@ -12,7 +12,7 @@ import {
 import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
 import { ContentWithText, CourseParams, RichCoursePage } from '@/types/courseTypes.ts';
 import { setArticleContent } from '@/services/courseArticleService.ts';
-import { downloadImageFromSupabaseBucket, uploadImageToSupabaseBucket } from '@/services/imageService.ts';
+import { uploadImageToSupabaseBucket } from '@/services/imageService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const courseGlobalLoading = ref(false);
@@ -23,7 +23,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const newCoverImageFile = ref<File | null>(null);
 	const originalCoverImageUrl = ref<string | null>(null);
 
-	const courseFrontpageDetails: Reactive<CourseParams> = reactive({
+	const courseFrontpageDetails: CourseParams = reactive({
 		title: '',
 		author_name: null,
 		estimated_time_minutes: null,
@@ -46,7 +46,10 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	});
 
 	const _frontPageDetailsPageHasAnyUnsavedChanges = computed(() => {
-		return JSON.stringify(courseFrontpageDetails) !== JSON.stringify(_originalCourseFrontPageDetails) || newCoverImageFile.value;
+		return (
+			JSON.stringify(courseFrontpageDetails) !== JSON.stringify(_originalCourseFrontPageDetails) ||
+			newCoverImageFile.value
+		);
 	});
 
 	const courseHasAnyUnsavedChanges = computed(() => {
