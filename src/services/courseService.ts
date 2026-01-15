@@ -14,8 +14,8 @@ import { createDefaultQuiz, getQuizByPageId } from '@/services/quizService.ts';
 
 export const createTemplateCourse = async (): Promise<Course> => {
 	const course = await createCourse({
-		title: 'Nyt kurses',
-		short_course_description: 'Kort beskrivelse af kurset',
+		title: '',
+		short_course_description: '',
 	});
 	await createCoursePageWithDefaultContent(CoursePageType.article, course.course_id, pageOrderIndexDefaultGab);
 	return course;

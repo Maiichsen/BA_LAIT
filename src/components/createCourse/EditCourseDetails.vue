@@ -27,7 +27,7 @@ const handleFileNameChange = (event: Event) => {
 };
 
 /*Update course*/
-const handleUpdateCourse = async () => {
+/*const handleUpdateCourse = async () => {
 	if (imgFile.value) {
 		coverImgUrl = Date.now().toString();
 		await uploadImageToSupabaseBucket(coverImgUrl, imgFile.value);
@@ -41,7 +41,7 @@ const handleUpdateCourse = async () => {
 		author_name: authorName.value,
 		long_course_description: longDescription.value,
 	});
-};
+};*/
 
 onMounted(() => {
 	getCourseById(courseStore.currentEditedCourseId)
@@ -62,10 +62,6 @@ onMounted(() => {
 		})
 		.catch(err => console.log(err));
 });
-
-watch(() => courseStore.courseFrontpageDetails.title, (newVal) => {
-	console.log(newVal);
-});
 </script>
 
 <template>
@@ -73,7 +69,7 @@ watch(() => courseStore.courseFrontpageDetails.title, (newVal) => {
 		<div class="flex flex-col gap-2">
 			<BaseInput
 				input-type="text"
-				:placeholder="title"
+				placeholder="overskrift"
 				input-id="overskrift"
 				label-text="Overskrift"
 				layout="inline"
@@ -84,7 +80,7 @@ watch(() => courseStore.courseFrontpageDetails.title, (newVal) => {
 				input-id="kortbeskrivelse"
 				label-text="Kort beskrivelse"
 				layout="inline"
-				v-model="shortDescription" />
+				v-model="courseStore.courseFrontpageDetails.short_course_description" />
 			<BaseInput
 				input-type="file"
 				input-id="image"
@@ -98,27 +94,23 @@ watch(() => courseStore.courseFrontpageDetails.title, (newVal) => {
 				input-id="varighed"
 				label-text="Varighed i minutter"
 				layout="inline"
-				v-model="timeEstimate" />
+				v-model="courseStore.courseFrontpageDetails.estimated_time_minutes" />
 			<BaseInput
 				input-type="text"
 				placeholder="oprettet af"
 				input-id="oprettet"
 				label-text="Oprettet af"
 				layout="inline"
-				v-model="authorName" />
+				v-model="courseStore.courseFrontpageDetails.author_name" />
 			<BaseInput
 				input-type="text"
 				placeholder="indhold"
 				input-id="indhold"
 				label-text="Indhold"
 				layout="stacked"
-				v-model="longDescription" />
+				v-model="courseStore.courseFrontpageDetails.long_course_description" />
 		</div>
 	</form>
-
-	<br />
-	<!--	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>-->
-
 	<div v-if="displayedCoverUrl">
 		<img :src="displayedCoverUrl" />
 	</div>

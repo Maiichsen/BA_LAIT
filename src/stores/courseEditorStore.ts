@@ -1,14 +1,15 @@
 import { defineStore } from 'pinia';
-import { computed, reactive, ref } from 'vue';
+import { computed, Reactive, reactive, ref } from 'vue';
 import type { CoursePage } from '@/types/db.ts';
 import {
 	createCoursePageWithDefaultContent,
 	getAllCoursePagesByCourseId,
 	getCourseById,
 	getCourseContentByPageId,
+	updateCourse,
 } from '@/services/courseService.ts';
 import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
-import { ContentWithText, RichCoursePage } from '@/types/courseTypes.ts';
+import { ContentWithText, CourseParams, RichCoursePage } from '@/types/courseTypes.ts';
 import { setArticleContent } from '@/services/courseArticleService.ts';
 
 export const useCourseEditorStore = defineStore('courseEditor', () => {
@@ -18,13 +19,23 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const _unsortedListOfCoursePages = ref<CoursePage[]>([]);
 	const coursePageContent = ref<Record<string, RichCoursePage>>({});
 
-	const courseFrontpageDetails = reactive({
-		title: null,
+	const courseFrontpageDetails: Reactive<CourseParams> = reactive({
+		title: '',
+		author_name: null,
+		estimated_time_minutes: null,
+		cover_image_url: null,
+		short_course_description: '',
+		long_course_description: '',
 	});
 
-	const _originalCourseFrontPageDetails = {
-		title: null,
-	};
+	const _originalCourseFrontPageDetails: CourseParams = reactive({
+		title: '',
+		author_name: null,
+		estimated_time_minutes: null,
+		cover_image_url: null,
+		short_course_description: '',
+		long_course_description: '',
+	});
 
 	const listOfCoursePages = computed(() => {
 		return _unsortedListOfCoursePages.value.sort((a, b) => a.order_index - b.order_index);
@@ -52,9 +63,6 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 			.then(course => {
 				Object.assign(courseFrontpageDetails, course);
 				Object.assign(_originalCourseFrontPageDetails, course);
-				console.log("OI IM CONSOLE LOGGING 'ERE");
-				console.log(courseFrontpageDetails);
-				console.log(_originalCourseFrontPageDetails);
 			})
 			.catch(err => {
 				console.log(err);
@@ -194,6 +202,14 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	};
 
 	const save = () => {
+		if (_frontPageDetailsPageHasAnyUnsavedChanges.value) {
+			updateCourse(currentEditedCourseId.value, courseFrontpageDetails).then((updatedCourse) => {
+				Object.assign(_originalCourseFrontPageDetails, courseFrontpageDetails);
+			}).catch((error) => {
+				console.error(error);
+			});
+		}
+
 		Object.values(coursePageContent.value).forEach(coursePage => {
 			if (!coursePage.hasUnsavedData) return;
 			if (!coursePage.course_page_id) return;
