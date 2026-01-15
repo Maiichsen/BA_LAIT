@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
-import { computed, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import type { CoursePage } from '@/types/db.ts';
 import {
 	createCoursePageWithDefaultContent,
 	getAllCoursePagesByCourseId,
+	getCourseById,
 	getCourseContentByPageId,
 } from '@/services/courseService.ts';
 import { CoursePageType, pageOrderIndexDefaultGab } from '@/constants/courseConstants.ts';
@@ -17,12 +18,27 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 	const _unsortedListOfCoursePages = ref<CoursePage[]>([]);
 	const coursePageContent = ref<Record<string, RichCoursePage>>({});
 
+	const courseFrontpageDetails = reactive({
+		title: null,
+	});
+
+	const _originalCourseFrontPageDetails = {
+		title: null,
+	};
+
 	const listOfCoursePages = computed(() => {
 		return _unsortedListOfCoursePages.value.sort((a, b) => a.order_index - b.order_index);
 	});
 
+	const _frontPageDetailsPageHasAnyUnsavedChanges = computed(() => {
+		return JSON.stringify(courseFrontpageDetails) !== JSON.stringify(_originalCourseFrontPageDetails);
+	});
+
 	const courseHasAnyUnsavedChanges = computed(() => {
-		return Object.values(coursePageContent.value).some(page => page.hasUnsavedData === true);
+		return (
+			_frontPageDetailsPageHasAnyUnsavedChanges.value ||
+			Object.values(coursePageContent.value).some(page => page.hasUnsavedData === true)
+		);
 	});
 
 	const loadCourse = (courseId: string) => {
@@ -31,6 +47,18 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		currentEditedCourseId.value = courseId;
 		currentEditedCoursePageId.value = '';
 		coursePageContent.value = {};
+
+		getCourseById(courseId)
+			.then(course => {
+				Object.assign(courseFrontpageDetails, course);
+				Object.assign(_originalCourseFrontPageDetails, course);
+				console.log("OI IM CONSOLE LOGGING 'ERE");
+				console.log(courseFrontpageDetails);
+				console.log(_originalCourseFrontPageDetails);
+			})
+			.catch(err => {
+				console.log(err);
+			});
 
 		getAllCoursePagesByCourseId(courseId)
 			.then(coursePages => {
@@ -196,6 +224,7 @@ export const useCourseEditorStore = defineStore('courseEditor', () => {
 		currentEditedCourseId,
 		coursePageContent,
 		courseHasAnyUnsavedChanges,
+		courseFrontpageDetails,
 		loadCourse,
 		setCurrentEditedCoursePage,
 		addNewPageTypeArticle,

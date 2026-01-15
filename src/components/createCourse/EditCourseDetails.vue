@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import BaseInput from '@/components/atoms/BaseInput.vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch, watchEffect } from 'vue';
 import { uploadImageToSupabaseBucket } from '@/services/imageService.ts';
 import { getCourseById, getCoverImgUrlByCourseId } from '@/services/courseService.ts';
 import { updateCourse } from '@/services/courseService.ts';
@@ -62,6 +62,10 @@ onMounted(() => {
 		})
 		.catch(err => console.log(err));
 });
+
+watch(() => courseStore.courseFrontpageDetails.title, (newVal) => {
+	console.log(newVal);
+});
 </script>
 
 <template>
@@ -73,7 +77,7 @@ onMounted(() => {
 				input-id="overskrift"
 				label-text="Overskrift"
 				layout="inline"
-				v-model="title" />
+				v-model="courseStore.courseFrontpageDetails.title" />
 			<BaseInput
 				input-type="text"
 				placeholder="kort beskrivelse"
@@ -113,7 +117,7 @@ onMounted(() => {
 	</form>
 
 	<br />
-	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>
+	<!--	<div @click="handleUpdateCourse" class="hover:text-amber-600 cursor-pointer">GEM</div>-->
 
 	<div v-if="displayedCoverUrl">
 		<img :src="displayedCoverUrl" />
