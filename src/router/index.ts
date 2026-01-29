@@ -6,6 +6,14 @@ import CourseEditorLayout from '@/components/layouts/CourseEditorLayout.vue';
 
 const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
+	scrollBehavior(_to, _from, savedPosition) {
+		//browser back/forward, gå tilbage til den gemte position
+		if (savedPosition) {
+			return savedPosition;
+		}
+		// Ellers scroll til toppen af siden
+		return { top: 0, behavior: 'smooth' };
+	},
 	routes: [
 		{
 			path: '/log-ind',
@@ -143,6 +151,32 @@ const router = createRouter({
 					},
 				},
 			],
+		},
+		{
+			path: '/kurser/:course_id',
+			name: 'courseDetail',
+			meta: {
+				layout: DefaultLayout,
+				breadcrumb: 'Kursus Detaljer',
+				parentBreadcrumb: {
+					name: 'Alle Kurser',
+					path: '/alle-kurser',
+				},
+			},
+			props: true,
+			component: () => import('../views/CourseDetailView.vue'),
+			beforeEnter: async (_to, _from, next) => {
+				try {
+					const user = await getAuthUser();
+					if (!user) {
+						return next({ name: 'login' });
+					}
+					return next();
+				} catch (err) {
+					console.error('route guard getAuthUser error:', err);
+					return next({ name: 'login' });
+				}
+			},
 		},
 		{
 			path: '/mine-kurser',

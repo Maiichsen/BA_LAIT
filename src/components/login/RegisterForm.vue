@@ -95,13 +95,13 @@ onMounted(async () => {
 					layout="stacked"
 					v-model="userLastname" />
 				<BaseInput
-					input-type="text"
+					input-type="password"
 					input-id="registerpassword"
 					label-text="Adgangskode"
 					layout="stacked"
 					v-model="userPassword" />
 				<BaseInput
-					input-type="text"
+					input-type="password"
 					input-id="repeatregisterpassword"
 					label-text="Gentag adgangskode"
 					layout="stacked"

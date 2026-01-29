@@ -14,8 +14,8 @@ import { createDefaultQuiz, getQuizByPageId } from '@/services/quizService.ts';
 
 export const createTemplateCourse = async (): Promise<Course> => {
 	const course = await createCourse({
-		title: 'Nyt kurses',
-		short_course_description: 'Kort beskrivelse af kurset',
+		title: '',
+		short_course_description: '',
 	});
 	await createCoursePageWithDefaultContent(CoursePageType.article, course.course_id, pageOrderIndexDefaultGab);
 	return course;
@@ -153,11 +153,27 @@ export const getAllPublicCourses = (): Promise<Course[]> =>
 export const getAllCourses = (): Promise<Course[]> =>
 	new Promise(async (resolve, reject) => {
 		try {
-			const { data, error } = await supabase.from('courses').select('*');
+			const { data, error } = await supabase.from('courses').select('*').is('soft_deleted_at', null);
 
 			if (error) return reject(error);
 
 			resolve(data);
+		} catch (err) {
+			reject(err);
+		}
+	});
+
+export const getUserCourses = (userId: string): Promise<Course[]> =>
+	new Promise(async (resolve, reject) => {
+		try {
+			const { data, error } = await supabase.from('course_seats').select('courses(*)').eq('user_id', userId);
+
+			if (error) return reject(error);
+
+			// Extract courses from the nested structure
+			const courses = data.map(seat => seat.courses).filter(course => course !== null) as Course[];
+
+			resolve(courses);
 		} catch (err) {
 			reject(err);
 		}

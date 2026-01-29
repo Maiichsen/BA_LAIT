@@ -115,12 +115,17 @@ const logout = () => {
 							Alle kurser
 						</router-link>
 					</li>
-					<li>
+					<li v-if="userStore.isInitialized && !userStore.isUserAdmin">
+						<router-link to="/mine-kurser" class="text-nav block" @click="isMobileMenuOpen = false">
+							Mine kurser
+						</router-link>
+					</li>
+					<li v-if="userStore.isInitialized && userStore.isUserAdmin">
 						<router-link to="/virksomheder" class="text-nav block" @click="isMobileMenuOpen = false">
 							Virksomheder
 						</router-link>
 					</li>
-					<li>
+					<li v-if="userStore.isInitialized && (userStore.isUserCompany || userStore.isUserAdmin)">
 						<router-link to="/Kursister" class="text-nav block" @click="isMobileMenuOpen = false">
 							Kursister
 						</router-link>

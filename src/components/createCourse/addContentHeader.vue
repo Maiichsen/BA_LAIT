@@ -27,13 +27,13 @@ const handleCreateNewQuizPage = () => {
 
 <template>
 	<div class="flex border border-tutara-200 bg-white">
-		<p @click="handleCreateNewTextPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+		<p @click="handleCreateNewTextPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<ContentIcon /> Tilføj indhold
 		</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<QuizIcon /> Tilføj quiz
 		</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-h8">
+		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<CertificateIcon /> Tilføj slut-test
 		</p>
 	</div>
