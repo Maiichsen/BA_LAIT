@@ -36,9 +36,9 @@ const contactInfo = {
 				<nav class="col-span-full mb-12 lg:mb-16" aria-label="Footer navigation">
 					<ul class="flex flex-col lg:flex-row gap-6 lg:gap-8 text-base lg:text-lg">
 						<li v-for="link in navigationLinks" :key="link.url">
-							<a :href="link.url" class="hover:text-tutara-300 transition-colors duration-200">
+							<RouterLink :to="link.url" class="hover:text-tutara-300 transition-colors duration-200">
 								{{ link.name }}
-							</a>
+							</RouterLink>
 						</li>
 					</ul>
 				</nav>

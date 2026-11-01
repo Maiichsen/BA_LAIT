@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { useCourseEditorStore } from '@/stores/courseEditorStore.ts';
 import { CertificateIcon, ContentIcon, QuizIcon } from '@/assets/icons';
+import { isDemo } from '@/db/connection.ts';
 
 const router = useRouter();
 const courseStore = useCourseEditorStore();
@@ -30,10 +31,17 @@ const handleCreateNewQuizPage = () => {
 		<p @click="handleCreateNewTextPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<ContentIcon /> Tilføj indhold
 		</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
+		<!-- The quiz editor was never finished, so the demo hides these -->
+		<p
+			v-if="!isDemo"
+			@click="handleCreateNewQuizPage"
+			class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<QuizIcon /> Tilføj quiz
 		</p>
-		<p @click="handleCreateNewQuizPage" class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
+		<p
+			v-if="!isDemo"
+			@click="handleCreateNewQuizPage"
+			class="cursor-pointer py-4 px-8 hover:bg-purple-10 flex gap-2 text-p1">
 			<CertificateIcon /> Tilføj slut-test
 		</p>
 	</div>
